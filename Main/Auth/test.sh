@@ -1,8 +1,8 @@
 #!/bin/bash
-mainAuthDir="${BASH_SOURCE%/*}"
-if [[ ! -d "$mainAuthDir" ]]; then mainAuthDir="$PWD"; fi
+auth_dir="${BASH_SOURCE%/*}"
+if [[ ! -d "$auth_dir" ]]; then auth_dir="$PWD"; fi
 
-. $mainAuthDir/index.sh
+. $auth_dir/index.sh
 
 
 

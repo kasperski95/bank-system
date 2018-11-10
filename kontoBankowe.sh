@@ -3,11 +3,13 @@
 . ./Main/globals.sh
 . ./Main/Utils/json.sh
 . ./Main/Auth/index.sh
+. ./Main/Core/Homepage/index.sh
 
 clear
 
 auth_authenticate
 
+home_show
 
 
 
@@ -20,14 +22,7 @@ auth_authenticate
 
 
 
-# Homepage: Balance
-# Homepage: Savings
-# Homepage: Total
-# Homepage: Transactions
-# Homepage: History
-# Homepage: Finance
-# Homepage: Services
-# Homepage: Offer
+
 
 
 # Finance: All accounts

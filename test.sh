@@ -1,7 +1,8 @@
 #!/bin/bash
 
 . ./Main/globals.sh
-DB=./Main/Database/Mock
+#TODO: prepare mock file
+#DB=./Main/Database/Mock
 . ./Main/Utils/json.sh
 . ./Main/Utils/testing.sh
 

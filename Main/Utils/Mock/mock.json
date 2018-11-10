@@ -9,5 +9,10 @@
         "2_spaces":  "foobar"
     },
     
-    "last":  "foobar"
+    "last":  "foobar",
+
+    "array": [
+        "0",
+        "1"
+    ]
 }

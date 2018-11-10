@@ -1,6 +1,16 @@
 #!/bin/bash
 
+# DevConfig
+PRODUCTION_MODE=true
+DB_EXT="json"
+
+# Config
 DB="$(pwd)/Database"
+if $PRODUCTION_MODE; then
+    USERS_FILE="$DB/Users/user.$DB_EXT"
+else
+    USERS_FILE=""
+fi
 
 # Colors
 red='\033[0;31m'

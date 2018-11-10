@@ -1,8 +1,8 @@
 #!/bin/bash
-authDir="${BASH_SOURCE%/*}"
-if [[ ! -d "$authDir" ]]; then authDir="$PWD"; fi
+auth_dir="${BASH_SOURCE%/*}"
+if [[ ! -d "$auth_dir" ]]; then auth_dir="$PWD"; fi
 
-. $authDir/../Database/index.sh
+. $auth_dir/../Database/users.sh
 
 
 
@@ -10,7 +10,7 @@ if [[ ! -d "$authDir" ]]; then authDir="$PWD"; fi
 auth_authenticate() {
     local login password
 
-    while [ -z ${USERS_FILE+x} ]; do
+    while [ "$USERS_FILE" == "" ]; do
         read -p "Podaj login: " login
         while (! __verifyLogin $login); do
             clear
@@ -27,13 +27,18 @@ auth_authenticate() {
         done
 
         if db_getUser $login $password; then
-            USERS_FILE="$DB/$login.txt"
+            clear
+            USERS_FILE="$DB/Users/$login.$DB_EXT"
+            echo "Trwa przekierowywanie..."  && sleep 1s
+            clear
+            return 0
         else
             clear
             echo "Niepoprawny login lub hasło."
             echo ""
         fi
     done
+    return 1
 }
 
 

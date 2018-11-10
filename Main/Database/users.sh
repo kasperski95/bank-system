@@ -14,9 +14,9 @@ fi
 db_getUser() {
     local login=$1
     local password=$2
-    
-    if [ -f "$DB/$login.txt" ]; then
-        local db_password=$(utl_getFromJson "password" "$DB/$login.txt")
+
+    if [ -f "$DB/Users/$login.$DB_EXT" ]; then
+        local db_password=$(utl_getFromJson "password" "$DB/Users/$login.$DB_EXT")
 
         if [ "$password" == "$db_password" ]; then
             return 0
