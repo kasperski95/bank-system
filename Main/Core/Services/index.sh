@@ -1,26 +1,59 @@
 #!/bin/bash
+serv_title="USŁUGI"
+serv_dir="${BASH_SOURCE%/*}"
+if [[ ! -d "$serv_dir" ]]; then serv_dir="$PWD"; fi
+
+. $serv_dir/Cantor/index.sh
+. $serv_dir/Documents/index.sh
+. $serv_dir/Goals/index.sh
+. $serv_dir/installments.sh
+. $serv_dir/phone.sh
+. $serv_dir/Receivers/index.sh
+. $serv_dir/StandingOrders/index.sh
+. $serv_dir/plannedPayments.sh
+
 
 
 serv_show() {
-    ui_printHeader "$HOMEPAGE_TITLE -> USŁUGI"
+    local action
+
+    ui_printHeader "$home_title -> $serv_title"
+    __serv_showMenu && echo ""
+    ui_printLine
+    read -p "Wybierz akcję: " action
+    __serv_handleAction $action
 
     return 0
 }
 
-# Receivers: List
-# Receivers: Add (personal data & account number)
-# Receivers: Remove
-# Planned payments: List
-# Standing orders: List
-# Standing orders: Add
-# Standing orders: Remove
-# Saving goals (virtual account, monthly transfer, calcaulate time)
-# Installments: List
-# Documents: List
-# Documents: Add
-# Documents: Remove
-# Certifications: List
-# Certifications: Add
-# Certifications: Remove
-# Top-up phone
-# Cantor (10 currencies)
+
+__serv_showMenu() {
+    echo "1 - Odbiorcy"
+    echo "2 - Zaplanowane płatności"
+    echo "3 - Stałe zlecenia"
+    echo "4 - Cele oszczędnościowe"
+    echo "5 - Raty"
+    echo "6 - Dokumenty i zaświadczenia"
+    echo "7 - Doładowanie telefonu"
+    echo "8 - Kantor"
+    echo "0 - Powrót"
+
+    return 0
+}
+
+
+__serv_handleAction() {
+    case $1 in
+        "1") servRec_show;;
+        "2") serv_showPlannedPayments;;
+        "3") servSo_show;;
+        "4") servGls_show;;
+        "5") serv_showInstallements;;
+        "6") servDoc_show;;
+        "7") serv_showTopUpPhone;;
+        "8") servCan_handleExchange;;
+        *) home_skipPause=true;;
+    esac
+
+    return 0
+}

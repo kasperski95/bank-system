@@ -6,7 +6,6 @@ DB_EXT="json"
 
 # Config
 DB="$(pwd)/Database"
-HOMEPAGE_TITLE="STRONA GŁÓWNA"
 WIDTH=48
 if $PRODUCTION_MODE; then
     USERS_FILE="$DB/Users/mock.$DB_EXT"
