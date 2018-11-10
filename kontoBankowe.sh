@@ -1,11 +1,9 @@
 #!/bin/bash
 
 . ./Main/globals.sh
-. ./Main/Utils/json.sh
-. ./Main/Utils/ui.sh
-. ./Main/Utils/user.sh
+. ./Main/Utils/index.sh
 . ./Main/Auth/index.sh
-. ./Main/Core/Homepage/index.sh
+. ./Main/Home/index.sh
 
 
 while true; do
