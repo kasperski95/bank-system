@@ -8,17 +8,27 @@ if [[ ! -d "$home_dir" ]]; then home_dir="$PWD"; fi
 
 
 home_show() {
-    local accounts=$(utl_parseToArray $(utl_getRawArrayFromJson "accountsID" $USERS_FILE))
+    while [ -f $USERS_FILE ]; do
+        local accounts=$(utl_parseToArray $(utl_getRawArrayFromJson "accountsID" $USERS_FILE))
+        local action
+        clear
+        echo -e "STRONA GŁÓWNA"
+        ui_printLine
+        echo ""
+        __home_showInfo $accounts
+        echo ""
+        __home_showMenu
+        echo ""
+        read -p "Wybierz akcję: " action
+        __home_handleAction $action
+    done
     
-    echo -e "STRONA GŁÓWNA\n"
-    _home_showInfo $accounts
-    _home_showMenu
     return 0
 }
 
 
 # Money in total
-_home_showInfo() {
+__home_showInfo() {
     local total=0
     local totalSavings=0
     local totalChecking=0
@@ -42,11 +52,34 @@ _home_showInfo() {
 
 
 # Show menu and handle interaction
-_home_showMenu() {
+__home_showMenu() {
+    echo "1 - Transakcje"
+    echo "2 - Historia"
+    echo "3 - Finanse"
+    echo "4 - Usługi"
+    echo "5 - Oferta"
+    echo "6 - Wyloguj"
     return 0
 }
 
 
+__home_handleAction() {
+    local action=$1
+
+    case $action in
+        "1") echo "Implement transactions";;
+        "2") echo "Implement history";;
+        "3") echo "Implement finance";;
+        "4") echo "Implement services";;
+        "5") echo "Implement offer";;
+        "6") echo "Implement logout";;
+    esac
+
+    ui_printLine
+    echo ""
+    read -n 1 -s -r -p "wciśnij dowolny klawisz aby kontynuować..."
+    return 0
+}
 
 
 # MENU

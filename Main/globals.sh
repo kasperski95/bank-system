@@ -6,6 +6,7 @@ DB_EXT="json"
 
 # Config
 DB="$(pwd)/Database"
+WIDTH=48
 if $PRODUCTION_MODE; then
     USERS_FILE="$DB/Users/user.$DB_EXT"
 else

@@ -1,9 +1,8 @@
 #!/bin/bash
 
 . ./Main/globals.sh
-#TODO: prepare mock file
-#DB=./Main/Database/Mock
 . ./Main/Utils/json.sh
+. ./Main/Utils/ui.sh
 . ./Main/Utils/testing.sh
 
 nPassed=0
