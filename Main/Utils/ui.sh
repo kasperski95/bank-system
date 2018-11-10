@@ -8,3 +8,10 @@ ui_printLine() {
     done
     echo "" 
 }
+
+ui_printHeader() {
+    clear
+    echo "$1"
+    ui_printLine
+    echo ""
+}

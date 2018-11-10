@@ -3,6 +3,11 @@ home_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$home_dir" ]]; then home_dir="$PWD"; fi
 
 . $home_dir/../../Database/accounts.sh
+. $home_dir/../Finance/index.sh
+. $home_dir/../History/index.sh
+. $home_dir/../Services/index.sh
+. $home_dir/../Offer/index.sh
+. $home_dir/../Transactions/index.sh
 
 
 
@@ -11,14 +16,14 @@ home_show() {
         local accounts=$(utl_parseToArray $(utl_getRawArrayFromJson "accountsID" $USERS_FILE))
         local action
         clear
-        echo -e "STRONA GŁÓWNA"
-        ui_printLine
-        echo ""
+        ui_printHeader "STRONA GŁÓWNA"
         __home_showInfo $accounts
         echo ""
         __home_showMenu
         echo ""
+        ui_printLine
         read -p "Wybierz akcję: " action
+        
         __home_handleAction $action
         
     done
@@ -67,18 +72,19 @@ __home_handleAction() {
     local skipPause=false
 
     case $action in
-        "1") echo "Implement transactions";;
-        "2") echo "Implement history";;
-        "3") echo "Implement finance";;
-        "4") echo "Implement services";;
-        "5") echo "Implement offer";;
+        "1") tnst_show;;
+        "2") hist_show;;
+        "3") fin_show;;
+        "4") serv_show;;
+        "5") off_show;;
         "0") logOut && skipPause=true;;
+        *) skipPause=true;;
     esac
 
     if ! $skipPause; then
         ui_printLine
         echo ""
-        read -n 1 -s -r -p "wciśnij dowolny klawisz aby kontynuować..."
+        read -n 1 -s -r -p "wciśnij dowolny klawisz aby powrócić: "
     fi
     return 0
 }

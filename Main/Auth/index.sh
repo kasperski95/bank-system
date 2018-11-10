@@ -9,19 +9,19 @@ if [[ ! -d "$auth_dir" ]]; then auth_dir="$PWD"; fi
 # handle user communication
 auth_authenticate() {
     local login password
-    clear
     while [ "$USERS_FILE" == "" ]; do
-        echo "LOGOWANIE"
-        ui_printLine
-        echo ""
+        ui_printHeader "LOGOWANIE"
+
+        # login
         read -p "Podaj login: " login
         while (! __verifyLogin $login); do
-            clear
+            ui_printHeader "LOGOWANIE"
             echo "Login może się składać tylko z liter."
             echo ""
             read -p "Podaj login: " login
         done
 
+        # password
         read -p "Podaj hasło: " password
         while (! __verifyPassword $password); do
             echo "Hasło może się składać tylko z cyfr."
@@ -29,12 +29,10 @@ auth_authenticate() {
             read -p "Podaj hasło: " password
         done
 
+        # verify
         if db_getUser $login $password; then
-            clear
             USERS_FILE="$DB/Users/$login.$DB_EXT"
-            echo "LOGOWANIE"
-            ui_printLine
-            echo ""
+            ui_printHeader "LOGOWANIE"
             echo "Trwa przekierowywanie..."  && sleep 1s
             clear
             return 0
