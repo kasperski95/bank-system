@@ -1,5 +1,4 @@
 #!/bin/bash
-
 home_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$home_dir" ]]; then home_dir="$PWD"; fi
 
@@ -8,7 +7,7 @@ if [[ ! -d "$home_dir" ]]; then home_dir="$PWD"; fi
 
 
 home_show() {
-    while [ -f $USERS_FILE ]; do
+    while isLogIn; do
         local accounts=$(utl_parseToArray $(utl_getRawArrayFromJson "accountsID" $USERS_FILE))
         local action
         clear
@@ -21,8 +20,9 @@ home_show() {
         echo ""
         read -p "Wybierz akcję: " action
         __home_handleAction $action
+        
     done
-    
+
     return 0
 }
 
@@ -51,20 +51,20 @@ __home_showInfo() {
 }
 
 
-# Show menu and handle interaction
 __home_showMenu() {
     echo "1 - Transakcje"
     echo "2 - Historia"
     echo "3 - Finanse"
     echo "4 - Usługi"
     echo "5 - Oferta"
-    echo "6 - Wyloguj"
+    echo "0 - Wyloguj"
     return 0
 }
 
 
 __home_handleAction() {
     local action=$1
+    local skipPause=false
 
     case $action in
         "1") echo "Implement transactions";;
@@ -72,19 +72,13 @@ __home_handleAction() {
         "3") echo "Implement finance";;
         "4") echo "Implement services";;
         "5") echo "Implement offer";;
-        "6") echo "Implement logout";;
+        "0") logOut && skipPause=true;;
     esac
 
-    ui_printLine
-    echo ""
-    read -n 1 -s -r -p "wciśnij dowolny klawisz aby kontynuować..."
+    if ! $skipPause; then
+        ui_printLine
+        echo ""
+        read -n 1 -s -r -p "wciśnij dowolny klawisz aby kontynuować..."
+    fi
     return 0
 }
-
-
-# MENU
-# Transactions
-# History
-# Finance
-# Services
-# Offer

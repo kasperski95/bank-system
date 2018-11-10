@@ -3,28 +3,18 @@
 . ./Main/globals.sh
 . ./Main/Utils/json.sh
 . ./Main/Utils/ui.sh
+. ./Main/Utils/user.sh
 . ./Main/Auth/index.sh
 . ./Main/Core/Homepage/index.sh
 
-clear
 
-auth_authenticate
-
-home_show
-
-
+while true; do
+    auth_authenticate
+    home_show
+done
 
 
-
-
-
-
-
-
-
-
-
-
+exit 0
 
 # Finance: All accounts
 # Finance: Subaccount
@@ -73,5 +63,3 @@ home_show
 # Transactions: Express transfer (check requirements)
 # Transactions: Monetary transfer (check requirements)
 
-
-exit 0

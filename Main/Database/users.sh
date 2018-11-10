@@ -1,7 +1,6 @@
 #!/bin/bash
 
 
-
 # check if DB is set and exists
 if [ -z ${DB+x} ] || [ ! -d $DB ]; then
     echo -e "$red"

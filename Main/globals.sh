@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # DevConfig
-PRODUCTION_MODE=true
+PRODUCTION_MODE=false
 DB_EXT="json"
 
 # Config
 DB="$(pwd)/Database"
 WIDTH=48
 if $PRODUCTION_MODE; then
-    USERS_FILE="$DB/Users/user.$DB_EXT"
+    USERS_FILE="$DB/Users/mock.$DB_EXT"
 else
     USERS_FILE=""
 fi
