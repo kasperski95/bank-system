@@ -10,9 +10,11 @@ nPassed=0
 nFailed=0
 
 clear
-. ./Main/Auth/test.sh
-. ./Main/Database/test.sh
-. ./Main/Utils/test.sh
+
+# run all tests
+for i in $(find Main -name "test.sh"); do
+    . $i
+done
 
 echo ""
 echo "========================================"
