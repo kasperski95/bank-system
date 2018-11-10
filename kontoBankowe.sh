@@ -1,8 +1,24 @@
 #!/bin/bash
 
-# Auth
+. ./Main/globals.sh
+. ./Main/Utils/json.sh
 . ./Main/Auth/index.sh
-authenticate
+
+clear
+
+auth_authenticate
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Homepage: Balance
 # Homepage: Savings

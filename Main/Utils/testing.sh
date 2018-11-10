@@ -1,12 +1,8 @@
 #!/bin/bash
-mainDir="${BASH_SOURCE%/*}"
-if [[ ! -d "$mainDir" ]]; then mainDir="$PWD"; fi
-
-. $mainDir/globals.sh
 
 
 
-check() {
+utl_test() {
     local testName=$1 && shift
     local expectedResult=$1 && shift
 
@@ -27,11 +23,11 @@ check() {
 }
 
 
-printCategory() {
+utl_printCategory() {
     echo -e "\n$1" | awk '{print toupper($1)}'
 }
 
 
-printSubcategory() {
+utl_printSubcategory() {
     echo -e "\n    $1"
 }
