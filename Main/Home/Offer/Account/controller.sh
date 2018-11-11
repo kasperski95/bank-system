@@ -7,7 +7,7 @@ if [[ ! -d "$ofrAct_dir" ]]; then ofrAct_dir="$PWD"; fi
 
 
 ofrAct_showInfo() {
-    ui_printHeader "$ofrAct_title -> INFORMACJE"
+    ui_header $ofrAct_title "INFORMACJE"
 
     echo "Imię: $(db_getFromUser "firstname")"
     echo "Nazwisko: $(db_getFromUser "surname")"

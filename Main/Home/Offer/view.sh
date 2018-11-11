@@ -10,9 +10,9 @@ if [[ ! -d "$ofr_dir" ]]; then ofr_dir="$PWD"; fi
 ofr_show() {
     local action
 
-    ui_printHeader "$home_title -> $ofr_title"
+    ui_header $home_title $ofr_title
     __ofr_showMenu && echo ""
-    ui_printLine
+    ui_line
     read -p "Wybierz akcję: " action
     __ofr_handleAction $action
 

@@ -10,12 +10,12 @@ if [[ ! -d "$auth_dir" ]]; then auth_dir="$PWD"; fi
 auth_authenticate() {
     local login password
     while [ "$USERS_FILE" == "" ]; do
-        ui_printHeader "LOGOWANIE"
+        ui_header "LOGOWANIE"
 
         # login
         read -p "Podaj login: " login
         while (! __verifyLogin $login); do
-            ui_printHeader "LOGOWANIE"
+            ui_header "LOGOWANIE"
             echo "Login może się składać tylko z liter."
             echo ""
             read -p "Podaj login: " login
@@ -32,7 +32,7 @@ auth_authenticate() {
         # verify
         if db_getUser $login $password; then
             USERS_FILE="$DB/Users/$login.$DB_EXT"
-            ui_printHeader "LOGOWANIE"
+            ui_header "LOGOWANIE"
             echo "Trwa przekierowywanie..."  && sleep 1s
             clear
             return 0

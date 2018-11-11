@@ -2,30 +2,30 @@
 
 
 __fin_sumarize() {
-    ui_printHeader "$fin_title > PODSUMOWANIE"
+    ui_header $fin_title "PODSUMOWANIE"
     return 0
 }
 
 
 __fin_showSubaccount() {
-    ui_printHeader "$fin_title > SUBKONTO"
+    ui_header $fin_title "SUBKONTO"
     return 0
 }
 
 
 __fin_showSavingAccounts() {
-    ui_printHeader "$fin_title > KONTA OSZCZĘDNOŚCIOWE"
+    ui_header $fin_title "KONTA_OSZCZĘDNOŚCIOWE"
     return 0
 }
 
 
 __fin_showCreditCards() {
-    ui_printHeader "$fin_title > KARTY KREDYTOWE"
+    ui_header $fin_title "KARTY_KREDYTOWE"
     return 0
 }
 
 
 __fin_showLoans() {
-    ui_printHeader "$fin_title > POŻYCZKI"
+    ui_header $fin_title "POŻYCZKI"
     return 0
 }

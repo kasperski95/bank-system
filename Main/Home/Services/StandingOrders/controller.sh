@@ -2,18 +2,18 @@
 
 
 __servSo_showList() {
-    ui_printHeader "$servSo_title -> LISTA"
+    ui_header $servSo_title "LISTA"
     return 0
 }
 
 
 __servSo_add() {
-    ui_printHeader "$servSo_title -> DODAJ"
+    ui_header $servSo_title "DODAJ"
     return 0
 }
 
 
 __servSo_delete() {
-    ui_printHeader "$servSo_title -> USUŃ"
+    ui_header $servSo_title "USUŃ"
     return 0
 }

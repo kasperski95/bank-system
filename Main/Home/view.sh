@@ -18,10 +18,10 @@ home_show() {
         local accounts=$(utl_parseToArray $(utl_getRawArrayFromJson "accountsID" $USERS_FILE))
         local action
 
-        ui_printHeader $home_title
+        ui_header $home_title
         home_showMoney $accounts && echo ""
         __home_showMenu && echo ""
-        ui_printLine
+        ui_line
         read -p "Wybierz akcję: " action  
         __home_handleAction $action
         
@@ -57,7 +57,7 @@ __home_handleAction() {
     esac
 
     if ! $home_skipPause; then
-        ui_printLine
+        ui_line
         read -n 1 -s -r -p "wciśnij dowolny klawisz aby wrócić do menu..."
     fi
     return 0

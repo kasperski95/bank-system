@@ -1,5 +1,5 @@
 #!/bin/bash
-ofrAct_title="KONTO I RACHUNKI BANKOWE"
+ofrAct_title="KONTO_I_RACHUNKI_BANKOWE"
 ofrAct_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$ofrAct_dir" ]]; then ofrAct_dir="$PWD"; fi
 
@@ -10,9 +10,9 @@ if [[ ! -d "$ofrAct_dir" ]]; then ofrAct_dir="$PWD"; fi
 ofrAct_show() {
     local action
 
-    ui_printHeader "$ofr_title -> $ofrAct_title"
+    ui_header $ofr_title $ofrAct_title
     __ofrAct_showMenu && echo ""
-    ui_printLine
+    ui_line
     read -p "Wybierz akcję: " action
     __ofrAct_handleAction $action
 
@@ -21,8 +21,8 @@ ofrAct_show() {
 
 
 __ofrAct_showMenu() {
-    printf $RED
     echo "1 - Informacje o koncie"
+    printf $RED
     echo "2 - Załóż nowy rachunek bankowy"
     printf $DEFAULT_COLOR
     echo "0 - Powrót"

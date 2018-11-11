@@ -10,9 +10,9 @@ if [[ ! -d "$servSo_dir" ]]; then servSo_dir="$PWD"; fi
 servSo_show() {
     local action
 
-    ui_printHeader "$serv_title -> $servSo_title"
+    ui_header $serv_title $servSo_title
     __servSo_showMenu && echo ""
-    ui_printLine
+    ui_line
     read -p "Wybierz akcję: " action
     __servSo_handleAction $action
 

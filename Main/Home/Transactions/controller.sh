@@ -3,18 +3,18 @@
 
 __tnst_makeTransfer() {
     #TODO
-    ui_printHeader "$tnst_title -> PRZELEW ZWYKŁY"
+    ui_header $tnst_title "PRZELEW_ZWYKŁY"
     return 0
 }
 
 __tnst_makeExpressTransfer() {
     #TODO
-    ui_printHeader "$tnst_title -> PRZELEW EKSPRESS"
+    ui_header $tnst_title "PRZELEW_EKSPRESS"
     return 0
 }
 
 __tnst_makeMonetaryTransfer() {
     #TODO
-    ui_printHeader "$tnst_title -> PRZELEW WALUTOWY"
+    ui_header $tnst_title "PRZELEW_WALUTOWY"
     return 0
 }

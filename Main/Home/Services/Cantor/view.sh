@@ -1,7 +1,7 @@
 #!/bin/bash
 
 servCan_handleExchange() {
-    ui_printHeader "$serv_title -> KANTOR"
+    ui_header $serv_title "KANTOR"
     
     return 0
 }

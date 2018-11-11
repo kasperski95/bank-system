@@ -16,9 +16,9 @@ if [[ ! -d "$serv_dir" ]]; then serv_dir="$PWD"; fi
 serv_show() {
     local action
 
-    ui_printHeader "$home_title -> $serv_title"
+    ui_header $home_title $serv_title
     __serv_showMenu && echo ""
-    ui_printLine
+    ui_line
     read -p "Wybierz akcję: " action
     __serv_handleAction $action
 
@@ -33,7 +33,7 @@ __serv_showMenu() {
     echo "3 - Stałe zlecenia"
     echo "4 - Cele oszczędnościowe"
     echo "5 - Raty"
-    echo "6 - Dokumenty i zaświadczenia"
+    echo "6 - Dokumenty"
     echo "7 - Doładowanie telefonu"
     echo "8 - Kantor"
     printf $DEFAULT_COLOR

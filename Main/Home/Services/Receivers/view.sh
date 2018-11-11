@@ -10,9 +10,9 @@ if [[ ! -d "$servRec_dir" ]]; then servRec_dir="$PWD"; fi
 servRec_show() {
     local action
 
-    ui_printHeader "$serv_title -> $servRec_title"
+    ui_header $serv_title $servRec_title
     __servRec_showMenu && echo ""
-    ui_printLine
+    ui_line
     read -p "Wybierz akcję: " action
     __servRec_handleAction $action
 
