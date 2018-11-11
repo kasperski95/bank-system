@@ -14,9 +14,7 @@ else
 fi
 
 # Colors
-red='\033[0;31m'
-green='\033[0;32m'
-lightGreen='\033[1;32m'
-lightGray='\033[0;37m' 
-white='\033[1;37m'
-defaultColor=$lightGray
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+SILVER='\033[0;37m' 
+DEFAULT_COLOR=$SILVER

@@ -26,6 +26,7 @@ serv_show() {
 
 
 __serv_showMenu() {
+    printf $RED
     echo "1 - Odbiorcy"
     echo "2 - Zaplanowane płatności"
     echo "3 - Stałe zlecenia"
@@ -34,6 +35,7 @@ __serv_showMenu() {
     echo "6 - Dokumenty i zaświadczenia"
     echo "7 - Doładowanie telefonu"
     echo "8 - Kantor"
+    printf $DEFAULT_COLOR
     echo "0 - Powrót"
 
     return 0

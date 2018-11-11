@@ -13,10 +13,10 @@ utl_test() {
     fi
 
     if [ $result == $expectedResult ]; then
-        echo -e "       $green[PASS]$defaultColor $testName: $expectedResult"
+        echo -e "       $GREEN[PASS]$DEFAULT_COLOR $testName: $expectedResult"
         ((nPassed++))
     else
-        echo -e "       $red[FAIL]$defaultColor $testName: $expectedResult" && shift
+        echo -e "       $RED[FAIL]$DEFAULT_COLOR $testName: $expectedResult" && shift
         echo    "           arg: $@"
         ((nFailed++))
     fi

@@ -3,7 +3,7 @@
 
 # check if DB is set and exists
 if [ -z ${DB+x} ] || [ ! -d $DB ]; then
-    echo -e "$red"
+    echo -e "$RED"
     echo "FATAL ERROR: Cannot find databse"
     echo ""
     exit 1

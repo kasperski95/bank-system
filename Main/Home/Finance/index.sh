@@ -21,12 +21,15 @@ fin_show() {
 
 
 __fin_showMenu() {
-    echo "1 - Podsumowanie"
-    echo "2 - Subkonto"
-    echo "3 - Konta oszczędnościowe"
+    printf "$RED"
+    echo "1 - Wszystkie rachunki bankowe"
+    echo "2 - Rachunki rozliczeniowe"
+    echo "3 - Rachunki oszczędnościowe"
     echo "4 - Karty kredytowe"
     echo "5 - Pożyczki"
+    printf "$DEFAULT_COLOR"
     echo "0 - Powrót"
+
     return 0
 }
 

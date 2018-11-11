@@ -19,7 +19,8 @@ ofr_show() {
 
 
 __ofr_showMenu() {
-    echo "1 - Konto osobiste"
+    printf $RED
+    echo "1 - Konto i rachunki bankowe"
     echo "2 - Oszczędności"
     echo "3 - Kredyty i pożyczki"
     echo "4 - Karty i płatności telefonem"
@@ -28,7 +29,9 @@ __ofr_showMenu() {
     echo "7 - Rozliczenie z ZUS"
     echo "8 - Leasing"
     echo "9 - Terminale płatnicze"
+    printf $DEFAULT_COLOR
     echo "0 - Powrót"
+
 
     return 0
 }
