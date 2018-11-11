@@ -7,6 +7,8 @@ DB_EXT="json"
 # Config
 DB="$(pwd)/Database"
 WIDTH=48
+
+# Crucial
 if $PRODUCTION_MODE; then
     USERS_FILE="$DB/Users/mock.$DB_EXT"
 else

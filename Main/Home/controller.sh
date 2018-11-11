@@ -15,13 +15,13 @@ home_showMoney() {
 
     # extract data and convert to PLN
     for i in $@; do
-        local currency=$(db_getFromAccount "currency" $i)
+        local currency=$(dbAccounts_get "currency" $i)
         local exchangeRate=$(db_getExchangeRate $currency)
-        local money=$(db_getFromAccount "money" $i)
+        local money=$(dbAccounts_get "money" $i)
 
-        if [ "$(db_getFromAccount "type" $i)" == "checking" ]; then
+        if [ "$(dbAccounts_get "type" $i)" == "checking" ]; then
             totalChecking=$(echo "$totalChecking + $money * $exchangeRate" | bc)
-        elif [ "$(db_getFromAccount "type" $i)" == "saving" ]; then
+        elif [ "$(dbAccounts_get "type" $i)" == "saving" ]; then
             totalSavings=$(echo "$totalSavings + $money * $exchangeRate" | bc)
         fi
         total=$(echo "$total + $money * $exchangeRate" | bc)

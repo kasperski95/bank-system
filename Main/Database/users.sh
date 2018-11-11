@@ -26,7 +26,19 @@ db_getUser() {
 }
 
 
-db_getFromUser() {
+db_addAccount() {
+    local accountID=$1
+    local accounts=$(utl_parseToArray $(utl_getRawArrayFromJson "accountsID" $USERS_FILE))
+    
+    accounts+=($accountID)
+    local accountsJson=$(utl_parseArrayToJson ${accounts[@]})
+    dbUsers_set "accountsID" $accountsJson
+
+    return 0
+}
+
+
+dbUsers_get() {
     local key=$1
     if [ -f $USERS_FILE ]; then
         utl_getFromJson $key $USERS_FILE
@@ -34,3 +46,17 @@ db_getFromUser() {
     fi
     return 1
 }
+
+
+dbUsers_set() {
+    local key=$1
+    local val=$2
+
+    if [ -f $USERS_FILE ]; then
+        sed -i "s/\($key\":\).*$/\1 $val,/" $USERS_FILE
+        return $?
+    fi
+    return 1
+}
+
+

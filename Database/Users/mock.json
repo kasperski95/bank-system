@@ -1,6 +1,6 @@
 {
     "password": "1234",
-    "accountsID": ["mockChecking", "mockSaving"],
+    "accountsID": ["000","001"],
     "firstname": "Jan",
     "surname": "Kowalski",
     "city": "Warszawa",
