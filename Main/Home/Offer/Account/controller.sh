@@ -10,7 +10,7 @@ ofrAct_showInfo() {
     ui_header $ofrAct_title "INFORMACJE"
 
     echo "Imię: $(dbUsers_get "firstname")"
-    echo "Nazwisko: $(dbUsers_get "surname")"
+    echo "Nazwisko: $(dbUsers_get "lastname")"
     echo "Adres: $(dbUsers_get "city"), ul. $(dbUsers_get "street") $(dbUsers_get "streetNumber")"
     echo "Telefon: $(dbUsers_get "phoneNumber")"
     

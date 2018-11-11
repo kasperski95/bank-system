@@ -11,7 +11,7 @@ isLogIn() {
 logOut() {
     USERS_FILE=""
     clear
-    ui_printHeader "LOGOWANIE"
+    ui_header "LOGOWANIE"
     echo "Trwa wylogowywanie..." && sleep 1s
     return 0;
 }

@@ -27,13 +27,17 @@ serv_show() {
 
 
 __serv_showMenu() {
-    printf $RED
     echo "1 - Odbiorcy"
+    printf $RED
     echo "2 - Zaplanowane płatności"
+    printf $DEFAULT_COLOR
     echo "3 - Stałe zlecenia"
     echo "4 - Cele oszczędnościowe"
+    printf $RED
     echo "5 - Raty"
+    printf $DEFAULT_COLOR
     echo "6 - Dokumenty"
+    printf $RED
     echo "7 - Doładowanie telefonu"
     echo "8 - Kantor"
     printf $DEFAULT_COLOR

@@ -9,8 +9,14 @@ if [[ ! -d "$auth_dir" ]]; then auth_dir="$PWD"; fi
 # handle user communication
 auth_authenticate() {
     local login password
+    local logInFailed=false
     while [ "$USERS_FILE" == "" ]; do
         ui_header "LOGOWANIE"
+
+        if $logInFailed; then
+            echo "Niepoprawny login lub hasło."
+            echo ""
+        fi
 
         # login
         read -p "Podaj login: " login
@@ -22,11 +28,11 @@ auth_authenticate() {
         done
 
         # password
-        read -p "Podaj hasło: " password
+        read -ps "Podaj hasło: " password
         while (! __verifyPassword $password); do
             echo "Hasło może się składać tylko z cyfr."
             echo ""
-            read -p "Podaj hasło: " password
+            read -ps "Podaj hasło: " password
         done
 
         # verify
@@ -37,9 +43,7 @@ auth_authenticate() {
             clear
             return 0
         else
-            clear
-            echo "Niepoprawny login lub hasło."
-            echo ""
+            logInFailed=true
         fi
     done
     return 1

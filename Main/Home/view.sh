@@ -17,8 +17,8 @@ home_show() {
     while isLogIn; do    
         local accounts=$(utl_parseToArray $(utl_getRawArrayFromJson "accountsID" $USERS_FILE))
         local action
-
-        ui_header $home_title
+        local username="$(dbUsers_get "firstname")_$(dbUsers_get "lastname")"
+        ui_header $home_title "" $username
         home_showMoney $accounts && echo ""
         __home_showMenu && echo ""
         ui_line

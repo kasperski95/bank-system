@@ -27,13 +27,15 @@ home_showMoney() {
         total=$(echo "$total + $money * $exchangeRate" | bc)
     done;
 
+    # money is stored as integers
     totalChecking=$(echo " $totalChecking / 100" | bc)
     totalSavings=$(echo "$totalSavings / 100" | bc)
     total=$(echo "$total / 100" | bc)
 
-    printf "Saldo:        %.2f PLN\n" $totalChecking
-    printf "Oszczędności: %.2f PLN\n" $totalSavings
-    printf "W sumie:      %.2f PLN\n" $total
+    local format=".2f"
+    ui_alignRight "Saldo:" $totalChecking "s" $format "4" && echo " PLN"
+    ui_alignRight "Oszczędności:" $totalSavings "s" $format "4" && echo " PLN"
+    ui_alignRight "W_sumie:" $total "s" $format "4" && echo " PLN"
 
     return 0
 }

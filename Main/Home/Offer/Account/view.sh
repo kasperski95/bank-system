@@ -22,9 +22,7 @@ ofrAct_show() {
 
 __ofrAct_showMenu() {
     echo "1 - Informacje o koncie"
-    printf $RED
     echo "2 - Nowy rachunek bankowy"
-    printf $DEFAULT_COLOR
     echo "0 - Powrót"
 
     return 0

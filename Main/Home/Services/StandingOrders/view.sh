@@ -21,9 +21,12 @@ servSo_show() {
 
 
 __servSo_showMenu() {
+    printf $RED
     echo "1 - Lista" 
     echo "2 - Dodaj" 
     echo "3 - Usuń" 
+    printf $DEFAULT_COLOR
+    echo "0 - Powrót"
 
     return 0
 }

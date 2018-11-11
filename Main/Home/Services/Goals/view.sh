@@ -24,10 +24,12 @@ servGls_show() {
 
 
 __servGls_showMenu() {
+    printf $RED
     echo "1 - Lista"
     echo "2 - Dodaj"
     echo "3 - Usuń"
     echo "0 - Powrót"
+    printf $DEFAULT_COLOR
 
     return 0
 }
