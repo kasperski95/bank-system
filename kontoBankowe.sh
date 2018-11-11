@@ -2,8 +2,8 @@
 
 . ./Main/globals.sh
 . ./Main/Utils/index.sh
-. ./Main/Auth/index.sh
-. ./Main/Home/index.sh
+. ./Main/Auth/view.sh
+. ./Main/Home/view.sh
 
 
 while true; do

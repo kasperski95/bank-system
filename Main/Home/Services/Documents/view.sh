@@ -3,7 +3,7 @@ servDoc_title="DOKUMENTY"
 servDoc_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$servDoc_dir" ]]; then servDoc_dir="$PWD"; fi
 
-. $servDoc_dir/utils.sh
+. $servDoc_dir/controller.sh
 
 
 servDoc_show() {

@@ -3,7 +3,7 @@ servSo_title="STAŁE_ZLECENIA"
 servSo_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$servSo_dir" ]]; then servSo_dir="$PWD"; fi
 
-. $servSo_dir/utils.sh
+. $servSo_dir/controller.sh
 
 
 

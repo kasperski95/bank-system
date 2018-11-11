@@ -6,7 +6,7 @@ servGls_title="CELE OSZCZĘDNOŚCIOWE"
 servGls_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$servGls_dir" ]]; then servGls_dir="$PWD"; fi
 
-. $servGls_dir/utils.sh
+. $servGls_dir/controller.sh
 
 
 

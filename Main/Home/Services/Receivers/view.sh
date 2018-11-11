@@ -3,7 +3,7 @@ servRec_title="ODBIORCY"
 servRec_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$servRec_dir" ]]; then servRec_dir="$PWD"; fi
 
-. $servRec_dir/utils.sh
+. $servRec_dir/controller.sh
 
 
 

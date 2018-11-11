@@ -3,7 +3,7 @@ fin_title="FINANSE"
 fin_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$fin_dir" ]]; then fin_dir="$PWD"; fi
 
-. $fin_dir/utils.sh
+. $fin_dir/controller.sh
 
 
 

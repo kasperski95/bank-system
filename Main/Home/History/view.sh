@@ -3,7 +3,7 @@ hist_title="HISTORIA"
 hist_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$hist_dir" ]]; then hist_dir="$PWD"; fi
 
-. $hist_dir/utils.sh
+. $hist_dir/controller.sh
 
 
 

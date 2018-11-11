@@ -3,12 +3,13 @@ home_title="STRONA_GŁÓWNA"
 home_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$home_dir" ]]; then home_dir="$PWD"; fi
 
-. $home_dir/utils.sh
-. $home_dir/Finance/index.sh
-. $home_dir/History/index.sh
-. $home_dir/Services/index.sh
-. $home_dir/Offer/index.sh
-. $home_dir/Transactions/index.sh
+. $home_dir/controller.sh
+
+. $home_dir/Finance/view.sh
+. $home_dir/History/view.sh
+. $home_dir/Services/view.sh
+. $home_dir/Offer/view.sh
+. $home_dir/Transactions/view.sh
 
 
 

@@ -3,6 +3,8 @@ ofr_title="OFERTA"
 ofr_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$ofr_dir" ]]; then ofr_dir="$PWD"; fi
 
+. $ofr_dir/Account/view.sh
+
 
 
 ofr_show() {
@@ -39,6 +41,7 @@ __ofr_showMenu() {
 
 __ofr_handleAction() {
     case $1 in
+        "1") ofrAct_show;;
         *) home_skipPause=true
     esac
 
