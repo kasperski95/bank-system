@@ -19,7 +19,7 @@ home_show() {
         local action
         local username="$(dbUsers_get "firstname")_$(dbUsers_get "lastname")"
         ui_header $home_title "" $username
-        home_showMoney $accounts && echo ""
+        home_showBalance $accounts && echo ""
         __home_showMenu && echo ""
         ui_line
         read -p "Wybierz akcję: " action  

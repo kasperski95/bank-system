@@ -21,10 +21,10 @@ fin_show() {
 
 
 __fin_showMenu() {
-    printf "$RED"
     echo "1 - Wszystkie rachunki bankowe"
     echo "2 - Rachunki rozliczeniowe"
     echo "3 - Rachunki oszczędnościowe"
+    printf "$RED"
     echo "4 - Karty kredytowe"
     echo "5 - Pożyczki"
     printf "$DEFAULT_COLOR"

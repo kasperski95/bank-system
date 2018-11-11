@@ -26,6 +26,12 @@ db_getUser() {
 }
 
 
+db_getUserAccounts() {
+    utl_parseToArray $(utl_getRawArrayFromJson "accountsID" $USERS_FILE)
+    return 0
+}
+
+
 db_addAccount() {
     local accountID=$1
     local accounts=$(utl_parseToArray $(utl_getRawArrayFromJson "accountsID" $USERS_FILE))
