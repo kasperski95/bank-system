@@ -21,8 +21,8 @@ ofr_show() {
 
 
 __ofr_showMenu() {
-    printf $RED
     echo "1 - Konto i rachunki bankowe"
+    printf $RED
     echo "2 - Oszczędności"
     echo "3 - Kredyty i pożyczki"
     echo "4 - Karty i płatności telefonem"

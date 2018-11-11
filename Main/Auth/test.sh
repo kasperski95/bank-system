@@ -2,7 +2,7 @@
 auth_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$auth_dir" ]]; then auth_dir="$PWD"; fi
 
-. $auth_dir/index.sh
+. $auth_dir/view.sh
 
 
 

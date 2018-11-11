@@ -24,3 +24,13 @@ db_getUser() {
     
     return 1
 }
+
+
+db_getFromUser() {
+    local key=$1
+    if [ -f $USERS_FILE ]; then
+        utl_getFromJson $key $USERS_FILE
+        return 0
+    fi
+    return 1
+}

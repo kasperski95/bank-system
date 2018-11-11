@@ -14,7 +14,7 @@ if [[ ! -d "$home_dir" ]]; then home_dir="$PWD"; fi
 
 
 home_show() {
-    while isLogIn; do
+    while isLogIn; do    
         local accounts=$(utl_parseToArray $(utl_getRawArrayFromJson "accountsID" $USERS_FILE))
         local action
 

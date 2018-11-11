@@ -1,7 +1,10 @@
 {
     "password": "1234",
-    "accountsID": [
-        "00",
-        "01"
-    ]
+    "accountsID": ["00","01"],
+    "firstname": "Jan",
+    "surname": "Kowalski",
+    "city": "Warszawa",
+    "street": "Słoneczna",
+    "streetNumber": "42",
+    "phoneNumber": "+48790123456"
 }

@@ -12,6 +12,7 @@ home_showMoney() {
     local totalSavings=0
     local totalChecking=0
 
+
     # extract data and convert to PLN
     for i in $@; do
         local currency=$(db_getFromAccount "currency" $i)
@@ -26,13 +27,13 @@ home_showMoney() {
         total=$(echo "$total + $money * $exchangeRate" | bc)
     done;
 
-    totalChecking=$(echo "scale=2; $totalChecking / 100" | bc)
-    totalSavings=$(echo "scale=2; $totalSavings / 100" | bc)
-    total=$(echo "scale=2; $total / 100" | bc)
+    totalChecking=$(echo " $totalChecking / 100" | bc)
+    totalSavings=$(echo "$totalSavings / 100" | bc)
+    total=$(echo "$total / 100" | bc)
 
-    echo "Saldo:        $totalChecking PLN"
-    echo "Oszczędności: $totalSavings PLN"
-    echo "W sumie:      $total PLN"
+    printf "Saldo:        %.2f PLN\n" $totalChecking
+    printf "Oszczędności: %.2f PLN\n" $totalSavings
+    printf "W sumie:      %.2f PLN\n" $total
 
     return 0
 }

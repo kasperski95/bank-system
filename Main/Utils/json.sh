@@ -10,11 +10,11 @@ utl_getFromJson() {
     return $?
 }
 
-#TODO: test
+# Array must be inline because of backtracing limit
 utl_getRawArrayFromJson() {
     local key=$1
     local file=$2
-    grep -Pzo "\"$key\"[ ]*:[ ]*\[\K(.|\s)*(?=])" $file | tr -d '\n' | tr -d ' ' | tr -d '\t' | tr -d '\0'
+    grep -Po "\"$key\": \[\K(.|\s)*(?=])" $file | tr -d '\n' | tr -d ' ' | tr -d '\t' | tr -d '\0'
     return $?
 } 
 
