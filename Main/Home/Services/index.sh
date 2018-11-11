@@ -3,14 +3,12 @@ serv_title="USŁUGI"
 serv_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$serv_dir" ]]; then serv_dir="$PWD"; fi
 
+. $serv_dir/utils.sh
 . $serv_dir/Cantor/index.sh
 . $serv_dir/Documents/index.sh
 . $serv_dir/Goals/index.sh
-. $serv_dir/installments.sh
-. $serv_dir/phone.sh
 . $serv_dir/Receivers/index.sh
 . $serv_dir/StandingOrders/index.sh
-. $serv_dir/plannedPayments.sh
 
 
 

@@ -3,7 +3,7 @@ tnst_title="TRANSAKCJE"
 tnst_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$tnst_dir" ]]; then tnst_dir="$PWD"; fi
 
-. $tnst_dir/transfers.sh
+. $tnst_dir/utils.sh
 
 
 
