@@ -18,6 +18,7 @@ home_show() {
         local accounts=$(utl_parseToArray $(utl_getRawArrayFromJson "accountsID" $USERS_FILE))
         local action
         local username="$(dbUsers_get "firstname")_$(dbUsers_get "lastname")"
+        
         ui_header $home_title "" $username
         home_showBalance $accounts && echo ""
         __home_showMenu && echo ""

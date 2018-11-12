@@ -82,7 +82,7 @@ db_doesAccountExists() {
 db_getAccountBalance() {
     local accountID=$1
     local balance=$(dbAccounts_get "balance" $accountID)
-    echo "$balance/100" | bc
+    echo "scale=2;$balance/100" | bc
     return 0
 }
 
@@ -91,7 +91,7 @@ db_getAccountRawBalance_PLN() {
     local balance=$(dbAccounts_get "balance" $accountID)
     local currency=$(db_getAccountCurrency $accountID)
     local exchangeRate=$(db_getExchangeRate $currency)
-    echo "$balance*$exchangeRate" | bc
+    echo "scale=2;$balance*$exchangeRate" | bc
     return 0
 }
 
@@ -101,8 +101,7 @@ db_getAccountBalance_PLN() {
     local balance=$(dbAccounts_get "balance" $accountID)
     local currency=$(db_getAccountCurrency $accountID)
     local exchangeRate=$(db_getExchangeRate $currency)
-    balance=$(echo "$balance*$exchangeRate" | bc)
-    echo "$balance/100" | bc
+    echo "scale=2;$balance*$exchangeRate/100" | bc
     return 0
 }
 
@@ -110,25 +109,5 @@ db_getAccountCurrency() {
     local accountID=$1
     local currency=$(dbAccounts_get "currency" $accountID)
     echo $currency
-    return 0
-}
-
-
-db_printAccountBalance() {
-    local accountID=$1
-    local balance=$(db_getAccountBalance $accountID)
-    local currency=$(db_getAccountCurrency $accountID)
-    printf "%.2f %s" $balance $currency
-    return 0
-}
-
-
-db_printAccountBalance_PLN() {
-    local accountID=$1
-    local balance=$(db_getAccountBalance $accountID)
-    local currency=$(db_getAccountCurrency $accountID)
-    local exchangeRate=$(db_getExchangeRate $currency)
-    balance=$(echo "$balance*$exchangeRate" | bc)
-    printf "%.2f PLN" $balance
     return 0
 }

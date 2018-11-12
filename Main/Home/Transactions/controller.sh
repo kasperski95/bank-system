@@ -147,7 +147,7 @@ __tnst_handleTransfer() {
         # sum
         if [ "$sum" == "" ]; then
             read -p "Kwota przelewu: " sum
-            sum=$(echo "($sum * 100)" | bc | sed "s/\.*//")
+            sum=$(echo "scale=0;($sum * 100)/1" | bc)
             if [ "$sum" == "" ]; then
                 error="Kwota przelewu nie może być pusta."
                 continue
@@ -204,7 +204,8 @@ __tnst_makeTransfer() {
     local targetAccountBalance=$(db_getAccountRawBalance_PLN $targetAccountID)
     local targetAccountCurrency=$(db_getAccountCurrency $targetAccountID)
     local targetExchangeRate=$(db_getExchangeRate $targetAccountCurrency)
-    local newTargetAccountBalance=$(echo "($targetAccountBalance+$sum)/$targetExchangeRate" | bc)
+    local newTargetAccountBalance=$(echo "scale=4;($targetAccountBalance+$sum)/$targetExchangeRate" | bc -l)
+    newTargetAccountBalance=$(echo "scale=0;($newTargetAccountBalance+0.4999)/1" | bc)
 
     #-----------------------------------------------
     echo "sum: $sum"

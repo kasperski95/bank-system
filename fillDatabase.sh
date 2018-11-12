@@ -53,7 +53,7 @@ echo "}" >> $file_account000
 
 echo "{" > $file_account001
 echo "   \"balance\": \"0\"," >> $file_account001
-echo "   \"type\": \"checking\"," >> $file_account001
+echo "   \"type\": \"saving\"," >> $file_account001
 echo "   \"transactionsID\": []," >> $file_account001
 echo "   \"currency\": \"USD\"" >> $file_account001
 echo "}" >> $file_account001
@@ -67,7 +67,7 @@ echo "}" >> $file_account002
 
 echo "{" > $file_account003
 echo "   \"balance\": \"0\"," >> $file_account003
-echo "   \"type\": \"checking\"," >> $file_account003
+echo "   \"type\": \"saving\"," >> $file_account003
 echo "   \"transactionsID\": []," >> $file_account003
 echo "   \"currency\": \"USD\"" >> $file_account003
 echo "}" >> $file_account003
