@@ -10,7 +10,7 @@ WIDTH=48
 
 # Crucial
 if $PRODUCTION_MODE; then
-    USERS_FILE="$DB/Users/mock.$DB_EXT"
+    USERS_FILE="$DB/Users/foo.$DB_EXT"
 else
     USERS_FILE=""
 fi

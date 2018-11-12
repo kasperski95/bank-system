@@ -1,0 +1,4 @@
+# ignore
+Database/Accounts/*
+Database/Transactions/*
+Database/Users/*

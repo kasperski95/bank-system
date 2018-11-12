@@ -7,8 +7,14 @@
 
 
 while true; do
-    auth_authenticate
-    home_show
+    if [ ! -z "$(ls -A $DB/Users)" ]; then
+        auth_authenticate
+        home_show
+    else
+        echo "Inicjalizuje bazę danych..."
+        . ./fillDatabase.sh
+        sleep 1s
+    fi
 done
 
 

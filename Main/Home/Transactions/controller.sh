@@ -1,4 +1,12 @@
 #!/bin/bash
+tnst_dir="${BASH_SOURCE%/*}"
+if [[ ! -d "$tnst_dir" ]]; then tnst_dir="$PWD"; fi
+
+. $tnst_dir/../../Database/users.sh
+. $tnst_dir/../../Database/accounts.sh
+. $tnst_dir/../../Database/misc.sh
+. $tnst_dir/../../Database/transactions.sh
+
 
 
 tnst_handleTransfer() {
@@ -199,15 +207,15 @@ __tnst_makeTransfer() {
     local newTargetAccountBalance=$(echo "($targetAccountBalance+$sum)/$targetExchangeRate" | bc)
 
     #-----------------------------------------------
-    echo "sum: $sum"
-    echo "SOURCE"
-    echo "sourceAccountBalance: $sourceAccountBalance"
-    echo "sourceExchangeRate: $sourceExchangeRate"
-    echo "newSourceAccountBalance: $newSourceAccountBalance"
-    echo "TARGET"
-    echo "targetAccountBalance: $targetAccountBalance"
-    echo "targetExchangeRate: $targetExchangeRate"
-    echo "newTargetAccountBalance: $newTargetAccountBalance"
+    # echo "sum: $sum"
+    # echo "SOURCE"
+    # echo "sourceAccountBalance: $sourceAccountBalance"
+    # echo "sourceExchangeRate: $sourceExchangeRate"
+    # echo "newSourceAccountBalance: $newSourceAccountBalance"
+    # echo "TARGET"
+    # echo "targetAccountBalance: $targetAccountBalance"
+    # echo "targetExchangeRate: $targetExchangeRate"
+    # echo "newTargetAccountBalance: $newTargetAccountBalance"
     #-----------------------------------------------
 
 
@@ -215,8 +223,14 @@ __tnst_makeTransfer() {
     dbAccounts_set "balance" $newTargetAccountBalance $targetAccountID
 
 
-    #TODO: put to the history
+    #TODO: transaction source name
+    local transactionID=$(db_createTransaction $(date) $sourceAccountID "<srcName>" $targetAccountID $name $title $amount)
+    
+    echo "transactionID: $transactionID"
 
+    # push transactionID to both accounts
+    db_addTransactionToAccount $transactionID $sourceAccountID
+    db_addTransactionToAccount $transactionID $targetAccountID
 
     echo "Przelew został zrealizowany."
     echo ""
