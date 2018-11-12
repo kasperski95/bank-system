@@ -76,7 +76,7 @@ echo "}" >> $file_account003
 echo "{" > $file_transaction0
 echo "  \"date\": \"$generationDate\"," >> $file_transaction0
 echo "  \"title\": \"Przelew testowy\"," >> $file_transaction0
-echo "  \"amount\": \"100000\"," >> $file_transaction0
+echo "  \"sum\": \"100000\"," >> $file_transaction0
 echo "  \"sourceAccountID\": \"001\"," >> $file_transaction0
 echo "  \"sourceName\": \"Bank\"," >> $file_transaction0
 echo "  \"targetAccountID\": \"000\"," >> $file_transaction0
@@ -86,7 +86,7 @@ echo "}" >> $file_transaction0
 echo "{" > $file_transaction1
 echo "  \"date\": \"$generationDate\"," >> $file_transaction1
 echo "  \"title\": \"Przelew testowy\"," >> $file_transaction1
-echo "  \"amount\": \"100000\"," >> $file_transaction1
+echo "  \"sum\": \"100000\"," >> $file_transaction1
 echo "  \"sourceAccountID\": \"000\"," >> $file_transaction1
 echo "  \"sourceName\": \"Bank\"," >> $file_transaction1
 echo "  \"targetAccountID\": \"001\"," >> $file_transaction1

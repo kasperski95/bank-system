@@ -207,15 +207,15 @@ __tnst_makeTransfer() {
     local newTargetAccountBalance=$(echo "($targetAccountBalance+$sum)/$targetExchangeRate" | bc)
 
     #-----------------------------------------------
-    # echo "sum: $sum"
-    # echo "SOURCE"
-    # echo "sourceAccountBalance: $sourceAccountBalance"
-    # echo "sourceExchangeRate: $sourceExchangeRate"
-    # echo "newSourceAccountBalance: $newSourceAccountBalance"
-    # echo "TARGET"
-    # echo "targetAccountBalance: $targetAccountBalance"
-    # echo "targetExchangeRate: $targetExchangeRate"
-    # echo "newTargetAccountBalance: $newTargetAccountBalance"
+    echo "sum: $sum"
+    echo "SOURCE"
+    echo "sourceAccountBalance: $sourceAccountBalance"
+    echo "sourceExchangeRate: $sourceExchangeRate"
+    echo "newSourceAccountBalance: $newSourceAccountBalance"
+    echo "TARGET"
+    echo "targetAccountBalance: $targetAccountBalance"
+    echo "targetExchangeRate: $targetExchangeRate"
+    echo "newTargetAccountBalance: $newTargetAccountBalance"
     #-----------------------------------------------
 
 
@@ -224,9 +224,8 @@ __tnst_makeTransfer() {
 
 
     #TODO: transaction source name
-    local transactionID=$(db_createTransaction $(date) $sourceAccountID "<srcName>" $targetAccountID $name $title $amount)
-    
-    echo "transactionID: $transactionID"
+    local transactionID=$(db_createTransaction "$(echo $(date))" $sourceAccountID "<srcName>" $targetAccountID $name $title $sum)
+
 
     # push transactionID to both accounts
     db_addTransactionToAccount $transactionID $sourceAccountID

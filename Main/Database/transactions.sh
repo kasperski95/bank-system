@@ -8,7 +8,7 @@ db_createTransaction() {
     local targetAccountID="$4"
     local targetName="$5"
     local title="$6"
-    local amount="$7"
+    local sum="$7"
 
     # create file
     local transactionID=$(ls $DB/Transactions/ | tail --lines=1 | grep -Po ".*(?=\.)")
@@ -23,7 +23,7 @@ db_createTransaction() {
     echo "{"  > $transactionFile
     echo "  \"date\": \"$date\"," >> $transactionFile
     echo "  \"title\": \"$title\"," >> $transactionFile
-    echo "  \"amount\": \"$amount\"," >> $transactionFile
+    echo "  \"sum\": \"$sum\"," >> $transactionFile
     echo "  \"sourceAccountID\": \"$sourceAccountID\"," >> $transactionFile
     echo "  \"sourceName\": \"$sourceName\"," >> $transactionFile
     echo "  \"targetAccountID\": \"$targetAccountID\"," >> $transactionFile
