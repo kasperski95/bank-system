@@ -1,6 +1,6 @@
 {
     "password": "1234",
-    "accountsID": ["000","001","002"],
+    "accountsID": ["000","001"],
     "firstname": "Jan",
     "lastname": "Kowalski",
     "city": "Warszawa",

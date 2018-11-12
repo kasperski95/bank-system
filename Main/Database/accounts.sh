@@ -11,10 +11,47 @@ dbAccounts_get() {
     return 0
 }
 
+dbAccounts_set() {
+    #FIXME: last property
+    local key=$1
+    local val=$2
+    local accountID=$3
+    sed -i "s/\($key\":\).*$/\1 \"$val\",/" "$DB/Accounts/$accountID.$DB_EXT"
+    return $?
+}
+
+
+
+db_doesAccountExists() {
+    if [ -f "$DB/Accounts/$1.$DB_EXT" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
 
 db_getAccountBalance() {
     local accountID=$1
     local balance=$(dbAccounts_get "balance" $accountID)
+    echo "$balance/100" | bc
+    return 0
+}
+
+db_getAccountRawBalance_PLN() {
+    local accountID=$1
+    local balance=$(dbAccounts_get "balance" $accountID)
+    local currency=$(db_getAccountCurrency $accountID)
+    local exchangeRate=$(db_getExchangeRate $currency)
+    echo "$balance*$exchangeRate" | bc
+    return 0
+}
+
+db_getAccountBalance_PLN() {
+    local accountID=$1
+    local balance=$(dbAccounts_get "balance" $accountID)
+    local currency=$(db_getAccountCurrency $accountID)
+    local exchangeRate=$(db_getExchangeRate $currency)
+    balance=$(echo "$balance*$exchangeRate" | bc)
     echo "$balance/100" | bc
     return 0
 }
@@ -26,7 +63,7 @@ db_getAccountCurrency() {
     return 0
 }
 
-db_getAccountBalance_ORG() {
+db_printAccountBalance() {
     local accountID=$1
     local balance=$(db_getAccountBalance $accountID)
     local currency=$(db_getAccountCurrency $accountID)
@@ -34,7 +71,7 @@ db_getAccountBalance_ORG() {
     return 0
 }
 
-db_getAccountBalance_PLN() {
+db_printAccountBalance_PLN() {
     local accountID=$1
     local balance=$(db_getAccountBalance $accountID)
     local currency=$(db_getAccountCurrency $accountID)

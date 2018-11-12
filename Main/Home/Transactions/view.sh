@@ -21,8 +21,8 @@ tnst_show() {
 
 
 __tnst_showMenu() {
-    printf "$RED"
     echo "1 - Przelew zwykły"
+    printf "$RED"
     echo "2 - Przelew ekspress"
     echo "3 - Przelew walutowy"
     printf "$DEFAULT_COLOR"
@@ -33,9 +33,9 @@ __tnst_showMenu() {
 
 __tnst_handleAction() {
     case $1 in
-        "1") __tnst_makeTransfer;;
-        "2") __tnst_makeExpressTransfer;;
-        "3") __tnst_makeMonetaryTransfer;;
+        "1") tnst_handleTransfer;;
+        "2") tnst_handleExpressTransfer;;
+        "3") tnst_handleMonetaryTransfer;;
         *) home_skipPause=true
     esac
 

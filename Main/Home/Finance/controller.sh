@@ -29,6 +29,7 @@ __fin_sumarize() {
 
 __fin_showSubaccount() {
     ui_header $fin_title "RACHUNKI_ROZLICZENIOWE"
+    local accounts=$(db_getUserAccounts)
 
     for i in $accounts; do
         if [ $(dbAccounts_get "type" $i) == "checking" ]; then
@@ -44,6 +45,7 @@ __fin_showSubaccount() {
 
 __fin_showSavingAccounts() {
     ui_header $fin_title "RACHUNKI_OSZCZĘDNOŚCIOWE"
+    local accounts=$(db_getUserAccounts)
 
     for i in $accounts; do
         if [ $(dbAccounts_get "type" $i) == "saving" ]; then

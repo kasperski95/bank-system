@@ -8,6 +8,8 @@ if [[ ! -d "$home_dir" ]]; then home_dir="$PWD"; fi
 
 
 home_showBalance() {
+    #FIXME: floating point
+
     local total=0
     local totalSavings=0
     local totalChecking=0

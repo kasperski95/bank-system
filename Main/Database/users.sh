@@ -27,7 +27,8 @@ db_getUser() {
 
 
 db_getUserAccounts() {
-    utl_parseToArray $(utl_getRawArrayFromJson "accountsID" $USERS_FILE)
+    local accounts=$(utl_parseToArray $(utl_getRawArrayFromJson "accountsID" $USERS_FILE))
+    echo $accounts
     return 0
 }
 
@@ -55,6 +56,8 @@ dbUsers_get() {
 
 
 dbUsers_set() {
+    #FIXME: last property
+    #FIXME: " and arrays
     local key=$1
     local val=$2
 

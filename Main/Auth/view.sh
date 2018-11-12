@@ -19,20 +19,22 @@ auth_authenticate() {
         fi
 
         # login
-        read -p "Podaj login: " login
+        read -p "Login: " login
         while (! __verifyLogin $login); do
             ui_header "LOGOWANIE"
             echo "Login może się składać tylko z liter."
             echo ""
-            read -p "Podaj login: " login
+            read -p "Login: " login
         done
 
         # password
-        read -ps "Podaj hasło: " password
+        read -s -p "Hasło: " password
         while (! __verifyPassword $password); do
+            ui_header "LOGOWANIE"
             echo "Hasło może się składać tylko z cyfr."
             echo ""
-            read -ps "Podaj hasło: " password
+            echo "Login: $login"
+            read -s -p "Hasło: " password
         done
 
         # verify
