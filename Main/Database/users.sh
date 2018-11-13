@@ -32,6 +32,20 @@ db_getUserAccounts() {
     return 0
 }
 
+db_isUsersAccount() {
+    local accountID=$1
+    local accounts=$(db_getUserAccounts)
+
+    for i in ${accounts[@]}; do
+        if [ "$accountID" == "$i" ]; then
+            echo "true"
+            return 0
+        fi
+    done;
+
+    echo "false"
+    return 1
+}
 
 db_addAccount() {
     local accountID=$1

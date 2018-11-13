@@ -1,15 +1,15 @@
 #!/bin/bash
 . Main/globals.sh
 
-generationDate=$(echo $(date))
-file_userFoo="$DB/Users/foo.json"
-file_userBar="$DB/Users/bar.json"
-file_account000="$DB/Accounts/000.json"
-file_account001="$DB/Accounts/001.json"
-file_account002="$DB/Accounts/002.json"
-file_account003="$DB/Accounts/003.json"
-file_transaction0="$DB/Transactions/0.json"
-file_transaction1="$DB/Transactions/1.json"
+generationDate=$(utl_getDateAndTime)
+file_userFoo="$DB/Users/foo.$DB_EXT"
+file_userBar="$DB/Users/bar.$DB_EXT"
+file_account000="$DB/Accounts/000.$DB_EXT"
+file_account001="$DB/Accounts/001.$DB_EXT"
+file_account002="$DB/Accounts/002.$DB_EXT"
+file_account003="$DB/Accounts/003.$DB_EXT"
+file_transaction0="$DB/Transactions/000000.$DB_EXT"
+file_transaction1="$DB/Transactions/000001.$DB_EXT"
 
 touch $file_userFoo
 touch $file_userBar
@@ -47,7 +47,7 @@ echo "}" >> $file_userBar
 echo "{" > $file_account000
 echo "   \"balance\": \"100000\"," >> $file_account000
 echo "   \"type\": \"checking\"," >> $file_account000
-echo "   \"transactionsID\": [\"0\"]," >> $file_account000
+echo "   \"transactionsID\": [\"000000\"]," >> $file_account000
 echo "   \"currency\": \"PLN\"" >> $file_account000
 echo "}" >> $file_account000
 
@@ -61,7 +61,7 @@ echo "}" >> $file_account001
 echo "{" > $file_account002
 echo "   \"balance\": \"100000\"," >> $file_account002
 echo "   \"type\": \"checking\"," >> $file_account002
-echo "   \"transactionsID\": [\"1\"]," >> $file_account002
+echo "   \"transactionsID\": [\"000001\"]," >> $file_account002
 echo "   \"currency\": \"PLN\"" >> $file_account002
 echo "}" >> $file_account002
 
@@ -69,7 +69,7 @@ echo "{" > $file_account003
 echo "   \"balance\": \"0\"," >> $file_account003
 echo "   \"type\": \"saving\"," >> $file_account003
 echo "   \"transactionsID\": []," >> $file_account003
-echo "   \"currency\": \"USD\"" >> $file_account003
+echo "   \"currency\": \"PLN\"" >> $file_account003
 echo "}" >> $file_account003
 
 
@@ -77,7 +77,7 @@ echo "{" > $file_transaction0
 echo "  \"date\": \"$generationDate\"," >> $file_transaction0
 echo "  \"title\": \"Przelew testowy\"," >> $file_transaction0
 echo "  \"sum\": \"100000\"," >> $file_transaction0
-echo "  \"sourceAccountID\": \"001\"," >> $file_transaction0
+echo "  \"sourceAccountID\": \"bank\"," >> $file_transaction0
 echo "  \"sourceName\": \"Bank\"," >> $file_transaction0
 echo "  \"targetAccountID\": \"000\"," >> $file_transaction0
 echo "  \"targetName\": \"Jan Kowalski\"" >> $file_transaction0
@@ -87,7 +87,7 @@ echo "{" > $file_transaction1
 echo "  \"date\": \"$generationDate\"," >> $file_transaction1
 echo "  \"title\": \"Przelew testowy\"," >> $file_transaction1
 echo "  \"sum\": \"100000\"," >> $file_transaction1
-echo "  \"sourceAccountID\": \"000\"," >> $file_transaction1
+echo "  \"sourceAccountID\": \"bank\"," >> $file_transaction1
 echo "  \"sourceName\": \"Bank\"," >> $file_transaction1
 echo "  \"targetAccountID\": \"001\"," >> $file_transaction1
 echo "  \"targetName\": \"Jan Nowak\"" >> $file_transaction1

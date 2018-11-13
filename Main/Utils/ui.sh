@@ -32,21 +32,21 @@ ui_header() {
 
 ui_alignRight() {
     if [ -z ${3+x} ]; then
-        local str=${1}
-        local format=${2}
+        local str="$1"
+        local format="$2"
         local padding=$((WIDTH-1))
         printf "%${padding}${format}" $str
     else
-        local str1=${1}
-        local str2=${2}
-        local format1=${3}
-        local format2=${4}
+        local str1="$1"
+        local str2="$2"
+        local format1="$3"
+        local format2="$4"
         local offsetLeft=0
         if [ ! -z ${5+x} ]; then
-            local offsetLeft=${5}
+            local offsetLeft="$5"
         fi
         local padding=$((WIDTH-${#1}-1-offsetLeft))
-        printf "%${format1} %${padding}${format2}" $str1 $str2
+        printf "%${format1} %${padding}${format2}" "${str1}" "${str2}"
     fi
     return 0
 }

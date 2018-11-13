@@ -7,7 +7,12 @@ if [[ ! -d "$db_dir" ]]; then db_dir="$PWD"; fi
 
 
 dbAccounts_get() {
-    utl_getFromJson "$1" "$DB/Accounts/$2.$DB_EXT"
+    if [ -z ${3+x} ]; then
+        utl_getFromJson "$1" "$DB/Accounts/$2.$DB_EXT"
+    else
+        # array
+        utl_getRawArrayFromJson "$1" "$DB/Accounts/$2.$DB_EXT"
+    fi
     return 0
 }
 
@@ -78,6 +83,12 @@ db_doesAccountExists() {
     fi
 }
 
+
+db_getAccountTransactions() {
+    local accountID=$1
+    echo $(utl_parseToArray $(dbAccounts_get "transactionsID" $accountID "array"))
+    return 0
+}
 
 db_getAccountBalance() {
     local accountID=$1

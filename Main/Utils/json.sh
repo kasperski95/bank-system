@@ -19,6 +19,17 @@ utl_getRawArrayFromJson() {
 } 
 
 
+utl_sort() {
+    echo $@ | tr ' ' '\n' | sort
+    return 0
+}
+
+utl_sortR() {
+    echo $@ | tr ' ' '\n' | sort -r
+    return 0
+}
+
+
 utl_parseArrayToJson() {
     local result="["
     local i

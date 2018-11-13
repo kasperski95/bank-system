@@ -198,8 +198,9 @@ __tnst_makeTransfer() {
     local sourceAccountBalance=$(db_getAccountRawBalance_PLN $sourceAccountID)
     local sourceAccountCurrency=$(db_getAccountCurrency $sourceAccountID)
     local sourceExchangeRate=$(db_getExchangeRate $sourceAccountCurrency)
-    local newSourceAccountBalance=$(echo "($sourceAccountBalance-$sum)/$sourceExchangeRate" | bc)
-    
+    local newSourceAccountBalance=$(echo "scale=4;($sourceAccountBalance-$sum)/$sourceExchangeRate" | bc)
+    newSourceAccountBalance=$(echo "scale=0;($newSourceAccountBalance+0.4999)/1" | bc)
+
     # calculate target account balance
     local targetAccountBalance=$(db_getAccountRawBalance_PLN $targetAccountID)
     local targetAccountCurrency=$(db_getAccountCurrency $targetAccountID)
@@ -208,15 +209,15 @@ __tnst_makeTransfer() {
     newTargetAccountBalance=$(echo "scale=0;($newTargetAccountBalance+0.4999)/1" | bc)
 
     #-----------------------------------------------
-    echo "sum: $sum"
-    echo "SOURCE"
-    echo "sourceAccountBalance: $sourceAccountBalance"
-    echo "sourceExchangeRate: $sourceExchangeRate"
-    echo "newSourceAccountBalance: $newSourceAccountBalance"
-    echo "TARGET"
-    echo "targetAccountBalance: $targetAccountBalance"
-    echo "targetExchangeRate: $targetExchangeRate"
-    echo "newTargetAccountBalance: $newTargetAccountBalance"
+    # echo "sum: $sum"
+    # echo "SOURCE"
+    # echo "sourceAccountBalance: $sourceAccountBalance"
+    # echo "sourceExchangeRate: $sourceExchangeRate"
+    # echo "newSourceAccountBalance: $newSourceAccountBalance"
+    # echo "TARGET"
+    # echo "targetAccountBalance: $targetAccountBalance"
+    # echo "targetExchangeRate: $targetExchangeRate"
+    # echo "newTargetAccountBalance: $newTargetAccountBalance"
     #-----------------------------------------------
 
 
@@ -225,7 +226,7 @@ __tnst_makeTransfer() {
 
 
     #TODO: transaction source name
-    local transactionID=$(db_createTransaction "$(echo $(date))" $sourceAccountID "<srcName>" $targetAccountID $name $title $sum)
+    local transactionID=$(db_createTransaction "$(echo $(utl_getDateAndTime))" $sourceAccountID "<srcName>" $targetAccountID $name $title $sum)
 
 
     # push transactionID to both accounts

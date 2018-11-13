@@ -1,6 +1,8 @@
 #!/bin/bash
 
 
+
+
 isLogIn() {
     if [ ! -z ${USERS_FILE+x} ] && [ "$USERS_FILE" != "" ] && [ -f $USERS_FILE ]; then
         return 0;

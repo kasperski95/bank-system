@@ -1,6 +1,17 @@
 #!/bin/bash
 
 
+dbTransactions_get() {
+    if [ -z ${3+x} ]; then
+        utl_getFromJson "$1" "$DB/Transactions/$2.$DB_EXT"
+    else
+        # array
+        utl_getRawArrayFromJson "$1" "$DB/Transactions/$2.$DB_EXT"
+    fi
+    return 0
+}
+
+
 db_createTransaction() {
     local date="$1"
     local sourceAccountID="$2"
@@ -13,9 +24,15 @@ db_createTransaction() {
     # create file
     local transactionID=$(ls $DB/Transactions/ | tail --lines=1 | grep -Po ".*(?=\.)")
     if [ "$transactionID" == "" ]; then
-        transactionID="0"
+        transactionID="-1"
     fi
+
+    # remove 0 from the beginning because of octal bullshit
+    newAccountID=$(echo $newAccountID | sed 's/^0*//') 
+
     ((transactionID++))
+    transactionID=$(printf "%06d\n" $transactionID)
+
     transactionFile="$DB/Transactions/$transactionID.$DB_EXT"
     touch $transactionFile
 
