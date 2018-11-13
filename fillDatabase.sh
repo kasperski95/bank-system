@@ -1,7 +1,8 @@
 #!/bin/bash
 . Main/globals.sh
 
-generationDate=$(utl_getDateAndTime)
+generationDate=$(utl_getDate)
+generationTime=$(utl_getTime)
 file_userFoo="$DB/Users/foo.$DB_EXT"
 file_userBar="$DB/Users/bar.$DB_EXT"
 file_account000="$DB/Accounts/000.$DB_EXT"
@@ -75,6 +76,7 @@ echo "}" >> $file_account003
 
 echo "{" > $file_transaction0
 echo "  \"date\": \"$generationDate\"," >> $file_transaction0
+echo "  \"time\": \"$generationTime\"," >> $file_transaction0
 echo "  \"title\": \"Przelew testowy\"," >> $file_transaction0
 echo "  \"sum\": \"100000\"," >> $file_transaction0
 echo "  \"sourceAccountID\": \"bank\"," >> $file_transaction0
@@ -85,6 +87,7 @@ echo "}" >> $file_transaction0
 
 echo "{" > $file_transaction1
 echo "  \"date\": \"$generationDate\"," >> $file_transaction1
+echo "  \"time\": \"$generationTime\"," >> $file_transaction1
 echo "  \"title\": \"Przelew testowy\"," >> $file_transaction1
 echo "  \"sum\": \"100000\"," >> $file_transaction1
 echo "  \"sourceAccountID\": \"bank\"," >> $file_transaction1

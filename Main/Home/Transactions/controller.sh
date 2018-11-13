@@ -175,7 +175,7 @@ __tnst_handleTransfer() {
     read -p "Wybierz akcję: " action
 
     if [ "$action" == "1" ]; then
-        __tnst_makeTransfer $1 $sourceAccountID $targetAccountID $name $address $title $sum
+        __tnst_makeTransfer $1 $sourceAccountID $targetAccountID $name $address $title $sum "PLN"
         return 0
     fi
 
@@ -224,9 +224,10 @@ __tnst_makeTransfer() {
     dbAccounts_set "balance" $newSourceAccountBalance $sourceAccountID
     dbAccounts_set "balance" $newTargetAccountBalance $targetAccountID
 
+    userInfo=$(echo "$(dbUsers_get "firstname") $(dbUsers_get "lastname")")
 
     #TODO: transaction source name
-    local transactionID=$(db_createTransaction "$(echo $(utl_getDateAndTime))" $sourceAccountID "<srcName>" $targetAccountID $name $title $sum)
+    local transactionID=$(db_createTransaction "$(echo $(utl_getDate))" "$(echo $(utl_getTime))" $sourceAccountID "$userInfo" $targetAccountID $name $title $sum)
 
 
     # push transactionID to both accounts

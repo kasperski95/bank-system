@@ -14,12 +14,13 @@ dbTransactions_get() {
 
 db_createTransaction() {
     local date="$1"
-    local sourceAccountID="$2"
-    local sourceName="$3"
-    local targetAccountID="$4"
-    local targetName="$5"
-    local title="$6"
-    local sum="$7"
+    local time="$2"
+    local sourceAccountID="$3"
+    local sourceName="$4"
+    local targetAccountID="$5"
+    local targetName="$6"
+    local title="$7"
+    local sum="$8"
 
     # create file
     local transactionID=$(ls $DB/Transactions/ | tail --lines=1 | grep -Po ".*(?=\.)")
@@ -39,6 +40,7 @@ db_createTransaction() {
     # print stuff to files
     echo "{"  > $transactionFile
     echo "  \"date\": \"$date\"," >> $transactionFile
+    echo "  \"time\": \"$time\"," >> $transactionFile
     echo "  \"title\": \"$title\"," >> $transactionFile
     echo "  \"sum\": \"$sum\"," >> $transactionFile
     echo "  \"sourceAccountID\": \"$sourceAccountID\"," >> $transactionFile

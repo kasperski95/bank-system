@@ -26,9 +26,7 @@ hist_show() {
 
 
 __hist_showMenu() {
-    printf "$RED"
-    echo "1 - Eksportuj do plików"
-    printf "$DEFAULT_COLOR"
+    echo "1 - Eksportuj"
     echo "0 - Powrót"
 
     return 0
