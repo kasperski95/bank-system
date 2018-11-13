@@ -14,9 +14,7 @@ hist_printList() {
         local targetAccountID=$(dbTransactions_get "targetAccountID" $i)
         local sum=$(dbTransactions_get "sum" $i)
         sum=$(echo "scale=2;$sum/100" | bc)
-
-        local left="${transactionDate} ${transactionTime} | ${sourceAccountID} -> ${targetAccountID}"
-        local right="${sum} PLN"
+        local sign=""
 
         local doesSourceBelongsToUser=$(db_isUsersAccount $sourceAccountID)
         local doesTargetBelongsToUser=$(db_isUsersAccount $targetAccountID)
@@ -24,11 +22,15 @@ hist_printList() {
             printf $DEFAULT_COLOR;
         elif [ "$doesSourceBelongsToUser" == "true" ]; then
             printf $RED;
+            sign="-"
         elif [ "$doesTargetBelongsToUser" == "true" ]; then
             printf $GREEN;
         fi
 
+        local left="${transactionDate} ${transactionTime} | ${sourceAccountID} -> ${targetAccountID}"
+        local right="${sign}${sum} PLN"
         ui_alignRight "$left" "$right" "s" "s"
+
         printf $DEFAULT_COLOR;
         echo ""
     done

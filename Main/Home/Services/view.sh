@@ -39,8 +39,8 @@ __serv_showMenu() {
     echo "6 - Dokumenty"
     printf $RED
     echo "7 - Doładowanie telefonu"
-    echo "8 - Kantor"
     printf $DEFAULT_COLOR
+    echo "8 - Kantor"
     echo "0 - Powrót"
 
     return 0
