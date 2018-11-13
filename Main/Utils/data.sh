@@ -29,6 +29,19 @@ utl_sortR() {
     return 0
 }
 
+utl_removeDoubles() {
+    local uniqueArray
+    local prev=""
+    for i in $@; do
+        if [ "$prev" != "$i" ]; then
+            uniqueArray+=("$i")
+            prev=$i
+        fi
+    done
+    echo ${uniqueArray[@]}
+    return 0
+}
+
 
 utl_parseArrayToJson() {
     local result="["

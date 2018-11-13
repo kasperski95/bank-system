@@ -18,6 +18,7 @@ hist_printList() {
 
     # sort transactions
     local sortedTransactions=$(utl_sortR ${transactions[@]} | tr "\n" " ")
+    sortedTransactions=$(utl_removeDoubles $sortedTransactions)
 
     # print list
     for i in ${sortedTransactions[@]}; do
