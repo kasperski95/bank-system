@@ -38,7 +38,7 @@ home_showBalance() {
     local format=".2f"
     ui_alignRight "Saldo:" "$totalChecking" "s" "$format" "4" && echo " PLN"
     ui_alignRight "Oszczędności:" $totalSavings "s" $format "4" && echo " PLN"
-    ui_alignRight "W_sumie:" $total "s" $format "4" && echo " PLN"
+    ui_alignRight "W sumie:" $total "s" $format "4" && echo " PLN"
 
     return 0
 }

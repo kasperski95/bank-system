@@ -16,7 +16,7 @@ hist_printList() {
         sum=$(echo "scale=2;$sum/100" | bc)
 
         local left="${transactionDate} ${transactionTime} | ${sourceAccountID} -> ${targetAccountID}"
-        local right="${sum}_PLN"
+        local right="${sum} PLN"
 
         local doesSourceBelongsToUser=$(db_isUsersAccount $sourceAccountID)
         local doesTargetBelongsToUser=$(db_isUsersAccount $targetAccountID)

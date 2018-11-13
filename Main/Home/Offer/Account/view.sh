@@ -1,5 +1,5 @@
 #!/bin/bash
-ofrAct_title="KONTO_I_RACHUNKI_BANKOWE"
+ofrAct_title="KONTO I RACHUNKI BANKOWE"
 ofrAct_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$ofrAct_dir" ]]; then ofrAct_dir="$PWD"; fi
 
@@ -10,7 +10,7 @@ if [[ ! -d "$ofrAct_dir" ]]; then ofrAct_dir="$PWD"; fi
 ofrAct_show() {
     local action
 
-    ui_header $ofr_title $ofrAct_title
+    ui_header "$ofr_title" "$ofrAct_title"
     __ofrAct_showMenu && echo ""
     ui_line
     read -p "Wybierz akcję: " action

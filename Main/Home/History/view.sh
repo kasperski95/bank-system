@@ -10,7 +10,7 @@ if [[ ! -d "$hist_dir" ]]; then hist_dir="$PWD"; fi
 hist_show() {
     local action
 
-    ui_header $home_title $hist_title
+    ui_header "$home_title" "$hist_title"
     hist_printList && echo ""
     __hist_showMenu && echo ""
     ui_line

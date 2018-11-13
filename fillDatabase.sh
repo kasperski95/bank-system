@@ -1,5 +1,6 @@
 #!/bin/bash
 . Main/globals.sh
+. Main/Utils/index.sh
 
 generationDate=$(utl_getDate)
 generationTime=$(utl_getTime)

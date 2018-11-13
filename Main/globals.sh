@@ -4,15 +4,7 @@
 PRODUCTION_MODE=true
 DB_EXT="json"
 
-utl_getDate() {
-    date '+%Y-%m-%d'
-}
-utl_getTime() {
-    date '+%H:%M:%S'
-}
-utl_getDateAndTime() {
-    date '+%Y-%m-%d_%H:%M:%S'
-}
+LC_NUMERIC=C # use '.' instead of ',' for floating point numbers         
 
 # Config
 DB="$(pwd)/Database"

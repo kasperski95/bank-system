@@ -29,7 +29,7 @@ db_createTransaction() {
     fi
 
     # remove 0 from the beginning because of octal bullshit
-    newAccountID=$(echo $newAccountID | sed 's/^0*//') 
+    transactionID=$(echo $transactionID | sed 's/^0*//') 
 
     ((transactionID++))
     transactionID=$(printf "%06d\n" $transactionID)

@@ -13,13 +13,13 @@ ui_line() {
 ui_header() {
     clear
     if [ -z ${2+x} ]; then
-        printf "%s" $1
+        printf "%s" "$1"
     elif [ ! -z ${2+x} ] && [ -z ${3+x} ]; then
-        local str1=$(echo $1)
-        local str2=$(echo $2) 
-        printf "%s -> %s" $str1 $str2
+        local str1="$1"
+        local str2="$2" 
+        printf "%s -> %s" "$str1" "$str2"
     elif [ ! -z ${2+x} ] && [ ! -z ${3+x} ]; then
-        ui_alignRight $1 $3 "s" "s"
+        ui_alignRight "$1" "$3" "s" "s"
     fi
 
     echo ""
@@ -41,7 +41,7 @@ ui_alignRight() {
         local str2="$2"
         local format1="$3"
         local format2="$4"
-        local offsetLeft=0
+        local offsetLeft="0"
         if [ ! -z ${5+x} ]; then
             local offsetLeft="$5"
         fi

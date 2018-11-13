@@ -10,17 +10,17 @@ if [[ ! -d "$tnst_dir" ]]; then tnst_dir="$PWD"; fi
 
 
 tnst_handleTransfer() {
-    __tnst_handleTransfer "PRZELEW_ZWYKŁY"
+    __tnst_handleTransfer "PRZELEW ZWYKŁY"
     return 0
 }
 
 tnst_handleExpressTransfer() {
-    ui_header $tnst_title "PRZELEW_EKSPRESS"
+    ui_header "$tnst_title" "PRZELEW EKSPRESS"
     return 0
 }
 
 tnst_handleMonetaryTransfer() {
-    ui_header $tnst_title "PRZELEW_WALUTOWY"
+    ui_header "$tnst_title" "PRZELEW WALUTOWY"
     return 0
 }
 
@@ -36,7 +36,7 @@ __tnst_handleTransfer() {
     local error=" "
 
     while [ "$error" != "" ]; do
-        ui_header $tnst_title ${1}
+        ui_header "$tnst_title" "$1"
 
         if [ "$error" != " " ]; then
             echo $error
@@ -68,7 +68,7 @@ __tnst_handleTransfer() {
                 return 1
             else
                 error=" "
-                ui_header $tnst_title ${1}
+                ui_header "$tnst_title" "$1"
                 sourceAccountID=${accounts[$sourceAccountSelection]}
 
                 sourceAccountBalance=$(db_getAccountRawBalance_PLN $sourceAccountID)
@@ -175,7 +175,7 @@ __tnst_handleTransfer() {
     read -p "Wybierz akcję: " action
 
     if [ "$action" == "1" ]; then
-        __tnst_makeTransfer $1 $sourceAccountID $targetAccountID $name $address $title $sum "PLN"
+        __tnst_makeTransfer "$1" $sourceAccountID $targetAccountID $name $address $title $sum
         return 0
     fi
 
@@ -185,7 +185,7 @@ __tnst_handleTransfer() {
 
 
 __tnst_makeTransfer() {
-    ui_header $tnst_title $1
+    ui_header "$tnst_title" "$1"
 
     local sourceAccountID=$2
     local targetAccountID=$3
@@ -226,7 +226,6 @@ __tnst_makeTransfer() {
 
     userInfo=$(echo "$(dbUsers_get "firstname") $(dbUsers_get "lastname")")
 
-    #TODO: transaction source name
     local transactionID=$(db_createTransaction "$(echo $(utl_getDate))" "$(echo $(utl_getTime))" $sourceAccountID "$userInfo" $targetAccountID $name $title $sum)
 
 

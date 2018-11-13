@@ -2,7 +2,7 @@
 
 
 __fin_sumarize() {
-    ui_header $fin_title "WSZYSTKIE_RACHUNKI_BANKOWE"
+    ui_header $fin_title "WSZYSTKIE RACHUNKI BANKOWE"
     local accounts=$(db_getUserAccounts)
 
     echo "Rachunki rozliczeniowe:"
@@ -28,7 +28,7 @@ __fin_sumarize() {
 
 
 __fin_showSubaccount() {
-    ui_header $fin_title "RACHUNKI_ROZLICZENIOWE"
+    ui_header $fin_title "RACHUNKI ROZLICZENIOWE"
     local accounts=$(db_getUserAccounts)
 
     for i in $accounts; do
@@ -44,7 +44,7 @@ __fin_showSubaccount() {
 
 
 __fin_showSavingAccounts() {
-    ui_header $fin_title "RACHUNKI_OSZCZĘDNOŚCIOWE"
+    ui_header $fin_title "RACHUNKI OSZCZĘDNOŚCIOWE"
     local accounts=$(db_getUserAccounts)
 
     for i in $accounts; do
@@ -60,7 +60,7 @@ __fin_showSavingAccounts() {
 
 
 __fin_showCreditCards() {
-    ui_header $fin_title "KARTY_KREDYTOWE"
+    ui_header $fin_title "KARTY KREDYTOWE"
     return 0
 }
 

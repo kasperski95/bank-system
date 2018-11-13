@@ -2,7 +2,7 @@
 
 # Saving goals (virtual account, monthly transfer, calcaulate time)
 
-servGls_title="CELE_OSZCZĘDNOŚCIOWE"
+servGls_title="CELE OSZCZĘDNOŚCIOWE"
 servGls_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$servGls_dir" ]]; then servGls_dir="$PWD"; fi
 
@@ -13,7 +13,7 @@ if [[ ! -d "$servGls_dir" ]]; then servGls_dir="$PWD"; fi
 servGls_show() {
     local action
 
-    ui_header $serv_title $servGls_title
+    ui_header "$serv_title" "$servGls_title"
     __servGls_showMenu && echo ""
     ui_line
     read -p "Wybierz akcję: " action

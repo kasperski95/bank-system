@@ -16,7 +16,7 @@ if [[ ! -d "$serv_dir" ]]; then serv_dir="$PWD"; fi
 serv_show() {
     local action
 
-    ui_header $home_title $serv_title
+    ui_header "$home_title" "$serv_title"
     __serv_showMenu && echo ""
     ui_line
     read -p "Wybierz akcję: " action

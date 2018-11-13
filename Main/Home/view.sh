@@ -1,5 +1,5 @@
 #!/bin/bash
-home_title="STRONA_GŁÓWNA"
+home_title="STRONA GŁÓWNA"
 home_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$home_dir" ]]; then home_dir="$PWD"; fi
 
@@ -17,8 +17,8 @@ home_show() {
     while isLogIn; do    
         local accounts=$(utl_parseToArray $(utl_getRawArrayFromJson "accountsID" $USERS_FILE))
         local action
-        local username="$(dbUsers_get "firstname")_$(dbUsers_get "lastname")"
-        ui_header $home_title "" $username
+        local username="$(dbUsers_get "firstname") $(dbUsers_get "lastname")"
+        ui_header "$home_title" "" "$username"
         home_showBalance $accounts && echo ""
         __home_showMenu && echo ""
         ui_line

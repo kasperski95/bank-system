@@ -10,7 +10,7 @@ if [[ ! -d "$tnst_dir" ]]; then tnst_dir="$PWD"; fi
 tnst_show() {
     local action
     
-    ui_header $home_title $tnst_title
+    ui_header "$home_title" "$tnst_title"
     __tnst_showMenu && echo ""
      ui_line
     read -p "Wybierz akcję: " action

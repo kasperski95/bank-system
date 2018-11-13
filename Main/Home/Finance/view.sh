@@ -10,7 +10,7 @@ if [[ ! -d "$fin_dir" ]]; then fin_dir="$PWD"; fi
 fin_show() {
     local action
 
-    ui_header $home_title $fin_title
+    ui_header "$home_title" "$fin_title"
     __fin_showMenu && echo ""
     ui_line
     read -p "Wybierz akcję: " action
