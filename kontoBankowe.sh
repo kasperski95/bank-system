@@ -7,7 +7,7 @@
 
 
 while true; do
-    if [ ! -z "$(ls -A $DB/Users)" ]; then
+    if [ -d "$DB/Users" ]; then
         auth_authenticate
         home_show
     else

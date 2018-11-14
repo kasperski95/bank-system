@@ -2,19 +2,34 @@
 . Main/globals.sh
 . Main/Utils/index.sh
 
+usersDir="$DB/Users"
+if [ ! -d "$usersDir" ]; then
+    mkdir $usersDir
+fi
+
+accountsDir="$DB/Accounts"
+if [ ! -d "$accountsDir" ]; then
+    mkdir $accountsDir
+fi
+
+transactionsDir="$DB/Transactions"
+if [ ! -d "$transactionsDir" ]; then
+    mkdir $transactionsDir
+fi
+
 generationDate=$(utl_getDate)
 generationTime=$(utl_getTime)
-file_userBank="$DB/Users/bank.$DB_EXT"
-file_userFoo="$DB/Users/foo.$DB_EXT"
-file_userBar="$DB/Users/bar.$DB_EXT"
-file_account000="$DB/Accounts/000.$DB_EXT"
-file_account001="$DB/Accounts/001.$DB_EXT"
-file_account002="$DB/Accounts/002.$DB_EXT"
-file_account003="$DB/Accounts/003.$DB_EXT"
-file_account004="$DB/Accounts/004.$DB_EXT"
-file_account005="$DB/Accounts/005.$DB_EXT"
-file_transaction0="$DB/Transactions/000000.$DB_EXT"
-file_transaction1="$DB/Transactions/000001.$DB_EXT"
+file_userBank="$usersDir/bank.$DB_EXT"
+file_userFoo="$usersDir/foo.$DB_EXT"
+file_userBar="$usersDir/bar.$DB_EXT"
+file_account000="$accountsDir/000.$DB_EXT"
+file_account001="$accountsDir/001.$DB_EXT"
+file_account002="$accountsDir/002.$DB_EXT"
+file_account003="$accountsDir/003.$DB_EXT"
+file_account004="$accountsDir/004.$DB_EXT"
+file_account005="$accountsDir/005.$DB_EXT"
+file_transaction0="$transactionsDir/000000.$DB_EXT"
+file_transaction1="$transactionsDir/000001.$DB_EXT"
 
 touch $file_userBank
 touch $file_userFoo
