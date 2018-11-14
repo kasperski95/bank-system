@@ -18,8 +18,8 @@ hist_printList() {
         local receivedSum=$(dbTransactions_get "receivedSum" $i)
         local sumCurrency=$(dbTransactions_get "sumCurrency" $i)
         local receivedSumCurrency=$(dbTransactions_get "receivedSumCurrency" $i)
-        sum=$(echo "scale=2;$sum/100" | bc)
-        receivedSum=$(echo "scale=2;$receivedSum/100" | bc)
+        sum=$(echo "scale=2;$sum/100" | bc | sed "s/^\./0\./")
+        receivedSum=$(echo "scale=2;$receivedSum/100" | bc | sed "s/^\./0\./")
 
 
         if [ "$(db_isUsersAccount $targetAccountID)" == "true" ]; then
@@ -65,8 +65,8 @@ hist_export() {
             local receivedSumCurrency=$(dbTransactions_get "receivedSumCurrency" $i)
             local title=$(dbTransactions_get "title" $i)
 
-            sum=$(echo "scale=2;$sum/100" | bc)
-            receivedSum=$(echo "scale=2;$receivedSum/100" | bc)
+            sum=$(echo "scale=2;$sum/100" | bc | sed "s/^\./0\./")
+            receivedSum=$(echo "scale=2;$receivedSum/100" | bc | sed "s/^\./0\./")
 
             local outputFile="$outputPath/${transactionDate}_${i}.txt"
             touch $outputFile

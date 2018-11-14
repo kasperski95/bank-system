@@ -10,6 +10,13 @@ if [ -z ${DB+x} ] || [ ! -d $DB ]; then
 fi
 
 
+db_dir="${BASH_SOURCE%/*}"
+if [[ ! -d "$db_dir" ]]; then db_dir="$PWD"; fi
+
+. $db_dir/accounts.sh
+
+
+
 db_getUser() {
     local login=$1
     local password=$2
@@ -31,6 +38,20 @@ db_getUserAccounts() {
     echo $accounts
     return 0
 }
+
+
+db_getUsersSavingAccount() {
+    local accounts=$(db_getUserAccounts)
+
+    for i in ${accounts[@]}; do
+        if [ "$(dbAccounts_get "type" $i)" == "saving" ]; then
+            echo "$i"
+            return 0
+        fi
+    done
+    return 1
+}
+
 
 db_isUsersAccount() {
     local accountID=$1

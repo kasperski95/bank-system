@@ -25,6 +25,19 @@ db_createTransaction() {
     local receivedSum="${10}"
     local receivedSumCurrency="${11}"
 
+    # read -p "---------DB----------" x
+    # read -p "date: $date" x
+    # read -p "time: $time" x
+    # read -p "sourceAccountID: $sourceAccountID" x
+    # read -p "sourceName: $sourceName" x
+    # read -p "targetAccountID: $targetAccountID" x
+    # read -p "title: $title" x
+    # read -p "sum: $sum" x
+    # read -p "sumCurrency: $sumCurrency" x
+    # read -p "receivedSum: $receivedSum" x
+    # read -p "receivedSumCurrency: $receivedSumCurrency" x
+    # read -p "---------------------" x
+
     # create file
     local transactionID=$(ls $DB/Transactions/ | tail --lines=1 | grep -Po ".*(?=\.)")
     if [ "$transactionID" == "" ]; then
@@ -33,6 +46,8 @@ db_createTransaction() {
 
     # remove 0 from the beginning because of octal bullshit
     transactionID=$(echo $transactionID | sed 's/^0*//') 
+
+
 
     ((transactionID++))
     transactionID=$(printf "%06d\n" $transactionID)

@@ -10,23 +10,34 @@ if [[ ! -d "$tnst_dir" ]]; then tnst_dir="$PWD"; fi
 
 
 tnst_handleTransfer() {
-    __tnst_handleTransfer "PRZELEW ZWYKŁY"
+    __tnst_handleTransfer "PRZELEW ZWYKŁY" "0" "300"
     return 0
 }
 
 tnst_handleExpressTransfer() {
-    ui_header "$tnst_title" "PRZELEW EKSPRESS"
+    __tnst_handleTransfer "PRZELEW EKSPRESS" "1000" "500"
     return 0
 }
 
 tnst_handleMonetaryTransfer() {
-    ui_header "$tnst_title" "PRZELEW WALUTOWY"
+    __tnst_handleTransfer "PRZELEW WALUTOWY" "2000" "1000"
     return 0
 }
 
 #--------------------------------------------------------
+#TODO: implement transactions
+# - cost of transactions
+# - send to saving account
+# - implement authorization
+# - normal: restrict receivers
+# - currency: handle currency choose
+# - currency: feedback
+# - transaction sum check must include cost of transaction
 
 __tnst_handleTransfer() {
+    local transactionCost="$2"
+    local sumToSave="$3"
+
     local sourceAccountID=""
     local targetAccountID=""
     local name=""
@@ -35,6 +46,7 @@ __tnst_handleTransfer() {
     local sum=""
     local error=" "
 
+    # extract information from the user
     while [ "$error" != "" ]; do
         ui_header "$tnst_title" "$1"
 
@@ -73,6 +85,7 @@ __tnst_handleTransfer() {
 
                 sourceAccountBalance=$(db_getAccountRawBalance_PLN $sourceAccountID)
                 sourceAccountBalance=$(echo "$sourceAccountBalance" | sed "s/\.[0-9]*//")
+                local sourceAccountCurrency=$(db_getAccountCurrency $sourceAccountID)
                 if [ "$sourceAccountBalance" == "0" ]; then
                     echo "Nie wystarczające środki."
                     echo ""
@@ -146,7 +159,7 @@ __tnst_handleTransfer() {
 
         # sum
         if [ "$sum" == "" ]; then
-            read -p "Kwota przelewu: " sum
+            read -p "Kwota przelewu [$sourceAccountCurrency]: " sum
             sum=$(echo $sum | tr "," ".")
             sum=$(echo "scale=0;($sum * 100)/1" | bc)
             if [ "$sum" == "" ]; then
@@ -163,7 +176,7 @@ __tnst_handleTransfer() {
             fi
             continue
         else
-            echo "Kwota przelewu: $sum"
+            echo "Kwota przelewu [$sourceAccountCurrency]: $sum"
         fi
     done
 
@@ -175,8 +188,24 @@ __tnst_handleTransfer() {
     local action
     read -p "Wybierz akcję: " action
 
+
+    # make transfers
     if [ "$action" == "1" ]; then
-        __tnst_makeTransfer "$1" $sourceAccountID $targetAccountID $name $address $title $sum
+        local transactionID=$(__tnst_makeTransfer "$1" $sourceAccountID $targetAccountID "$name" "$address" "$title" $sum)
+        
+        if [ "$transactionCost" -gt "0" ]; then
+            $( __tnst_makeTransfer "$1" $sourceAccountID "bank" "$name" "$address" "Koszt przelewu: $transactionID" $sum)
+        fi
+
+        if [ "$sumToSave" -gt "0" ]; then
+            local usersSavingAccount=$(db_getUsersSavingAccount)
+            local internalTransactionID=$(__tnst_makeTransfer "$1" $sourceAccountID $usersSavingAccount "$name" "$address" "Przelew wewnętrzny" $sumToSave)
+        fi
+
+
+        ui_header "$tnst_title" "$1"
+        echo "Przelew został zrealizowany."
+        echo ""
         return 0
     fi
 
@@ -186,30 +215,20 @@ __tnst_handleTransfer() {
 
 
 __tnst_makeTransfer() {
-    ui_header "$tnst_title" "$1"
+    #ui_header "$tnst_title" "$1"
 
-    #TODO: add more info to transfer
-    # - sumCurrency
-    # - receivedSum
-    # - receivedSumCurrency
-    # in: fillDatabase, makeTransaction & createTransaction
+    local sourceAccountID="$2"
+    local targetAccountID="$3"
+    local name="$4"
+    local address="$5"
+    local title="$6"
+    local sum="$7"
 
-    # make function to print single item in history
-    # create 2 entries in history if internal transaction
-    # update method generating files
-
-    local sourceAccountID=$2
-    local targetAccountID=$3
-    local name=$4
-    local address=$5
-    local title=$6
-    local sum=$7
-
+    read -p "makeTransfer: title: $title" x
 
     # calculate source account balance
     local sourceAccountBalance=$(db_getAccountRawBalance $sourceAccountID)
     local newSourceAccountBalance=$(($sourceAccountBalance-$sum))
-    #newSourceAccountBalance=$(echo "scale=0;($newSourceAccountBalance+0.4999)/1" | bc)
 
     # exchangeSum
     local sourceAccountCurrency=$(db_getAccountCurrency $sourceAccountID)
@@ -222,32 +241,19 @@ __tnst_makeTransfer() {
     # calculate target account balance
     local newTargetAccountBalance=$(($targetAccountBalance+$receivedSum))
 
-    #-----------------------------------------------
-    # echo "sum: $sum"
-    # echo "SOURCE"
-    # echo "sourceAccountBalance: $sourceAccountBalance"
-    # echo "sourceExchangeRate: $sourceExchangeRate"
-    # echo "newSourceAccountBalance: $newSourceAccountBalance"
-    # echo "TARGET"
-    # echo "targetAccountBalance: $targetAccountBalance"
-    # echo "targetExchangeRate: $targetExchangeRate"
-    # echo "newTargetAccountBalance: $newTargetAccountBalance"
-    #-----------------------------------------------
-
-
+    # update db
     dbAccounts_set "balance" $newSourceAccountBalance $sourceAccountID
     dbAccounts_set "balance" $newTargetAccountBalance $targetAccountID
 
+    # create transaction
     userInfo=$(echo "$(dbUsers_get "firstname") $(dbUsers_get "lastname")")
-
-    local transactionID=$(db_createTransaction "$(echo $(utl_getDate))" "$(echo $(utl_getTime))" $sourceAccountID "$userInfo" $targetAccountID $name $title $sum $sourceAccountCurrency $receivedSum $targetAccountCurrency)
-
+    local transactionID=$(db_createTransaction "$(echo $(utl_getDate))" "$(echo $(utl_getTime))" $sourceAccountID "$userInfo" $targetAccountID "$name" "$title" $sum $sourceAccountCurrency $receivedSum $targetAccountCurrency)
 
     # push transactionID to both accounts
     db_addTransactionToAccount $transactionID $sourceAccountID
     db_addTransactionToAccount $transactionID $targetAccountID
 
-    echo "Przelew został zrealizowany."
-    echo ""
+
+    echo "$transactionID"
     return 0
 }
