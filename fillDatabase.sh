@@ -72,7 +72,7 @@ echo "{" > $file_account001
 echo "   \"balance\": \"0\"," >> $file_account001
 echo "   \"type\": \"saving\"," >> $file_account001
 echo "   \"transactionsID\": []," >> $file_account001
-echo "   \"currency\": \"USD\"" >> $file_account001
+echo "   \"currency\": \"PLN\"" >> $file_account001
 echo "}" >> $file_account001
 
 echo "{" > $file_account002
