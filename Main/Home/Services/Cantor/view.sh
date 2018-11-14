@@ -14,16 +14,21 @@ servCan_handleExchange() {
     __servCan_showCurrencies
 
     # handle user input
-    read -p "Wybierz akcję: " action
+    read -p "Wybierz walutę: " action
     local currency=$(__servCan_getCurrencyFromNumber $action)
 
+    local sum
+    ui_header "$servCan_title" "Kwota"
+    read -p "Podaj kwotę: " sum
+    
+
     # print relative exchange rates 
-    ui_header "$servCan_title" "$currency"
+    ui_header "$servCan_title" "$sum $currency"
     local srcExchangeRate=$(db_getExchangeRate $currency)
     local currencies=("PLN" "USD" "EUR" "CHF" "GBP" "AUD" "UAH" "CZK" "HRK" "RUB")
     for i in ${currencies[@]}; do
         if [ "$i" != "$currency" ]; then
-            echo "$i: $(printf "%.4f" "$(echo "scale=4;$(db_getExchangeRate $i)/$(db_getExchangeRate $currency)" | bc)")"
+            echo "$i: $(printf "%.2f" "$(echo "scale=2;($(echo "scale=4;$(db_getExchangeRate $i)/$(db_getExchangeRate $currency) * $sum" | bc) +0.0049)/1" | bc)")"
         fi
     done
     echo ""
