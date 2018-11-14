@@ -10,36 +10,33 @@ if [[ ! -d "$tnst_dir" ]]; then tnst_dir="$PWD"; fi
 
 
 tnst_handleTransfer() {
-    __tnst_handleTransfer "PRZELEW ZWYKŁY" "0" "300"
+    __tnst_handleTransfer "PRZELEW ZWYKŁY" "0" "300" "false"
     return 0
 }
 
 tnst_handleExpressTransfer() {
-    __tnst_handleTransfer "PRZELEW EKSPRESS" "1000" "500"
+    __tnst_handleTransfer "PRZELEW EKSPRESS" "1000" "500" "false"
     return 0
 }
 
 tnst_handleMonetaryTransfer() {
-    __tnst_handleTransfer "PRZELEW WALUTOWY" "2000" "1000"
+    __tnst_handleTransfer "PRZELEW WALUTOWY" "2000" "1000" "true"
     return 0
 }
 
 #--------------------------------------------------------
-#TODO: implement transactions
-# - normal and fast: restrict accounts
-# - currency: handle currency choose
-# - currency: feedback
-# - transaction sum check must include cost of transaction
 
 __tnst_handleTransfer() {
     local transactionCost="$2"
     local sumToSave="$3"
+    local monetaryTransfer="$4"
 
     local sourceAccountID=""
     local targetAccountID=""
     local name=""
     local address=""
     local title=""
+    local currency=""
     local sum=""
     local error=" "
 
@@ -47,11 +44,7 @@ __tnst_handleTransfer() {
     while [ "$error" != "" ]; do
         ui_header "$tnst_title" "$1"
 
-        if [ "$error" != " " ]; then
-            echo $error
-            error=""
-            echo ""
-        fi
+        
 
         # sourceAccount
         if [ "$sourceAccountID" == "" ]; then
@@ -59,9 +52,11 @@ __tnst_handleTransfer() {
             local id=1           
             local accounts=()
             for i in $_accounts; do
-                echo "$id - $i"
-                accounts+=("$i")
-                ((id++))
+                if [ "$(db_getAccountsType $i)" != "saving" ]; then
+                    echo "$id - $i"
+                    accounts+=("$i")
+                    ((id++))
+                fi
             done
             echo "0 - Powrót"
             echo ""
@@ -83,7 +78,7 @@ __tnst_handleTransfer() {
                 sourceAccountBalance=$(db_getAccountRawBalance_PLN $sourceAccountID)
                 sourceAccountBalance=$(echo "$sourceAccountBalance" | sed "s/\.[0-9]*//")
                 local sourceAccountCurrency=$(db_getAccountCurrency $sourceAccountID)
-                if [ "$sourceAccountBalance" == "0" ]; then
+                if [ "$sourceAccountBalance" -lt "$(($transactionCost+$sumToSave))" ]; then
                     echo "Nie wystarczające środki."
                     echo ""
                     return 1
@@ -92,8 +87,49 @@ __tnst_handleTransfer() {
                 echo "Przelew z rachunku: $sourceAccountID"   
             fi
             continue
-        else
-            echo "Przelew z rachunku: $sourceAccountID"   
+ 
+        fi
+
+
+        # currency
+        if [ "$currency" == "" ]; then
+            if [ "$monetaryTransfer" == "true" ]; then
+                local chosenCurrency
+                __tnst_showCurrencies
+                read -p "Wybierz walutę: " chosenCurrency
+                
+                if [ "$chosenCurrency" == "" ]; then
+                    error=" "
+                    continue
+                fi
+
+                currency=$(__tnst_getCurrencyFromNumber $chosenCurrency)
+                local exchangeRate=$(echo "scale=4; $(db_getExchangeRate $currency)/$(db_getExchangeRate $sourceAccountCurrency)" | bc | sed "s/^\./0\./")
+                
+                transactionCost=$(echo "scale=4; $transactionCost*$(db_getExchangeRate $sourceAccountCurrency)" | bc )
+                transactionCost=$(echo "scale=0; ($transactionCost+0.4999)/1" | bc )
+                sumToSave=$(echo "scale=4; $sumToSave*$(db_getExchangeRate $sourceAccountCurrency)" | bc)
+                sumToSave=$(echo "scale=0; ($sumToSave+0.4999)/1" | bc )
+
+            else
+                currency=$sourceAccountCurrency
+                local exchangeRate=1
+            fi
+        fi
+
+
+        ui_header "$tnst_title" "$1"
+        if [ "$error" != " " ]; then
+            echo $error
+            error=""
+            echo ""
+        fi
+
+        echo "Przelew z rachunku: $sourceAccountID"   
+        
+        if [ "$monetaryTransfer" == "true" ]; then
+            echo "Waluta przelewu: $currency"   
+            echo "Kurs: $exchangeRate"
         fi
 
         # targetAccount
@@ -141,6 +177,7 @@ __tnst_handleTransfer() {
             echo "Adres odbiorcy: $address"
         fi
 
+
         # title
         if [ "$title" == "" ]; then
             read -p "Tytuł przelewu: " title
@@ -156,7 +193,7 @@ __tnst_handleTransfer() {
 
         # sum
         if [ "$sum" == "" ]; then
-            read -p "Kwota przelewu [$sourceAccountCurrency]: " sum
+            read -p "Kwota przelewu [$currency]: " sum
             sum=$(echo $sum | tr "," ".")
             if [[ ! "$sum" =~ ^[0-9]+\.[0-9][0-9]$ ]]; then
                 sum=""
@@ -177,9 +214,16 @@ __tnst_handleTransfer() {
             fi
             continue
         else
-            echo "Kwota przelewu [$sourceAccountCurrency]: $(echo "scale=2;$sum/100" | bc)"
+            echo "Kwota przelewu [$currency]: $(echo "scale=2;$sum/100" | bc)"
         fi
 
+
+        if [ "$monetaryTransfer" == "true" ]; then
+            
+            sum=$(echo "scale=4;$exchangeRate*$sum" | bc)
+            sum=$(echo "scale=0;($sum+0.4999)/1" | bc)
+            echo "Kwota przelewu [$sourceAccountCurrency]: $(echo "scale=2;$sum/100" | bc)"      
+        fi
 
 
         if [ "$sum" -gt "5000" ]; then
@@ -276,5 +320,40 @@ __tnst_makeTransfer() {
 
 
     echo "$transactionID"
+    return 0
+}
+
+
+__tnst_showCurrencies() {
+    ui_header "$tnst_title" "PRZELEW WALUTOWY"
+    echo "1 - USD"
+    echo "2 - EUR"
+    echo "3 - CHF"
+    echo "4 - GBP"
+    echo "5 - AUD"
+    echo "6 - UAH"
+    echo "7 - CZK"
+    echo "8 - HRK"
+    echo "9 - RUB"
+    echo ""
+    ui_line
+
+    return 0
+}
+
+
+__tnst_getCurrencyFromNumber() {
+    case $1 in
+        "1") echo "USD";;
+        "2") echo "EUR";;
+        "3") echo "CHF";;
+        "4") echo "GBP";;
+        "5") echo "AUD";;
+        "6") echo "UAH";;
+        "7") echo "CZK";;
+        "8") echo "HRK";;
+        "9") echo "RUB";;
+    esac
+
     return 0
 }

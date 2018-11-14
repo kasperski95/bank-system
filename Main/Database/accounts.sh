@@ -129,3 +129,10 @@ db_getAccountCurrency() {
     echo $currency
     return 0
 }
+
+db_getAccountsType() {
+    local accountID=$1
+    local currency=$(dbAccounts_get "type" $accountID)
+    echo $currency
+    return 0
+}
