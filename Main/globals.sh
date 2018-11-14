@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # DevConfig
-PRODUCTION_MODE=true
+PRODUCTION_MODE=false
 DB_EXT="json"
 
 LC_NUMERIC=C # use '.' instead of ',' for floating point numbers         
