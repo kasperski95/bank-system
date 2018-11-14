@@ -4,7 +4,10 @@ Aby zakończyć działanie skryptu należy wcisnąć **CTRL+C**.
 
 *Przy pierwszym uruchmieniu program wygeneruje developerską bazę danych na podstawie skryptu fillDatabse.sh*
 
-- Użytkownik  1:
+- Użytkownik 0:
+    - login: **bank**
+    - hasło: **1234**
+- Użytkownik 1:
     - login: **foo**
     - hasło: **1234**
 - Użytkownik 2:

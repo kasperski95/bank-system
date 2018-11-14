@@ -22,10 +22,8 @@ tnst_show() {
 
 __tnst_showMenu() {
     echo "1 - Przelew zwykły"
-    printf "$RED"
     echo "2 - Przelew ekspress"
     echo "3 - Przelew walutowy"
-    printf "$DEFAULT_COLOR"
     echo "0 - Powrót"
     return 0
 }

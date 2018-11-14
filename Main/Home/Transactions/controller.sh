@@ -26,10 +26,7 @@ tnst_handleMonetaryTransfer() {
 
 #--------------------------------------------------------
 #TODO: implement transactions
-# - cost of transactions
-# - send to saving account
-# - implement authorization
-# - normal: restrict receivers
+# - normal and fast: restrict accounts
 # - currency: handle currency choose
 # - currency: feedback
 # - transaction sum check must include cost of transaction
@@ -161,28 +158,53 @@ __tnst_handleTransfer() {
         if [ "$sum" == "" ]; then
             read -p "Kwota przelewu [$sourceAccountCurrency]: " sum
             sum=$(echo $sum | tr "," ".")
-            sum=$(echo "scale=0;($sum * 100)/1" | bc)
-            if [ "$sum" == "" ]; then
-                error="Kwota przelewu nie może być pusta."
-                continue
-            elif [ "$sum" -lt 0 ]; then
+            if [[ ! "$sum" =~ ^[0-9]+\.[0-9][0-9]$ ]]; then
                 sum=""
-                error="Kwota przelewu nie może być ujemna."
-            elif [ "$sum" -gt "$sourceAccountBalance" ]; then
-                sum=""
-                error="Nie wystarczające środki."
-            else 
-                error=""
+                error="Kwota przelewu musi być w formacie: 0.00"
+            else
+                sum=$(echo "scale=0;($sum * 100)/1" | bc)
+                if [ "$sum" == "" ]; then
+                    error="Kwota przelewu nie może być pusta."
+                elif [ "$sum" -lt 0 ]; then
+                    sum=""
+                    error="Kwota przelewu nie może być ujemna."
+                elif [ "$sum" -gt "$sourceAccountBalance" ]; then
+                    sum=""
+                    error="Nie wystarczające środki."
+                else 
+                    error=" "
+                fi
             fi
             continue
         else
-            echo "Kwota przelewu [$sourceAccountCurrency]: $sum"
+            echo "Kwota przelewu [$sourceAccountCurrency]: $(echo "scale=2;$sum/100" | bc)"
         fi
+
+
+
+        if [ "$sum" -gt "5000" ]; then
+            local code
+
+            echo ""
+            echo "<wysyłanie kodu na telefon: 123456>"
+            read -p "Wprowadź kod: " code
+
+            if [ "$code" -eq "123456" ]; then
+                error=""
+            else
+                error="Kod jest nieprawidłowy."
+            fi
+
+        else
+            error=""
+        fi
+
     done
 
     echo ""
     echo "1 - Potwierdź"
     echo "0 - Anuluj"
+    echo ""
     ui_line
     
     local action
@@ -194,14 +216,13 @@ __tnst_handleTransfer() {
         local transactionID=$(__tnst_makeTransfer "$1" $sourceAccountID $targetAccountID "$name" "$address" "$title" $sum)
         
         if [ "$transactionCost" -gt "0" ]; then
-            $( __tnst_makeTransfer "$1" $sourceAccountID "bank" "$name" "$address" "Koszt przelewu: $transactionID" $sum)
+            local bankTransactionID=$( __tnst_makeTransfer "$1" $sourceAccountID "000" "$name" "$address" "Koszt przelewu: $transactionID" $transactionCost)
         fi
 
         if [ "$sumToSave" -gt "0" ]; then
             local usersSavingAccount=$(db_getUsersSavingAccount)
             local internalTransactionID=$(__tnst_makeTransfer "$1" $sourceAccountID $usersSavingAccount "$name" "$address" "Przelew wewnętrzny" $sumToSave)
         fi
-
 
         ui_header "$tnst_title" "$1"
         echo "Przelew został zrealizowany."
@@ -224,7 +245,6 @@ __tnst_makeTransfer() {
     local title="$6"
     local sum="$7"
 
-    read -p "makeTransfer: title: $title" x
 
     # calculate source account balance
     local sourceAccountBalance=$(db_getAccountRawBalance $sourceAccountID)
@@ -239,6 +259,7 @@ __tnst_makeTransfer() {
     receivedSum=$(echo "scale=0;($receivedSum+0.4999)/1" | bc)
 
     # calculate target account balance
+    local targetAccountBalance=$(db_getAccountRawBalance $targetAccountID)
     local newTargetAccountBalance=$(($targetAccountBalance+$receivedSum))
 
     # update db
