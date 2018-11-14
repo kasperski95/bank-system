@@ -7,7 +7,7 @@ if [[ ! -d "$ofrAct_dir" ]]; then ofrAct_dir="$PWD"; fi
 
 
 ofrAct_showInfo() {
-    ui_header $ofrAct_title "INFORMACJE"
+    ui_header "$ofrAct_title" "INFORMACJE"
 
     echo "Imię: $(dbUsers_get "firstname")"
     echo "Nazwisko: $(dbUsers_get "lastname")"
@@ -59,7 +59,7 @@ ofrAct_create() {
 #————————————————————————————————————————————————————————
 
 
-ofrActCr_title="NOWY_RACHUNEK"
+ofrActCr_title="NOWY RACHUNEK"
 
 __ofrActCr_createAccount() {
     local accountType=$1
@@ -70,7 +70,7 @@ __ofrActCr_createAccount() {
     accountID=$(db_createAccount $accountType $currency)
     db_addAccount $accountID
     
-    ui_header $ofrActCr_title "UTWORZONO KONTO"
+    ui_header "$ofrActCr_title" "UTWORZONO KONTO"
     echo "Konto zostało utworzone."
     echo "Numer konta: $accountID"
     echo ""
@@ -80,7 +80,7 @@ __ofrActCr_createAccount() {
 
 
 __ofrActCr_showTypes() {
-    ui_header $ofrActCr_title "TYP"
+    ui_header "$ofrActCr_title" "TYP"
     echo "1 - Rachunek rozliczeniowy"
     echo "2 - Rachunek oszczędnościowy"
     echo ""
@@ -91,7 +91,7 @@ __ofrActCr_showTypes() {
 
 
 __ofrActCr_showCurrencies() {
-    ui_header $ofrActCr_title "WALUTA"
+    ui_header "$ofrActCr_title" "WALUTA"
     echo "1 - PLN"
     echo "2 - USD"
     echo "3 - EUR"
@@ -110,7 +110,7 @@ __ofrActCr_showCurrencies() {
 
 
 __ofrActCr_showConfirmation() {
-    ui_header $ofrActCr_title "POTWIERDZENIE"
+    ui_header "$ofrActCr_title" "POTWIERDZENIE"
     echo "Typ: $(__ofrActCr_getAccountNameFromNumber $1)"
     echo "Waluta: $(__ofrActCr_getCurrencyFromNumber $2)"
     echo ""

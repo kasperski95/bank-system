@@ -79,10 +79,9 @@ hist_export() {
             echo "Otrzymana kwota: $receivedSum $receivedSumCurrency" >> $outputFile
         done;
 
-        echo "Eksport zakończył się powodzeniem."
+        echo "Wyeksportowano do: ~/Pulpit/Konto"
 
     else
-        echo "Niepowodzenie."
         echo "Ścieżka: \"~/Pulpit\" nie istnieje."
     fi
     echo ""
