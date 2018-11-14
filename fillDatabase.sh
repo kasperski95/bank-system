@@ -80,6 +80,9 @@ echo "  \"date\": \"$generationDate\"," >> $file_transaction0
 echo "  \"time\": \"$generationTime\"," >> $file_transaction0
 echo "  \"title\": \"Przelew testowy\"," >> $file_transaction0
 echo "  \"sum\": \"100000\"," >> $file_transaction0
+echo "  \"sumCurrency\": \"PLN\"," >> $file_transaction0
+echo "  \"receivedSum\": \"100000\"," >> $file_transaction0
+echo "  \"receivedSumCurrency\": \"PLN\"," >> $file_transaction0
 echo "  \"sourceAccountID\": \"bank\"," >> $file_transaction0
 echo "  \"sourceName\": \"Bank\"," >> $file_transaction0
 echo "  \"targetAccountID\": \"000\"," >> $file_transaction0
@@ -91,6 +94,9 @@ echo "  \"date\": \"$generationDate\"," >> $file_transaction1
 echo "  \"time\": \"$generationTime\"," >> $file_transaction1
 echo "  \"title\": \"Przelew testowy\"," >> $file_transaction1
 echo "  \"sum\": \"100000\"," >> $file_transaction1
+echo "  \"sumCurrency\": \"PLN\"," >> $file_transaction1
+echo "  \"receivedSum\": \"100000\"," >> $file_transaction1
+echo "  \"receivedSumCurrency\": \"PLN\"," >> $file_transaction1
 echo "  \"sourceAccountID\": \"bank\"," >> $file_transaction1
 echo "  \"sourceName\": \"Bank\"," >> $file_transaction1
 echo "  \"targetAccountID\": \"001\"," >> $file_transaction1

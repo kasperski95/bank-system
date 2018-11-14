@@ -147,6 +147,7 @@ __tnst_handleTransfer() {
         # sum
         if [ "$sum" == "" ]; then
             read -p "Kwota przelewu: " sum
+            sum=$(echo $sum | tr "," ".")
             sum=$(echo "scale=0;($sum * 100)/1" | bc)
             if [ "$sum" == "" ]; then
                 error="Kwota przelewu nie może być pusta."
@@ -187,6 +188,16 @@ __tnst_handleTransfer() {
 __tnst_makeTransfer() {
     ui_header "$tnst_title" "$1"
 
+    #TODO: add more info to transfer
+    # - sumCurrency
+    # - receivedSum
+    # - receivedSumCurrency
+    # in: fillDatabase, makeTransaction & createTransaction
+
+    # make function to print single item in history
+    # create 2 entries in history if internal transaction
+    # update method generating files
+
     local sourceAccountID=$2
     local targetAccountID=$3
     local name=$4
@@ -194,19 +205,22 @@ __tnst_makeTransfer() {
     local title=$6
     local sum=$7
 
-    # calculate source account balance
-    local sourceAccountBalance=$(db_getAccountRawBalance_PLN $sourceAccountID)
-    local sourceAccountCurrency=$(db_getAccountCurrency $sourceAccountID)
-    local sourceExchangeRate=$(db_getExchangeRate $sourceAccountCurrency)
-    local newSourceAccountBalance=$(echo "scale=4;($sourceAccountBalance-$sum)/$sourceExchangeRate" | bc)
-    newSourceAccountBalance=$(echo "scale=0;($newSourceAccountBalance+0.4999)/1" | bc)
 
-    # calculate target account balance
-    local targetAccountBalance=$(db_getAccountRawBalance_PLN $targetAccountID)
+    # calculate source account balance
+    local sourceAccountBalance=$(db_getAccountRawBalance $sourceAccountID)
+    local newSourceAccountBalance=$(($sourceAccountBalance-$sum))
+    #newSourceAccountBalance=$(echo "scale=0;($newSourceAccountBalance+0.4999)/1" | bc)
+
+    # exchangeSum
+    local sourceAccountCurrency=$(db_getAccountCurrency $sourceAccountID)
+    local sourceExchangeRate=$(db_getExchangeRate $sourceAccountCurrency) 
     local targetAccountCurrency=$(db_getAccountCurrency $targetAccountID)
     local targetExchangeRate=$(db_getExchangeRate $targetAccountCurrency)
-    local newTargetAccountBalance=$(echo "scale=4;($targetAccountBalance+$sum)/$targetExchangeRate" | bc -l)
-    newTargetAccountBalance=$(echo "scale=0;($newTargetAccountBalance+0.4999)/1" | bc)
+    local receivedSum=$(echo "scale=4;$sum/($targetExchangeRate/$sourceExchangeRate)" | bc)
+    receivedSum=$(echo "scale=0;($receivedSum+0.4999)/1" | bc)
+
+    # calculate target account balance
+    local newTargetAccountBalance=$(($targetAccountBalance+$receivedSum))
 
     #-----------------------------------------------
     # echo "sum: $sum"
@@ -226,7 +240,7 @@ __tnst_makeTransfer() {
 
     userInfo=$(echo "$(dbUsers_get "firstname") $(dbUsers_get "lastname")")
 
-    local transactionID=$(db_createTransaction "$(echo $(utl_getDate))" "$(echo $(utl_getTime))" $sourceAccountID "$userInfo" $targetAccountID $name $title $sum)
+    local transactionID=$(db_createTransaction "$(echo $(utl_getDate))" "$(echo $(utl_getTime))" $sourceAccountID "$userInfo" $targetAccountID $name $title $sum $sourceAccountCurrency $receivedSum $targetAccountCurrency)
 
 
     # push transactionID to both accounts

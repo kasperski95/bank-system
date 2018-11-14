@@ -21,6 +21,9 @@ db_createTransaction() {
     local targetName="$6"
     local title="$7"
     local sum="$8"
+    local sumCurrency="$9"
+    local receivedSum="${10}"
+    local receivedSumCurrency="${11}"
 
     # create file
     local transactionID=$(ls $DB/Transactions/ | tail --lines=1 | grep -Po ".*(?=\.)")
@@ -43,6 +46,9 @@ db_createTransaction() {
     echo "  \"time\": \"$time\"," >> $transactionFile
     echo "  \"title\": \"$title\"," >> $transactionFile
     echo "  \"sum\": \"$sum\"," >> $transactionFile
+    echo "  \"sumCurrency\": \"$sumCurrency\"," >> $transactionFile
+    echo "  \"receivedSum\": \"$receivedSum\"," >> $transactionFile
+    echo "  \"receivedSumCurrency\": \"$receivedSumCurrency\"," >> $transactionFile
     echo "  \"sourceAccountID\": \"$sourceAccountID\"," >> $transactionFile
     echo "  \"sourceName\": \"$sourceName\"," >> $transactionFile
     echo "  \"targetAccountID\": \"$targetAccountID\"," >> $transactionFile

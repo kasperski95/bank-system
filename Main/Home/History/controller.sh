@@ -4,6 +4,8 @@ if [[ ! -d "$hist_dir" ]]; then hist_dir="$PWD"; fi
 
 . $hist_dir/../../Database/users.sh
 
+
+
 hist_printList() {    
     local transactions=$(__hist_getUsersTransactions)
 
@@ -13,26 +15,25 @@ hist_printList() {
         local sourceAccountID=$(dbTransactions_get "sourceAccountID" $i)
         local targetAccountID=$(dbTransactions_get "targetAccountID" $i)
         local sum=$(dbTransactions_get "sum" $i)
+        local receivedSum=$(dbTransactions_get "receivedSum" $i)
+        local sumCurrency=$(dbTransactions_get "sumCurrency" $i)
+        local receivedSumCurrency=$(dbTransactions_get "receivedSumCurrency" $i)
         sum=$(echo "scale=2;$sum/100" | bc)
-        local sign=""
+        receivedSum=$(echo "scale=2;$receivedSum/100" | bc)
 
-        local doesSourceBelongsToUser=$(db_isUsersAccount $sourceAccountID)
-        local doesTargetBelongsToUser=$(db_isUsersAccount $targetAccountID)
-        if [ "$doesSourceBelongsToUser" == "true" ] && [ "$doesTargetBelongsToUser" == "true" ]; then
-            printf $DEFAULT_COLOR;
-        elif [ "$doesSourceBelongsToUser" == "true" ]; then
-            printf $RED;
-            sign="-"
-        elif [ "$doesTargetBelongsToUser" == "true" ]; then
+
+        if [ "$(db_isUsersAccount $targetAccountID)" == "true" ]; then
             printf $GREEN;
+            __hist_printHistoryEntry $transactionDate $transactionTime $sourceAccountID $targetAccountID $receivedSum $receivedSumCurrency
         fi
 
-        local left="${transactionDate} ${transactionTime} | ${sourceAccountID} -> ${targetAccountID}"
-        local right="${sign}${sum} PLN"
-        ui_alignRight "$left" "$right" "s" "s"
+        if [ "$(db_isUsersAccount $sourceAccountID)" == "true" ]; then
+            printf $RED;
+            __hist_printHistoryEntry $transactionDate $transactionTime $sourceAccountID $targetAccountID "-$sum" $sumCurrency
+        fi
+
 
         printf $DEFAULT_COLOR;
-        echo ""
     done
 
     return 0
@@ -58,19 +59,24 @@ hist_export() {
             local transactionTime=$(dbTransactions_get "time" $i)
             local sourceAccountID=$(dbTransactions_get "sourceAccountID" $i)
             local targetAccountID=$(dbTransactions_get "targetAccountID" $i)
-            local targetAccountID=$(dbTransactions_get "targetAccountID" $i)
             local sum=$(dbTransactions_get "sum" $i)
-
+            local sumCurrency=$(dbTransactions_get "sumCurrency" $i)
+            local receivedSum=$(dbTransactions_get "receivedSum" $i)
+            local receivedSumCurrency=$(dbTransactions_get "receivedSumCurrency" $i)
+            local title=$(dbTransactions_get "title" $i)
 
             sum=$(echo "scale=2;$sum/100" | bc)
+            receivedSum=$(echo "scale=2;$receivedSum/100" | bc)
 
             local outputFile="$outputPath/${transactionDate}_${i}.txt"
             touch $outputFile
-            echo "Data: $transactionDate" > $outputFile
+            echo "Tytuł przelewu: $title" > $outputFile
+            echo "Data: $transactionDate" >> $outputFile
             echo "Czas: $transactionTime" >> $outputFile
             echo "Rachunek nadawcy: $sourceAccountID" >> $outputFile
             echo "Rachunek odbiorcy: $targetAccountID" >> $outputFile
-            echo "Kwota przelewu: $sum PLN" >> $outputFile
+            echo "Kwota przelewu: $sum $sumCurrency" >> $outputFile
+            echo "Otrzymana kwota: $receivedSum $receivedSumCurrency" >> $outputFile
         done;
 
         echo "Eksport zakończył się powodzeniem."
@@ -100,6 +106,24 @@ __hist_getUsersTransactions() {
     sortedTransactions=$(utl_removeDoubles $sortedTransactions)
 
     echo $sortedTransactions
+
+    return 0
+}
+
+
+__hist_printHistoryEntry() {
+    local transactionDate="$1"
+    local transactionTime="$2"
+    local sourceAccountID="$3"
+    local targetAccountID="$4"
+    local sum="$5"
+    local currency="$6"
+
+    local left="${transactionDate} ${transactionTime} | ${sourceAccountID} -> ${targetAccountID}"
+    local right="${sum} ${currency}"
+    ui_alignRight "$left" "$right" "s" "s"
+
+    echo ""
 
     return 0
 }

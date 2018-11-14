@@ -97,6 +97,13 @@ db_getAccountBalance() {
     return 0
 }
 
+db_getAccountRawBalance() {
+    local accountID=$1
+    local balance=$(dbAccounts_get "balance" $accountID)
+    echo $balance
+    return 0
+}
+
 db_getAccountRawBalance_PLN() {
     local accountID=$1
     local balance=$(dbAccounts_get "balance" $accountID)
