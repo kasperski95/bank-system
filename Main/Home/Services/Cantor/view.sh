@@ -28,7 +28,7 @@ servCan_handleExchange() {
     local currencies=("PLN" "USD" "EUR" "CHF" "GBP" "AUD" "UAH" "CZK" "HRK" "RUB")
     for i in ${currencies[@]}; do
         if [ "$i" != "$currency" ]; then
-            echo "$i: $(printf "%.2f" "$(echo "scale=2;($(echo "scale=4;$(db_getExchangeRate $i)/$(db_getExchangeRate $currency) * $sum" | bc) +0.0049)/1" | bc)")"
+            echo "$i: $(printf "%.2f" "$(echo "scale=2;($(echo "scale=4;$sum / ($(db_getExchangeRate $i)/$(db_getExchangeRate $currency))" | bc) +0.0049)/1" | bc)")"
         fi
     done
     echo ""
