@@ -17,6 +17,16 @@ if [ ! -d "$transactionsDir" ]; then
     mkdir $transactionsDir
 fi
 
+fooReceiversDir="$DB/Receivers/foo"
+if [ ! -d "$fooReceiversDir" ]; then
+    mkdir $fooReceiversDir
+fi
+
+barReceiversDir="$DB/Receivers/bar"
+if [ ! -d "$barReceiversDir" ]; then
+    mkdir $barReceiversDir
+fi
+
 generationDate=$(utl_getDate)
 generationTime=$(utl_getTime)
 file_userBank="$usersDir/bank.$DB_EXT"
@@ -30,6 +40,8 @@ file_account004="$accountsDir/004.$DB_EXT"
 file_account005="$accountsDir/005.$DB_EXT"
 file_transaction0="$transactionsDir/000000.$DB_EXT"
 file_transaction1="$transactionsDir/000001.$DB_EXT"
+file_zusFoo="$fooReceiversDir/000.$DB_EXT"
+file_zusBar="$barReceiversDir/000.$DB_EXT"
 
 touch $file_userBank
 touch $file_userFoo
@@ -148,3 +160,18 @@ echo "  \"sourceName\": \"Bank\"," >> $file_transaction1
 echo "  \"targetAccountID\": \"004\"," >> $file_transaction1
 echo "  \"targetName\": \"Jan Nowak\"" >> $file_transaction1
 echo "}" >> $file_transaction1
+
+
+echo "{" > $file_zusFoo
+echo "  \"name\": \"ZUS\"," >> $file_zusFoo
+echo "  \"address\": \"ul. Senatorska 6, Warszawa\"," >> $file_zusFoo
+echo "  \"accountID\": \"000\"," >> $file_zusFoo
+echo "  \"hidden\": \"false\"" >> $file_zusFoo
+echo "}" >> $file_zusFoo
+
+echo "{" > $file_zusBar
+echo "  \"name\": \"ZUS\"," >> $file_zusBar
+echo "  \"address\": \"ul. Senatorska 6, Warszawa\"," >> $file_zusBar
+echo "  \"accountID\": \"000\"," >> $file_zusBar
+echo "  \"hidden\": \"false\"" >> $file_zusBar
+echo "}" >> $file_zusBar

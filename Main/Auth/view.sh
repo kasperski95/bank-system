@@ -40,6 +40,7 @@ auth_authenticate() {
         # verify
         if db_getUser $login $password; then
             USERS_FILE="$DB/Users/$login.$DB_EXT"
+            USERNAME="$login"
             ui_header "LOGOWANIE"
             echo "Trwa przekierowywanie..."  && sleep 1s
             clear
