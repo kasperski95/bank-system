@@ -1,4 +1,10 @@
 #!/bin/bash
+db_dir="${BASH_SOURCE%/*}"
+if [[ ! -d "$db_dir" ]]; then db_dir="$PWD"; fi
+
+. $db_dir/accounts.sh
+. $db_dir/misc.sh
+. $db_dir/users.sh
 
 
 dbTransactions_get() {
@@ -27,19 +33,19 @@ db_createTransaction() {
     local receivedSumCurrency="${12}"
 
 
-    read -p "---------DB----------" x
-    read -p "date: $date" x
-    read -p "time: $time" x
-    read -p "type: $type" x
-    read -p "sourceAccountID: $sourceAccountID" x
-    read -p "sourceName: $sourceName" x
-    read -p "targetAccountID: $targetAccountID" x
-    read -p "title: $title" x
-    read -p "sum: $sum" x
-    read -p "sumCurrency: $sumCurrency" x
-    read -p "receivedSum: $receivedSum" x
-    read -p "receivedSumCurrency: $receivedSumCurrency" x
-    read -p "---------------------" x
+    # read -p "---------DB----------" x
+    # read -p "date: $date" x
+    # read -p "time: $time" x
+    # read -p "type: $type" x
+    # read -p "sourceAccountID: $sourceAccountID" x
+    # read -p "sourceName: $sourceName" x
+    # read -p "targetAccountID: $targetAccountID" x
+    # read -p "title: $title" x
+    # read -p "sum: $sum" x
+    # read -p "sumCurrency: $sumCurrency" x
+    # read -p "receivedSum: $receivedSum" x
+    # read -p "receivedSumCurrency: $receivedSumCurrency" x
+    # read -p "---------------------" x
 
     # create file
     local transactionID=$(ls $DB/Transactions/ | tail --lines=1 | grep -Po ".*(?=\.)")
@@ -75,6 +81,51 @@ db_createTransaction() {
     echo "}" >> $transactionFile
    
     # print transactionID
+    echo "$transactionID"
+    return 0
+}
+
+
+db_makeTransfer() {
+    #ui_header "$tnst_title" "$1"
+    local type="$1"
+    local sourceAccountID="$2"
+    local targetAccountID="$3"
+    local name="$4"
+    local address="$5"
+    local title="$6"
+    local sum="$7"
+
+
+    # calculate source account balance
+    local sourceAccountBalance=$(db_getAccountRawBalance $sourceAccountID)
+    local newSourceAccountBalance=$(($sourceAccountBalance-$sum))
+
+    # exchangeSum
+    local sourceAccountCurrency=$(db_getAccountCurrency $sourceAccountID)
+    local sourceExchangeRate=$(db_getExchangeRate $sourceAccountCurrency) 
+    local targetAccountCurrency=$(db_getAccountCurrency $targetAccountID)
+    local targetExchangeRate=$(db_getExchangeRate $targetAccountCurrency)
+    local receivedSum=$(echo "scale=4;$sum/($targetExchangeRate/$sourceExchangeRate)" | bc)
+    receivedSum=$(echo "scale=0;($receivedSum+0.4999)/1" | bc)
+
+    # calculate target account balance
+    local targetAccountBalance=$(db_getAccountRawBalance $targetAccountID)
+    local newTargetAccountBalance=$(($targetAccountBalance+$receivedSum))
+
+    # update db
+    dbAccounts_set "balance" $newSourceAccountBalance $sourceAccountID
+    dbAccounts_set "balance" $newTargetAccountBalance $targetAccountID
+
+    # create transaction
+    userInfo=$(echo "$(dbUsers_get "firstname") $(dbUsers_get "lastname")")
+    local transactionID=$(db_createTransaction "$(echo $(utl_getDate))" "$(echo $(utl_getTime))" "$type" $sourceAccountID "$userInfo" $targetAccountID "$name" "$title" $sum $sourceAccountCurrency $receivedSum $targetAccountCurrency)
+
+    # push transactionID to both accounts
+    db_addTransactionToAccount $transactionID $sourceAccountID
+    db_addTransactionToAccount $transactionID $targetAccountID
+
+
     echo "$transactionID"
     return 0
 }
