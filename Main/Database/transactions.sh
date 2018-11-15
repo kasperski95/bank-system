@@ -15,28 +15,31 @@ dbTransactions_get() {
 db_createTransaction() {
     local date="$1"
     local time="$2"
-    local sourceAccountID="$3"
-    local sourceName="$4"
-    local targetAccountID="$5"
-    local targetName="$6"
-    local title="$7"
-    local sum="$8"
-    local sumCurrency="$9"
-    local receivedSum="${10}"
-    local receivedSumCurrency="${11}"
+    local type="$3"
+    local sourceAccountID="$4"
+    local sourceName="$5"
+    local targetAccountID="$6"
+    local targetName="$7"
+    local title="$8"
+    local sum="$9"
+    local sumCurrency="${10}"
+    local receivedSum="${11}"
+    local receivedSumCurrency="${12}"
 
-    # read -p "---------DB----------" x
-    # read -p "date: $date" x
-    # read -p "time: $time" x
-    # read -p "sourceAccountID: $sourceAccountID" x
-    # read -p "sourceName: $sourceName" x
-    # read -p "targetAccountID: $targetAccountID" x
-    # read -p "title: $title" x
-    # read -p "sum: $sum" x
-    # read -p "sumCurrency: $sumCurrency" x
-    # read -p "receivedSum: $receivedSum" x
-    # read -p "receivedSumCurrency: $receivedSumCurrency" x
-    # read -p "---------------------" x
+
+    read -p "---------DB----------" x
+    read -p "date: $date" x
+    read -p "time: $time" x
+    read -p "type: $type" x
+    read -p "sourceAccountID: $sourceAccountID" x
+    read -p "sourceName: $sourceName" x
+    read -p "targetAccountID: $targetAccountID" x
+    read -p "title: $title" x
+    read -p "sum: $sum" x
+    read -p "sumCurrency: $sumCurrency" x
+    read -p "receivedSum: $receivedSum" x
+    read -p "receivedSumCurrency: $receivedSumCurrency" x
+    read -p "---------------------" x
 
     # create file
     local transactionID=$(ls $DB/Transactions/ | tail --lines=1 | grep -Po ".*(?=\.)")
@@ -59,6 +62,7 @@ db_createTransaction() {
     echo "{"  > $transactionFile
     echo "  \"date\": \"$date\"," >> $transactionFile
     echo "  \"time\": \"$time\"," >> $transactionFile
+    echo "  \"type\": \"$type\"," >> $transactionFile
     echo "  \"title\": \"$title\"," >> $transactionFile
     echo "  \"sum\": \"$sum\"," >> $transactionFile
     echo "  \"sumCurrency\": \"$sumCurrency\"," >> $transactionFile

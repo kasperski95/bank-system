@@ -57,6 +57,7 @@ hist_export() {
         for i in $transactions; do
             local transactionDate=$(dbTransactions_get "date" $i)
             local transactionTime=$(dbTransactions_get "time" $i)
+            local type=$(dbTransactions_get "type" $i)
             local sourceAccountID=$(dbTransactions_get "sourceAccountID" $i)
             local targetAccountID=$(dbTransactions_get "targetAccountID" $i)
             local sum=$(dbTransactions_get "sum" $i)
@@ -71,6 +72,7 @@ hist_export() {
             local outputFile="$outputPath/${transactionDate}_${i}.txt"
             touch $outputFile
             echo "Tytuł przelewu: $title" > $outputFile
+            echo "Typ: $type" >> $outputFile
             echo "Data: $transactionDate" >> $outputFile
             echo "Czas: $transactionTime" >> $outputFile
             echo "Rachunek nadawcy: $sourceAccountID" >> $outputFile

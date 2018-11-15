@@ -123,6 +123,7 @@ echo "{" > $file_transaction0
 echo "  \"date\": \"$generationDate\"," >> $file_transaction0
 echo "  \"time\": \"$generationTime\"," >> $file_transaction0
 echo "  \"title\": \"Przelew testowy\"," >> $file_transaction0
+echo "  \"type\": \"PRZELEW ZWYKŁY\"," >> $file_transaction0
 echo "  \"sum\": \"100000\"," >> $file_transaction0
 echo "  \"sumCurrency\": \"PLN\"," >> $file_transaction0
 echo "  \"receivedSum\": \"100000\"," >> $file_transaction0
@@ -137,6 +138,7 @@ echo "{" > $file_transaction1
 echo "  \"date\": \"$generationDate\"," >> $file_transaction1
 echo "  \"time\": \"$generationTime\"," >> $file_transaction1
 echo "  \"title\": \"Przelew testowy\"," >> $file_transaction1
+echo "  \"type\": \"PRZELEW ZWYKŁY\"," >> $file_transaction1
 echo "  \"sum\": \"100000\"," >> $file_transaction1
 echo "  \"sumCurrency\": \"PLN\"," >> $file_transaction1
 echo "  \"receivedSum\": \"100000\"," >> $file_transaction1

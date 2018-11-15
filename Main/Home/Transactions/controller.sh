@@ -260,12 +260,12 @@ __tnst_handleTransfer() {
         local transactionID=$(__tnst_makeTransfer "$1" $sourceAccountID $targetAccountID "$name" "$address" "$title" $sum)
         
         if [ "$transactionCost" -gt "0" ]; then
-            local bankTransactionID=$( __tnst_makeTransfer "$1" $sourceAccountID "000" "$name" "$address" "Koszt przelewu: $transactionID" $transactionCost)
+            local bankTransactionID=$( __tnst_makeTransfer "PRZELEW ZWYKŁY" $sourceAccountID "000" "$name" "$address" "Koszt przelewu: $transactionID" $transactionCost)
         fi
 
         if [ "$sumToSave" -gt "0" ]; then
             local usersSavingAccount=$(db_getUsersSavingAccount)
-            local internalTransactionID=$(__tnst_makeTransfer "$1" $sourceAccountID $usersSavingAccount "$name" "$address" "Przelew wewnętrzny" $sumToSave)
+            local internalTransactionID=$(__tnst_makeTransfer "PRZELEW ZWYKŁY" $sourceAccountID $usersSavingAccount "$name" "$address" "Przelew wewnętrzny" $sumToSave)
         fi
 
         ui_header "$tnst_title" "$1"
@@ -281,7 +281,7 @@ __tnst_handleTransfer() {
 
 __tnst_makeTransfer() {
     #ui_header "$tnst_title" "$1"
-
+    local type="$1"
     local sourceAccountID="$2"
     local targetAccountID="$3"
     local name="$4"
@@ -289,6 +289,9 @@ __tnst_makeTransfer() {
     local title="$6"
     local sum="$7"
 
+
+    read -p "type: $type" x
+    read -p "sourceAccountID: $sourceAccountID" x
 
     # calculate source account balance
     local sourceAccountBalance=$(db_getAccountRawBalance $sourceAccountID)
@@ -312,7 +315,7 @@ __tnst_makeTransfer() {
 
     # create transaction
     userInfo=$(echo "$(dbUsers_get "firstname") $(dbUsers_get "lastname")")
-    local transactionID=$(db_createTransaction "$(echo $(utl_getDate))" "$(echo $(utl_getTime))" $sourceAccountID "$userInfo" $targetAccountID "$name" "$title" $sum $sourceAccountCurrency $receivedSum $targetAccountCurrency)
+    local transactionID=$(db_createTransaction "$(echo $(utl_getDate))" "$(echo $(utl_getTime))" "$type" $sourceAccountID "$userInfo" $targetAccountID "$name" "$title" $sum $sourceAccountCurrency $receivedSum $targetAccountCurrency)
 
     # push transactionID to both accounts
     db_addTransactionToAccount $transactionID $sourceAccountID
