@@ -76,16 +76,14 @@ ui_form() {
 
 
     if [ "$#" -gt "0" ]; then
-        local toExecute="$1" && shift 1
-
+        local toExecute=$1 && shift 1
+    
         if [ "$#" -gt "0" ]; then
             local nArgs="$1" && shift 1
             local args=( "${@:1:$nArgs}" ); shift $nArgs
         else
             local args=""
         fi
-    else
-        local toExecute=""
     fi
 
 
@@ -94,7 +92,7 @@ ui_form() {
     
 
     # do some stuff before menu appears
-    if [ -z ${toExecute+x} ]; then
+    if [ -n ${toExecute+x} ]; then
         $toExecute ${args[@]}
     fi
 

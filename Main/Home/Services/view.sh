@@ -3,13 +3,14 @@ serv_title="USŁUGI"
 serv_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$serv_dir" ]]; then serv_dir="$PWD"; fi
 
-. $serv_dir/controller.sh
-
 . $serv_dir/Cantor/view.sh
 . $serv_dir/Documents/view.sh
 . $serv_dir/Goals/view.sh
 . $serv_dir/Receivers/view.sh
 . $serv_dir/StandingOrders/view.sh
+. $serv_dir/../../Database/transactions.sh
+
+. $serv_dir/controller.sh
 
 
 
@@ -37,9 +38,7 @@ __serv_showMenu() {
     echo "5 - Raty"
     printf $DEFAULT_COLOR
     echo "6 - Dokumenty"
-    printf $RED
     echo "7 - Doładowanie telefonu"
-    printf $DEFAULT_COLOR
     echo "8 - Kantor"
     echo "0 - Powrót"
 

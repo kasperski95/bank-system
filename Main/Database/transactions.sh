@@ -102,6 +102,11 @@ db_makeTransfer() {
     local transactionSum="$8"
     local transactionCurrency="$9"
 
+    # validate
+    if [ "$sum" -lt "0" ]; then
+        return 1
+    fi
+
     # calculate source account balance
     local sourceAccountBalance=$(db_getAccountRawBalance $sourceAccountID)
     local newSourceAccountBalance=$(($sourceAccountBalance-$sum))

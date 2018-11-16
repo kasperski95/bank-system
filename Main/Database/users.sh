@@ -40,6 +40,18 @@ db_getUserAccounts() {
 }
 
 
+db_getUsersAccount() {
+    local accounts=$(db_getUserAccounts)
+
+    for i in ${accounts[@]}; do
+        if [ "$(dbAccounts_get "type" $i)" == "checking" ]; then
+            echo "$i"
+            return 0
+        fi
+    done
+    return 1
+}
+
 db_getUsersSavingAccount() {
     local accounts=$(db_getUserAccounts)
 
