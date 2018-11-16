@@ -57,6 +57,7 @@ touch $file_transaction1
 echo "{" > $file_userBank
 echo "    \"password\": \"1234\"," >> $file_userBank
 echo "    \"accountsID\": [\"000\",\"001\"]," >> $file_userBank
+echo "    \"insurancesID\": []," >> $file_userBank
 echo "    \"firstname\": \"Bank\"," >> $file_userBank
 echo "    \"lastname\": \"Owners\"," >> $file_userBank
 echo "    \"city\": \"Warszawa\"," >> $file_userBank
@@ -68,6 +69,7 @@ echo "}" >> $file_userBank
 echo "{" > $file_userFoo
 echo "    \"password\": \"1234\"," >> $file_userFoo
 echo "    \"accountsID\": [\"002\",\"003\"]," >> $file_userFoo
+echo "    \"insurancesID\": []," >> $file_userFoo
 echo "    \"firstname\": \"John\"," >> $file_userFoo
 echo "    \"lastname\": \"Doe\"," >> $file_userFoo
 echo "    \"city\": \"Warszawa\"," >> $file_userFoo
@@ -79,6 +81,7 @@ echo "}" >> $file_userFoo
 echo "{" > $file_userBar
 echo "    \"password\": \"1234\"," >> $file_userBar
 echo "    \"accountsID\": [\"004\",\"005\"]," >> $file_userBar
+echo "    \"insurancesID\": []," >> $file_userBar
 echo "    \"firstname\": \"Jan\"," >> $file_userBar
 echo "    \"lastname\": \"Nowak\"," >> $file_userBar
 echo "    \"city\": \"Kraków\"," >> $file_userBar

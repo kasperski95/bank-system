@@ -47,7 +47,7 @@ _serv_handleTopUpPhone() {
 
 _serv_topUpPhone() {
     local transactionID=$(db_makeTransfer "PRZELEW ZWYKŁY" "$(db_getUsersAccount)" "000" "Play" "Warszawa" "Doładowanie telefonu: $1" $2 $2 "PLN")   
-    read x
+
     ui_header "$serv_title" "DOŁADOWANIE TELEFONU"
     if [ "$?" == "0" ]; then
         echo "Operacja zakończyła się powodzeniem."

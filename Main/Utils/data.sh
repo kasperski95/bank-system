@@ -76,7 +76,12 @@ utl_parseToArray() {
 utl_getNextIndex() {
     local path="$1"
     local length="$2"
-    local newID=$(ls $path | tail --lines=1 | grep -Po ".*(?=\.)")
+
+    if [ -z "$(ls -A $path)" ]; then
+        local newID=-1
+    else
+        local newID=$(ls $path | tail --lines=1 | grep -Po ".*(?=\.)")
+    fi
 
     # remove 0 from the beginning because of octal bullshit
     newID=$(echo $newID | sed 's/^0*//')

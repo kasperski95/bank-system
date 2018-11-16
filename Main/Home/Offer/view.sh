@@ -4,6 +4,7 @@ ofr_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$ofr_dir" ]]; then ofr_dir="$PWD"; fi
 
 . $ofr_dir/Account/view.sh
+. $ofr_dir/Insurances/controller.sh
 
 
 
@@ -42,6 +43,7 @@ __ofr_showMenu() {
 __ofr_handleAction() {
     case $1 in
         "1") ofrAct_show;;
+        "6") ofrIns_show;;
         *) home_skipPause=true
     esac
 

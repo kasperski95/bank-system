@@ -40,7 +40,7 @@ db_getReceivers() {
 
 db_createReceiver() {
     local file="$(dbReceivers_getPath)/$(utl_getNextIndex "$(dbReceivers_getPath)" "3").$DB_EXT"
-
+    touch $file
     echo -e "{" > $file
     echo -e "\t\"name\": \"$1\"," >> $file
     echo -e "\t\"address\": \"$2\"," >> $file

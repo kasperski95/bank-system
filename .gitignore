@@ -2,3 +2,5 @@
 Database/Accounts/*
 Database/Transactions/*
 Database/Users/*
+Database/Insurances/Transactions/*
+Database/Receivers/*

@@ -74,6 +74,10 @@ ui_form() {
     local handlersSize="$1" && shift 1
     local handlers=( ${@:1:$handlersSize} ); shift $handlersSize
 
+    if [ "$handlersSize" == 1 ]; then
+        local nArgsHandler="$1" && shift 1
+        local argsHandler=( ${@:1:$nArgsHandler} ); shift $nArgsHandler
+    fi
 
     if [ "$#" -gt "0" ]; then
         local toExecute=$1 && shift 1
@@ -119,7 +123,7 @@ ui_form() {
     if [ "$handlersSize" -eq "0" ]; then
         return 0
     elif [ "$handlersSize" -eq "1" ]; then
-        ${handlers[0]} $index
+        ${handlers[0]} $index ${argsHandler[@]}
     else
         ${handlers[$index]}
     fi
