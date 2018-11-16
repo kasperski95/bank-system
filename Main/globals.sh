@@ -12,8 +12,10 @@ WIDTH=48
 
 # Crucial
 if $PRODUCTION_MODE; then
-    USERS_FILE="$DB/Users/foo.$DB_EXT"
+    USERNAME="foo"
+    USERS_FILE="$DB/Users/$USERNAME.$DB_EXT"
 else
+    USERNAME=""
     USERS_FILE=""
 fi
 

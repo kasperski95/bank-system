@@ -90,6 +90,7 @@ db_getAccountTransactions() {
     return 0
 }
 
+
 db_getAccountBalance() {
     local accountID=$1
     local balance=$(dbAccounts_get "balance" $accountID)
@@ -97,12 +98,14 @@ db_getAccountBalance() {
     return 0
 }
 
+
 db_getAccountRawBalance() {
     local accountID=$1
     local balance=$(dbAccounts_get "balance" $accountID)
     echo $balance
     return 0
 }
+
 
 db_getAccountRawBalance_PLN() {
     local accountID=$1
@@ -123,12 +126,14 @@ db_getAccountBalance_PLN() {
     return 0
 }
 
+
 db_getAccountCurrency() {
     local accountID=$1
     local currency=$(dbAccounts_get "currency" $accountID)
     echo $currency
     return 0
 }
+
 
 db_getAccountsType() {
     local accountID=$1

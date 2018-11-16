@@ -119,6 +119,31 @@ __tnst_handleTransfer() {
         fi
 
 
+        # user's receivers
+        if [ "$targetAccountID" == "" ]; then
+            local receiversFilesRaw=$(db_getReceivers)
+            local receiversFiles=()
+            local j=1
+            for i in ${receiversFilesRaw[@]}; do
+                echo "$j - $(utl_getFromJson "name" "$(dbReceivers_getPath)/$i")"
+                receiversFiles+=("$i")
+            done
+            echo "0 - Pomiń"
+            echo ""
+            ui_line
+            local receiverIndex
+            read -p "Wybierz odbiorcę: " receiverIndex
+            
+
+            if [ "$receiverIndex" != "0" ]; then
+                ((receiverIndex--))
+                name=$(utl_getFromJson "name" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
+                address=$(utl_getFromJson "address" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
+                targetAccountID=$(utl_getFromJson "accountID" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
+            fi   
+        fi
+
+
         ui_header "$tnst_title" "$1"
         if [ "$error" != " " ]; then
             echo $error

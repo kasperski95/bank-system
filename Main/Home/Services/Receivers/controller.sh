@@ -1,21 +1,54 @@
 #!/bin/bash
 
-
-
-__servRec_showList() {
-    ui_header "$servRec_title" "LISTA"
-    return 0
-}
-
-
 # add personal data & account number
 __servRec_add() {
+    local name
+    local address
+    local accountID
+
     ui_header "$servRec_title" "DODAJ"
+
+    read -p "Nazwa: " name
+    read -p "Adres: " address
+    read -p "Numer konta: " accountID
+
+    while (! db_doesAccountExists $accountID); do
+        ui_header "$servRec_title" "DODAJ"
+        echo "Podane konto nie istnieje."
+        echo ""
+        echo "Nazwa: $name"
+        echo "Adres: $address"
+
+        read -p "Numer konta: " accountID
+    done;
+
+    db_createReceiver $name $address $accountID
+
     return 0
 }
 
 
 __servRec_delete() {
     ui_header "$servRec_title" "USUŃ"
+
+    local receiversFilesRaw=$(db_getReceivers)
+    local receiversFiles=()
+    local j=1
+    for i in ${receiversFilesRaw[@]}; do
+        echo "$j - $(utl_getFromJson "name" "$(dbReceivers_getPath)/$i")"
+        receiversFiles+=("$i")
+    done
+    echo ""
+    ui_line
+    local receiverIndex
+    read -p "Wybierz odbiorcę: " receiverIndex
+    ((receiverIndex--))
+
+    rm "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}"
+
+    ui_header "$servRec_title" "USUŃ"
+    echo "Operacja zakończyła się powodzeniem."
+    echo ""
+
     return 0
 }

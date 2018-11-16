@@ -71,3 +71,20 @@ utl_parseToArray() {
     IFS=' '
     return 0
 }
+
+
+utl_getNextIndex() {
+    local path="$1"
+    local length="$2"
+    local newID=$(ls $path | tail --lines=1 | grep -Po ".*(?=\.)")
+
+    # remove 0 from the beginning because of octal bullshit
+    newID=$(echo $newID | sed 's/^0*//')
+
+    ((newID++))
+    newID=$(printf "%0${length}d\n" $newID)
+
+    echo "$newID"
+
+    return 0
+}
