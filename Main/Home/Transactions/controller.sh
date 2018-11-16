@@ -38,6 +38,7 @@ __tnst_handleTransfer() {
     local title=""
     local currency=""
     local sum=""
+    local transferSum=""
     local error=" "
 
     # extract information from the user
@@ -218,8 +219,8 @@ __tnst_handleTransfer() {
         fi
 
 
-        if [ "$monetaryTransfer" == "true" ]; then
-            
+        transferSum=$sum
+        if [ "$monetaryTransfer" == "true" ]; then   
             sum=$(echo "scale=4;$exchangeRate*$sum" | bc)
             sum=$(echo "scale=0;($sum+0.4999)/1" | bc)
             echo "Kwota przelewu [$sourceAccountCurrency]: $(echo "scale=2;$sum/100" | bc)"      
@@ -257,15 +258,15 @@ __tnst_handleTransfer() {
 
     # make transfers
     if [ "$action" == "1" ]; then
-        local transactionID=$(db_makeTransfer "$1" $sourceAccountID $targetAccountID "$name" "$address" "$title" $sum)
+        local transactionID=$(db_makeTransfer "$1" $sourceAccountID $targetAccountID "$name" "$address" "$title" $sum $transferSum $currency)
         
         if [ "$transactionCost" -gt "0" ]; then
-            local bankTransactionID=$( db_makeTransfer "PRZELEW ZWYKŁY" $sourceAccountID "000" "$name" "$address" "Koszt przelewu: $transactionID" $transactionCost)
+            local bankTransactionID=$( db_makeTransfer "PRZELEW ZWYKŁY" $sourceAccountID "000" "$name" "$address" "Koszt przelewu: $transactionID" $transactionCost $transactionCost "PLN")
         fi
 
         if [ "$sumToSave" -gt "0" ]; then
             local usersSavingAccount=$(db_getUsersSavingAccount)
-            local internalTransactionID=$(db_makeTransfer "PRZELEW ZWYKŁY" $sourceAccountID $usersSavingAccount "$name" "$address" "Przelew wewnętrzny" $sumToSave)
+            local internalTransactionID=$(db_makeTransfer "PRZELEW ZWYKŁY" $sourceAccountID $usersSavingAccount "$name" "$address" "Przelew wewnętrzny" $sumToSave $sumToSave "PLN")
         fi
 
         ui_header "$tnst_title" "$1"

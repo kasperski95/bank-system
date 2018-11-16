@@ -31,6 +31,8 @@ db_createTransaction() {
     local sumCurrency="${10}"
     local receivedSum="${11}"
     local receivedSumCurrency="${12}"
+    local transactionSum="${13}"
+    local transactionCurrency="${14}"
 
 
     # read -p "---------DB----------" x
@@ -72,6 +74,8 @@ db_createTransaction() {
     echo "  \"title\": \"$title\"," >> $transactionFile
     echo "  \"sum\": \"$sum\"," >> $transactionFile
     echo "  \"sumCurrency\": \"$sumCurrency\"," >> $transactionFile
+    echo "  \"transactionSum\": \"$transactionSum\"," >> $transactionFile
+    echo "  \"transactionCurrency\": \"$transactionCurrency\"," >> $transactionFile
     echo "  \"receivedSum\": \"$receivedSum\"," >> $transactionFile
     echo "  \"receivedSumCurrency\": \"$receivedSumCurrency\"," >> $transactionFile
     echo "  \"sourceAccountID\": \"$sourceAccountID\"," >> $transactionFile
@@ -95,7 +99,8 @@ db_makeTransfer() {
     local address="$5"
     local title="$6"
     local sum="$7"
-
+    local transactionSum="$8"
+    local transactionCurrency="$9"
 
     # calculate source account balance
     local sourceAccountBalance=$(db_getAccountRawBalance $sourceAccountID)
@@ -119,7 +124,7 @@ db_makeTransfer() {
 
     # create transaction
     userInfo=$(echo "$(dbUsers_get "firstname") $(dbUsers_get "lastname")")
-    local transactionID=$(db_createTransaction "$(echo $(utl_getDate))" "$(echo $(utl_getTime))" "$type" $sourceAccountID "$userInfo" $targetAccountID "$name" "$title" $sum $sourceAccountCurrency $receivedSum $targetAccountCurrency)
+    local transactionID=$(db_createTransaction "$(echo $(utl_getDate))" "$(echo $(utl_getTime))" "$type" $sourceAccountID "$userInfo" $targetAccountID "$name" "$title" $sum $sourceAccountCurrency $receivedSum $targetAccountCurrency "$transactionSum" "$transactionCurrency")
 
     # push transactionID to both accounts
     db_addTransactionToAccount $transactionID $sourceAccountID

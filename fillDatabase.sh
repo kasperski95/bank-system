@@ -126,6 +126,8 @@ echo "  \"title\": \"Przelew testowy\"," >> $file_transaction0
 echo "  \"type\": \"PRZELEW ZWYKŁY\"," >> $file_transaction0
 echo "  \"sum\": \"100000\"," >> $file_transaction0
 echo "  \"sumCurrency\": \"PLN\"," >> $file_transaction0
+echo "  \"transactionSum\": \"100000\"," >> $file_transaction0
+echo "  \"transactionCurrency\": \"PLN\"," >> $file_transaction0
 echo "  \"receivedSum\": \"100000\"," >> $file_transaction0
 echo "  \"receivedSumCurrency\": \"PLN\"," >> $file_transaction0
 echo "  \"sourceAccountID\": \"000\"," >> $file_transaction0
@@ -141,6 +143,8 @@ echo "  \"title\": \"Przelew testowy\"," >> $file_transaction1
 echo "  \"type\": \"PRZELEW ZWYKŁY\"," >> $file_transaction1
 echo "  \"sum\": \"100000\"," >> $file_transaction1
 echo "  \"sumCurrency\": \"PLN\"," >> $file_transaction1
+echo "  \"transactionSum\": \"100000\"," >> $file_transaction1
+echo "  \"transactionCurrency\": \"PLN\"," >> $file_transaction1
 echo "  \"receivedSum\": \"100000\"," >> $file_transaction1
 echo "  \"receivedSumCurrency\": \"PLN\"," >> $file_transaction1
 echo "  \"sourceAccountID\": \"000\"," >> $file_transaction1

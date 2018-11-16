@@ -64,10 +64,13 @@ hist_export() {
             local sumCurrency=$(dbTransactions_get "sumCurrency" $i)
             local receivedSum=$(dbTransactions_get "receivedSum" $i)
             local receivedSumCurrency=$(dbTransactions_get "receivedSumCurrency" $i)
+            local transactionSum=$(dbTransactions_get "transactionSum" $i)
+            local transactionCurrency=$(dbTransactions_get "transactionCurrency" $i)
             local title=$(dbTransactions_get "title" $i)
 
             sum=$(echo "scale=2;$sum/100" | bc | sed "s/^\./0\./")
             receivedSum=$(echo "scale=2;$receivedSum/100" | bc | sed "s/^\./0\./")
+            transactionSum=$(echo "scale=2;$transactionSum/100" | bc | sed "s/^\./0\./")
 
             local outputFile="$outputPath/${transactionDate}_${i}.txt"
             touch $outputFile
@@ -77,7 +80,8 @@ hist_export() {
             echo "Czas: $transactionTime" >> $outputFile
             echo "Rachunek nadawcy: $sourceAccountID" >> $outputFile
             echo "Rachunek odbiorcy: $targetAccountID" >> $outputFile
-            echo "Kwota przelewu: $sum $sumCurrency" >> $outputFile
+            echo "Wysłana kwota: $sum $sumCurrency" >> $outputFile
+            echo "Kwota transakcji: $transactionSum $transactionCurrency" >> $outputFile
             echo "Otrzymana kwota: $receivedSum $receivedSumCurrency" >> $outputFile
         done;
 
