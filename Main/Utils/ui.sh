@@ -1,5 +1,8 @@
 #!/bin/bash
 
+
+
+
 ui_line() {
     local i=0
     while [ $i -lt $WIDTH ]; do
@@ -48,5 +51,80 @@ ui_alignRight() {
         local padding=$((WIDTH-${#1}-1-offsetLeft))
         printf "%${format1} %${padding}${format2}" "${str1}" "${str2}"
     fi
+    return 0
+}
+
+
+ui_form() {
+    # fun() { echo "1" }
+
+    # bar() { echo "2" }
+
+    # ui_form "FOO" "BAR"\
+    #     2 "foo" "bar"\
+    #     2 fun bar
+
+
+    local title1="$1" && shift 1
+    local title2="$1"  && shift 1
+
+    local menuSize="$1" && shift 1
+    local menuLabels=( "${@:1:$menuSize}" ); shift $menuSize
+
+    local handlersSize="$1" && shift 1
+    local handlers=( ${@:1:$handlersSize} ); shift $handlersSize
+
+
+    if [ "$#" -gt "0" ]; then
+        local toExecute="$1" && shift 1
+
+        if [ "$#" -gt "0" ]; then
+            local nArgs="$1" && shift 1
+            local args=( "${@:1:$nArgs}" ); shift $nArgs
+        else
+            local args=""
+        fi
+    else
+        local toExecute=""
+    fi
+
+
+    # clear & show header
+    ui_header "$title1" "$title2"
+    
+
+    # do some stuff before menu appears
+    if [ -z ${toExecute+x} ]; then
+        $toExecute ${args[@]}
+    fi
+
+
+    # display menu
+    local label
+    local index=0
+    while [ "$index" -lt "$menuSize" ]; do
+        ((index++))
+        echo "$index - ${menuLabels[$((index-1))]}"
+    done
+    echo "0 - Powrót"
+    echo ""
+    ui_line
+
+    # handle input
+    read -p "Wybierz akcję: " index
+    ((index--))
+
+    if [ "$index" -eq "-1" ]; then
+        return 1
+    fi
+
+    if [ "$handlersSize" -eq "0" ]; then
+        return 0
+    elif [ "$handlersSize" -eq "1" ]; then
+        ${handlers[0]} $index
+    else
+        ${handlers[$index]}
+    fi
+
     return 0
 }
