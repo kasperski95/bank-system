@@ -24,6 +24,7 @@ __servRec_add() {
 
     db_createReceiver $name $address $accountID
 
+    echo ""
     return 0
 }
 
@@ -36,6 +37,7 @@ __servRec_delete() {
     local j=1
     for i in ${receiversFilesRaw[@]}; do
         echo "$j - $(utl_getFromJson "name" "$(dbReceivers_getPath)/$i")"
+        ((j++))
         receiversFiles+=("$i")
     done
     echo ""

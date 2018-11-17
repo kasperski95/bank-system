@@ -12,6 +12,13 @@ ofrIns_handleList() {
     local insuranceTransactionID=$(utl_parseToArray $(db_get "insurancesID" "$USERNAME.$DB_EXT" "Users" true))
 
     ui_header "UBEZPIECZENIA" "WYKUPIONE"
+
+    if [ "${insuranceTransactionID[@]}" == "" ]; then
+        echo "Brak ubezpieczeń."
+        echo ""
+        return 0
+    fi
+
     for i in ${insuranceTransactionID[@]}; do
         local insuranceID=$(db_get "insuranceID" "$i.$DB_EXT" "$ofrIns_dbName/Transactions")
         local insuranceName=$(db_get "name" "$insuranceID.$DB_EXT" "$ofrIns_dbName/Info") 
@@ -82,7 +89,9 @@ ofrIns_handleInssuranceChoice() {
         db_add "insurancesID" "$insuranceID" "$USERNAME.$DB_EXT" "Users"
 
         # feedback
+        ui_header "UBEZPIECZENIA" "POTWIERDZENIE"
         echo "Operacja zakończyła się powodzeniem."
+        echo ""
         return 0
     fi
 

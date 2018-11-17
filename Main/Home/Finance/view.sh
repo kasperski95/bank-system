@@ -24,10 +24,8 @@ __fin_showMenu() {
     echo "1 - Wszystkie rachunki bankowe"
     echo "2 - Rachunki rozliczeniowe"
     echo "3 - Rachunki oszczędnościowe"
-    printf "$RED"
     echo "4 - Karty płatnicze"
     echo "5 - Pożyczki"
-    printf "$DEFAULT_COLOR"
     echo "0 - Powrót"
 
     return 0

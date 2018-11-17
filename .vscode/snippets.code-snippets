@@ -16,6 +16,14 @@
 	// 	"description": "Log output to console"
 	// }
 
+	"shebang": {
+		"scope": "shellscript",
+		"prefix": "shebang",
+		"body": [
+			"#!/bin/bash"
+		]
+	},
+	
 	"function": {
 		"scope": "shellscript",
 		"prefix": "fun",
@@ -68,7 +76,7 @@
 			"local file=\"\\$(echo \\$fileDir/\\$fileID.\\$DB_EXT)\"",
 			"touch \\$file",
 			"echo -e \"{\" > \\$file",
-			"echo -e \"\\t\\\"KEY\\\": \\\"VALUE\\\" >> \\$file",
+			"echo -e \"\\t\\\"KEY\\\": \\\"VALUE\\\"\" >> \\$file",
 			"echo -e \"}\" >> \\$file"
 		]
 	},
@@ -85,8 +93,18 @@
 		"scope": "shellscript",
 		"prefix": "db_get",
 		"body": [
-			"db_get \"KEY\" \"FILE\" \"DIR_RELATIVE_TO_DB\" \"ARRAY?\"",
+			"$(db_get \"KEY\" \"FILE\" \"DIR_RELATIVE_TO_DB\" ARRAY?)",
+		]
+	},
+
+	"db_makeTransfer": {
+		"scope": "shellscript",
+		"prefix": "db_makeTransfer",
+		"body": [
+			"local transactionID=\\$(db_makeTransfer \"PRZELEW ZWYKŁY\" \"SRC_ACCOUNT_ID\" \"TARGET_ACCOUNT_ID\" \"TARGET_NAME\" \"TARGET_ADDRESS\" \"TITLE\" \"SUM\" \"TRANSACTION_SUM\" \"TRANSACTION_CURRENCY\")",
 		]
 	}
+
+	
 
 }

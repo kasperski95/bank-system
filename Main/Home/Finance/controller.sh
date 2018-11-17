@@ -75,6 +75,12 @@ __fin_showCreditCards() {
         done
     done
 
+    if [ "${#cardsIDs[@]}" == "0" ]; then
+        echo "Brak kart płatniczych."
+        echo ""
+        return 0
+    fi
+
     # loop through cardsIDs and print: <cardType>: <cardID> ~ <accountID>   <balance> <currency>
     for i in ${cardsIDs[@]}; do
         local accountID=$(db_get "accountID" "$i.$DB_EXT" "Cards")
@@ -90,6 +96,6 @@ __fin_showCreditCards() {
 
 
 __fin_showLoans() {
-    ui_header "$fin_title" "POŻYCZKI"
-    return 0
+    db_loanMoney "POŻYCZKA" "$fin_title" "POŻYCZKI" "1.06" "Kasperski Bank" true false false false
+    return $?
 }

@@ -3,15 +3,18 @@ ofr_title="OFERTA"
 ofr_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$ofr_dir" ]]; then ofr_dir="$PWD"; fi
 
-. $ofr_dir/Account/view.sh
-. $ofr_dir/Insurances/controller.sh
-. $ofr_dir/Phone/controller.sh
 
 . $ofr_dir/../../Database/accounts.sh
 . $ofr_dir/../../Database/misc.sh
 . $ofr_dir/../../Database/receivers.sh
 . $ofr_dir/../../Database/transactions.sh
 . $ofr_dir/../../Database/users.sh
+
+. $ofr_dir/Account/view.sh
+. $ofr_dir/Insurances/controller.sh
+. $ofr_dir/Phone/controller.sh
+. $ofr_dir/Credits/controller.sh
+. $ofr_dir/Leasing/controller.sh
 
 
 
@@ -32,16 +35,16 @@ __ofr_showMenu() {
     echo "1 - Konto i rachunki bankowe"
     printf $RED
     echo "2 - Oszczędności"
+    printf $DEFAULT_COLOR
     echo "3 - Kredyty i pożyczki"
-    printf $GREEN
     echo "4 - Karty i płatności telefonem"
-    printf $DEFAULT_COLOR
     echo "5 - Emerytura"
-    printf $DEFAULT_COLOR
-    echo "6 - Ubezpieczenie"
+    echo "6 - Ubezpieczenia"
     printf $RED
     echo "7 - Rozliczenie z ZUS"
+    printf $DEFAULT_COLOR
     echo "8 - Leasing"
+    printf $RED
     echo "9 - Terminale płatnicze"
     printf $DEFAULT_COLOR
     echo "0 - Powrót"
@@ -54,8 +57,10 @@ __ofr_showMenu() {
 __ofr_handleAction() {
     case $1 in
         "1") ofrAct_show;;
+        "3") ofrCre_show;;
         "4") ofrPho_show;;
         "6") ofrIns_show;;
+        "8") ofrLsg_show;;
         *) home_skipPause=true
     esac
 

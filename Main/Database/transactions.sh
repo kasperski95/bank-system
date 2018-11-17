@@ -113,9 +113,9 @@ db_makeTransfer() {
 
     
     # validate
-    if [ "$sum" -gt "$sourceAccountBalance" ]; then
-        return 1
-    fi
+    # if [ "$sum" -gt "$sourceAccountBalance" ]; then
+    #     return 1
+    # fi
 
     # exchangeSum
     local sourceAccountCurrency=$(db_getAccountCurrency $sourceAccountID)
@@ -143,5 +143,150 @@ db_makeTransfer() {
 
 
     echo "$transactionID"
+    return 0
+}
+
+
+db_loanMoney() {
+    local type="$1"
+    local subtitle="$2"
+    local title="$3"
+    local rrso="$4"
+    local sourceName="$5"
+    local bMakeTransfer=$6
+    local bAskLoansGoal=$7
+    local bAuthenticateByPhone=$8    
+    local bAuthenticateByPesel=$9    
+
+    local sum
+    local expectedSum    
+    local nInstallments    
+    local endDate
+    local loansGoal=""       
+
+    # extract data from user: loanSum, loanInstallments
+    ui_header "$subtitle" "$title"
+    read -p "Kwota [PLN]: " sum
+    sum=$(echo $sum | tr "," ".")
+    sum=$(echo "scale=0;($sum*100)/1" | bc)
+    if [ "$sum" -le 0 ]; then
+        echo "Kwota musi być większa od zera."
+        echo ""
+        return 1
+    fi
+    
+    expectedSum="$sum"
+
+    read -p "Czas spłaty [w miesiącach]: " nInstallments
+    if [ "$nInstallments" -le 0 ]; then
+        echo "Ilość miesięcy musi być większa 0."
+        echo ""
+        return 1
+    fi
+
+    if ($bAskLoansGoal); then
+        read -p "Cel: " loansGoal
+    fi
+
+    # calculate: endDate, expectedSum, monthlySum
+    endDate=`date '+%Y-%m-%d' -d "$(date)+$nInstallments months"`
+    local nYears=$(echo "scale=0;($nInstallments-1)/12" | bc)
+    ((nYears++))
+    while [ "$nYears" -gt 0 ]; do
+        expectedSum=$(echo "scale=0;($rrso*$expectedSum)/1" | bc)
+        ((nYears--))
+    done
+
+    local monthlySum=$(echo "scale=2;($expectedSum/$nInstallments)/100" | bc)
+    local expectedSumPrint=$(echo "scale=2;$expectedSum/100" | bc)
+
+
+    # confirm
+    echo ""
+    echo "Całkowita suma do spłaty: $expectedSumPrint PLN"
+    echo "Miesięczna rata: $monthlySum PLN"
+    echo ""
+    echo "1 - Potwierdź"
+    echo "0 - Anuluj"
+    echo ""
+    ui_line
+    local action
+    read -p "Wybierz akcję: " action
+    if [ "$action" != "1" ]; then
+        home_skipPause=true
+        return 1
+    fi
+
+    # auth
+    if $bAuthenticateByPhone; then
+        ui_header "$subtitle" "$title"
+        echo "<wysyłanie kodu na telefon (123456)>"
+        echo ""
+        read -p "Podaj kod autoryzacyjny: " code
+        
+        if [ "$code" != "123456" ]; then
+            ui_header "$subtitle" "$title"
+            printf $RED
+            echo "Kod autoryzacyjny niepoprawny."
+            echo "Operacja zakończyła się niepowodzeniem."
+            printf $DEFAULT_COLOR
+            echo ""
+            return 1
+        fi
+    fi
+
+    if $bAuthenticateByPesel; then
+        ui_header "$subtitle" "$title"
+        read -p "Podaj numer pesel: " pesel
+        
+        if [ "$pesel" != "$(dbUsers_get "pesel")" ]; then
+            ui_header "$subtitle" "$title"
+            printf $RED
+            echo "Pesel niepoprawny."
+            echo "Operacja zakończyła się niepowodzeniem."
+            printf $DEFAULT_COLOR
+            echo ""
+            return 1
+        fi
+    fi
+
+
+    # create file: sum, expectedSum, paidSum, endDate
+    local fileDir="$DB/Loans"
+    local fileID=$(utl_getNextIndex "$fileDir" "3")
+    local file="$(echo $fileDir/$fileID.$DB_EXT)"
+    touch $file
+    echo -e "{" > $file
+    echo -e "\t\"type\": \"$type\"," >> $file
+    echo -e "\t\"sum\": \"$sum\"," >> $file
+    echo -e "\t\"expectedSum\": \"$expectedSum\"," >> $file
+    echo -e "\t\"paidSum\": \"0\"," >> $file
+    echo -e "\t\"currency\": \"PLN\"," >> $file
+    echo -e "\t\"date\": \"$(utl_getDate)\"," >> $file
+    echo -e "\t\"endDate\": \"$endDate\"," >> $file
+    echo -e "\t\"goal\": \"$loansGoal\"," >> $file
+    echo -e "\t\"bank\": \"$sourceName\"," >> $file
+    echo -e "\t\"location\": \"Online\"" >> $file
+    echo -e "}" >> $file
+
+    # add to user
+    db_add "loansID" "$fileID" "$USERNAME.$DB_EXT" "Users"
+
+    # makeTransfer
+    local typeLabel
+    case "$type" in
+        "POŻYCZKA") typeLabel="Pożyczka" ;;
+        "KREDYT") typeLabel="Kredyt" ;;
+        "LEASING") typeLabel="Leasing" ;;
+    esac
+    
+    if $bMakeTransfer; then
+        local transactionID=$(db_makeTransfer "PRZELEW ZWYKŁY" "000" "$(db_getUsersAccount)" "$(echo "$(dbUsers_get "firstname") $(dbUsers_get "lastname")")" "" "$typeLabel: $fileID" "$sum" "$sum" "PLN")
+    fi
+
+    # feedback
+    ui_header "$subtitle" "$title"
+    echo "Operacja zakończyła się powodzeniem."
+    echo ""
     return 0
 }
