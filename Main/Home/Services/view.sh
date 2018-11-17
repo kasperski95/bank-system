@@ -29,9 +29,7 @@ serv_show() {
 
 __serv_showMenu() {
     echo "1 - Odbiorcy"
-    printf $RED
     echo "2 - Zaplanowane płatności"
-    printf $DEFAULT_COLOR
     echo "3 - Stałe zlecenia"
     echo "4 - Cele oszczędnościowe"
     printf $RED

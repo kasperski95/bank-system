@@ -74,6 +74,7 @@ __servSo_add() {
 
             ((accountIndex--))
             sourceAccountID="${accounts[$accountIndex]}"
+            currency=$(db_getAccountCurrency $sourceAccountID)
             error=" "   
         fi
 
@@ -101,7 +102,7 @@ __servSo_add() {
                 targetName=$(utl_getFromJson "name" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
                 address=$(utl_getFromJson "address" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
                 targetAccountID=$(utl_getFromJson "accountID" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
-                bVirtual==$(utl_getFromJson "hidden" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
+                bVirtual=$(utl_getFromJson "hidden" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
             else
                 targetAccountID=""
             fi
@@ -179,7 +180,7 @@ __servSo_add() {
 
         # sum
         if [ "$sum" == "" ]; then
-            read -p "Kwota przelewów [PLN]: " sum
+            read -p "Kwota przelewów [$currency]: " sum
             sum=$(echo $sum | tr "," ".")
             if [[ ! "$sum" =~ ^[0-9]+\.[0-9][0-9]$ ]]; then
                 sum=""
@@ -197,7 +198,7 @@ __servSo_add() {
             fi
             continue
         else
-            echo "Kwota przelewów [PLN]: $(echo "scale=2;$sum/100" | bc)"
+            echo "Kwota przelewów [$currency]: $(echo "scale=2;$sum/100" | bc)"
         fi
 
 
@@ -245,8 +246,9 @@ __servSo_add() {
     echo -e "\t\"name\": \"$name\"," >> $file
     echo -e "\t\"title\": \"$title\"," >> $file
     echo -e "\t\"sum\": \"$sum\"," >> $file
+    echo -e "\t\"currency\": \"$currency\"," >> $file
     echo -e "\t\"initialDate\": \"$transactionDate\"," >> $file
-    echo -e "\t\"interval\": \"$interval\"" >> $file
+    echo -e "\t\"interval\": \"$interval\"," >> $file
     echo -e "\t\"virtual\": \"$bVirtual\"" >> $file
     echo -e "}" >> $file
 

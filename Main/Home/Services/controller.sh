@@ -31,10 +31,44 @@ serv_showTopUpPhone() {
 serv_showPlannedPayments() {
     ui_header "$serv_title" "ZAPLANOWANE_PŁATNOŚCI"
     
+    # get all standingOrders
+    local standingOrdersID=$(utl_parseToArray $(db_get "standingOrdersID" "$USERNAME.$DB_EXT" "Users" true))
+
+    for j in ${standingOrdersID[@]}; do
+        local initialDate="$(db_get "initialDate" "$j.$DB_EXT" "StandingOrders")"
+        local interval="$(db_get "interval" "$j.$DB_EXT" "StandingOrders")"
+        local name="$(db_get "name" "$j.$DB_EXT" "StandingOrders")"
+        local sum="$(db_get "sum" "$j.$DB_EXT" "StandingOrders")"
+        local currency="$(db_get "currency" "$j.$DB_EXT" "StandingOrders")"
+        
+        # calculate closest date in future
+        local dateInFuture="$(_serv_findClosestDateInFuture "$initialDate" "$interval")"
+
+        # print
+        sum=$(echo "scale=2;$sum/100" | bc)
+        ui_alignRight "$name ($sum $currency)" "$dateInFuture" "s" "s" && echo ""
+    done
+    echo ""
+
     return 0
 }
 
 
+_serv_findClosestDateInFuture() {
+    local initialDate="$1"
+    local interval="$2"
+
+    local result="$initialDate"
+    local offset="0"
+    local i="1"
+    while [[ "$result" < "$(utl_getDate)" ]]; do
+        offset=$(echo "$interval*$i" | bc)
+        result=$(date '+%Y-%m-%d' -d "$initialDate + $offset months")
+        ((i++))
+    done
+    echo "$result"
+    return 0
+}
 
 
 _serv_handleTopUpPhone() {
