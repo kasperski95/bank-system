@@ -10,6 +10,7 @@ ofrPho_show() {
         ${#handlers[@]} ${handlers[@]}
 }
 
+
 _handleNewCard () {
     local title="NOWA KARTA"
     ui_header "$ofrPho_title" "$title"
@@ -59,12 +60,74 @@ _handleNewCard () {
     return 0
 }
 
+
 _handleNewBinding () {
-    echo "test2"
+    local ofrPhoNbtitle="POWIĄZANIE"
+    local phoneNumber
+    local _accounts=$(db_getUserAccounts)
+    local accounts=()
+    local accountIndex=1
+
+    # enter phone number
+    ui_header "$ofrPho_title" "$ofrPhoNbtitle"
+    read -p "Numer telefonu: " phoneNumber
+    echo "<wysyłanie kodu potwierdzającego (123456)>"
+    read -p "Podaj kod potwierdzający: " code
+
+    if [ "$code" != "123456" ]; then
+        echo "Nieprawidłowy kod aktywujący."
+        echo ""
+        return 1
+    fi
+
+    # choose account
+    ui_header "$ofrPho_title" "$ofrPhoNbtitle"
+    
+    for i in ${_accounts[@]}; do
+        if [ "$(db_getAccountsType $i)" == "checking" ]; then
+            accounts+=("$i")
+            echo "$accountIndex - $i"
+            ((accountIndex++))
+        fi
+    done
+    echo ""
+    ui_line
+    read -p "Wybierz rachunek: " accountIndex
+    ((accountIndex--))
+
+    # create binding file
+    local fileDir="$DB/Phones"
+    local fileID="$phoneNumber"
+    local file="$(echo $fileDir/$fileID.$DB_EXT)"
+    touch $file
+    echo -e "{" > $file
+    echo -e "\t\"accountID\": \"${accounts[$accountIndex]}\"" >> $file
+    echo -e "}" >> $file
+
+    # add to user
+    db_add "phonesID" "$phoneNumber" "$USERNAME.$DB_EXT" "Users"
+
+    # feedback
+    ui_header "$ofrPho_title" "$ofrPhoNbtitle"
+    echo "Operacja zakończyła się powodzeniem."
+    echo ""
+
     return 0
 }
 
+
 _handleBindingList () {
-    echo "test3"
+    ui_header "$ofrPho_title" "LISTA POWIĄZAŃ"
+
+    # get array of bindings
+    phonesID=$(utl_parseToArray $(db_get "phonesID" "$USERNAME.$DB_EXT" "Users" true))
+
+    # print: <phone number> ~> <accountID>
+    for i in ${phonesID[@]}; do
+        local accountID=$(db_get "accountID" "$i.$DB_EXT" "Phones")
+        echo "$phonesID ~ $accountID"
+    done
+    echo ""
+
     return 0
 }
