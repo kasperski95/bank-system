@@ -72,3 +72,31 @@ db_add() {
 
     return 0
 }
+
+
+db_subtract() {
+    local key="$1"
+    local value="$2"
+    local file="$3"
+    local dir="$4"
+
+    # echo "key: $key"
+    # echo "value: $value"
+    # echo "file: $file"
+    # echo "dir: $dir"
+    # read x
+
+    local oldArray=$(utl_parseToArray $(utl_getRawArrayFromJson "$key" "$DB/$dir/$file"))
+    local newArray=()
+
+    for i in ${oldArray[@]}; do
+        if [ "$i" != "$value" ]; then
+            newArray+=("$i")
+        fi
+    done
+
+    local arrayJson=$(utl_parseArrayToJson ${newArray[@]})
+    db_set "$key" "$arrayJson" "$file" "$dir"
+
+    return 0
+}

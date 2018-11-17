@@ -11,6 +11,7 @@ servSo_show() {
     local action
 
     ui_header "$serv_title" "$servSo_title"
+    servSo_showList
     __servSo_showMenu && echo ""
     ui_line
     read -p "Wybierz akcję: " action
@@ -21,11 +22,8 @@ servSo_show() {
 
 
 __servSo_showMenu() {
-    printf $RED
-    echo "1 - Lista" 
-    echo "2 - Dodaj" 
-    echo "3 - Usuń" 
-    printf $DEFAULT_COLOR
+    echo "1 - Dodaj" 
+    echo "2 - Usuń" 
     echo "0 - Powrót"
 
     return 0
@@ -34,9 +32,8 @@ __servSo_showMenu() {
 
 __servSo_handleAction() {
     case $1 in
-        "1") __servSo_showList;;
-        "2") __servSo_add;;
-        "3") __servSo_delete;;
+        "1") __servSo_add;;
+        "2") __servSo_delete;;
         *) home_skipPause=true;;
     esac
 

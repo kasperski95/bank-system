@@ -6,3 +6,4 @@ Database/Insurances/Transactions/*
 Database/Receivers/*
 Database/Cards/*
 Database/Loans/*
+Database/StandingOrders/*

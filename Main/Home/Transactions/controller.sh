@@ -32,7 +32,7 @@ __tnst_handleTransfer() {
     local monetaryTransfer="$4"
 
     local sourceAccountID=""
-    local targetAccountID=""
+    local targetAccountID="init"
     local name=""
     local address=""
     local title=""
@@ -120,7 +120,7 @@ __tnst_handleTransfer() {
 
 
         # user's receivers
-        if [ "$targetAccountID" == "" ]; then
+        if [ "$targetAccountID" == "init" ]; then
             local receiversFilesRaw=$(db_getReceivers)
             local receiversFiles=()
             local j=1
@@ -140,7 +140,9 @@ __tnst_handleTransfer() {
                 name=$(utl_getFromJson "name" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
                 address=$(utl_getFromJson "address" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
                 targetAccountID=$(utl_getFromJson "accountID" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
-            fi   
+            else
+                targetAccountID=""
+            fi
         fi
 
 

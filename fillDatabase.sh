@@ -42,6 +42,11 @@ if [ ! -d "$loansDir" ]; then
     mkdir $loansDir
 fi
 
+standingOrdersDir="$DB/StandingOrders"
+if [ ! -d "$standingOrdersDir" ]; then
+    mkdir $standingOrdersDir
+fi
+
 
 generationDate=$(utl_getDate)
 generationTime=$(utl_getTime)
@@ -76,8 +81,9 @@ echo "    \"accountsID\": [\"000\",\"001\"]," >> $file_userBank
 echo "    \"insurancesID\": []," >> $file_userBank
 echo "    \"phonesID\": []," >> $file_userBank
 echo "    \"loansID\": []," >> $file_userBank
-echo "    \"firstname\": \"Bank\"," >> $file_userBank
-echo "    \"lastname\": \"Owners\"," >> $file_userBank
+echo "    \"standingOrdersID\": []," >> $file_userBank
+echo "    \"firstname\": \"Kasperski\"," >> $file_userBank
+echo "    \"lastname\": \"Bank\"," >> $file_userBank
 echo "    \"pesel\": \"000\"," >> $file_userBank
 echo "    \"city\": \"Warszawa\"," >> $file_userBank
 echo "    \"street\": \"Żydowska\"," >> $file_userBank
@@ -91,8 +97,9 @@ echo "    \"accountsID\": [\"002\",\"003\"]," >> $file_userFoo
 echo "    \"insurancesID\": []," >> $file_userFoo
 echo "    \"phonesID\": []," >> $file_userFoo
 echo "    \"loansID\": []," >> $file_userFoo
+echo "    \"standingOrdersID\": []," >> $file_userFoo
 echo "    \"firstname\": \"John\"," >> $file_userFoo
-echo "    \"lastname\": \"Doe\"," >> $file_userFoo
+echo "    \"lastname\": \"Foo\"," >> $file_userFoo
 echo "    \"pesel\": \"001\"," >> $file_userFoo
 echo "    \"city\": \"Warszawa\"," >> $file_userFoo
 echo "    \"street\": \"Słoneczna\"," >> $file_userFoo
@@ -106,8 +113,9 @@ echo "    \"accountsID\": [\"004\",\"005\"]," >> $file_userBar
 echo "    \"insurancesID\": []," >> $file_userBar
 echo "    \"phonesID\": []," >> $file_userBar
 echo "    \"loansID\": []," >> $file_userBar
+echo "    \"standingOrdersID\": []," >> $file_userBar
 echo "    \"firstname\": \"Jan\"," >> $file_userBar
-echo "    \"lastname\": \"Nowak\"," >> $file_userBar
+echo "    \"lastname\": \"Bar\"," >> $file_userBar
 echo "    \"pesel\": \"002\"," >> $file_userBar
 echo "    \"city\": \"Kraków\"," >> $file_userBar
 echo "    \"street\": \"Kamienna\"," >> $file_userBar
