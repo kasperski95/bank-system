@@ -5,6 +5,13 @@ if [[ ! -d "$ofr_dir" ]]; then ofr_dir="$PWD"; fi
 
 . $ofr_dir/Account/view.sh
 . $ofr_dir/Insurances/controller.sh
+. $ofr_dir/Phone/controller.sh
+
+. $ofr_dir/../../Database/accounts.sh
+. $ofr_dir/../../Database/misc.sh
+. $ofr_dir/../../Database/receivers.sh
+. $ofr_dir/../../Database/transactions.sh
+. $ofr_dir/../../Database/users.sh
 
 
 
@@ -26,9 +33,13 @@ __ofr_showMenu() {
     printf $RED
     echo "2 - Oszczędności"
     echo "3 - Kredyty i pożyczki"
+    printf $GREEN
     echo "4 - Karty i płatności telefonem"
+    printf $DEFAULT_COLOR
     echo "5 - Emerytura"
+    printf $DEFAULT_COLOR
     echo "6 - Ubezpieczenie"
+    printf $RED
     echo "7 - Rozliczenie z ZUS"
     echo "8 - Leasing"
     echo "9 - Terminale płatnicze"
@@ -43,6 +54,7 @@ __ofr_showMenu() {
 __ofr_handleAction() {
     case $1 in
         "1") ofrAct_show;;
+        "4") ofrPho_show;;
         "6") ofrIns_show;;
         *) home_skipPause=true
     esac

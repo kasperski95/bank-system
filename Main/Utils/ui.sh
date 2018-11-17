@@ -56,15 +56,6 @@ ui_alignRight() {
 
 
 ui_form() {
-    # fun() { echo "1" }
-
-    # bar() { echo "2" }
-
-    # ui_form "FOO" "BAR"\
-    #     2 "foo" "bar"\
-    #     2 fun bar
-
-
     local title1="$1" && shift 1
     local title2="$1"  && shift 1
 

@@ -27,6 +27,11 @@ if [ ! -d "$barReceiversDir" ]; then
     mkdir $barReceiversDir
 fi
 
+cardsDir="$DB/Cards"
+if [ ! -d "$cardsDir" ]; then
+    mkdir $cardsDir
+fi
+
 generationDate=$(utl_getDate)
 generationTime=$(utl_getTime)
 file_userBank="$usersDir/bank.$DB_EXT"
@@ -95,6 +100,7 @@ echo "{" > $file_account000
 echo "   \"balance\": \"10000000\"," >> $file_account000
 echo "   \"type\": \"checking\"," >> $file_account000
 echo "   \"transactionsID\": [\"000000\", \"000001\"]," >> $file_account000
+echo "   \"cardsID\": []," >> $file_account000
 echo "   \"currency\": \"PLN\"" >> $file_account000
 echo "}" >> $file_account000
 
@@ -102,6 +108,7 @@ echo "{" > $file_account001
 echo "   \"balance\": \"0\"," >> $file_account001
 echo "   \"type\": \"saving\"," >> $file_account001
 echo "   \"transactionsID\": []," >> $file_account001
+echo "   \"cardsID\": []," >> $file_account001
 echo "   \"currency\": \"PLN\"" >> $file_account001
 echo "}" >> $file_account001
 
@@ -109,6 +116,7 @@ echo "{" > $file_account002
 echo "   \"balance\": \"100000\"," >> $file_account002
 echo "   \"type\": \"checking\"," >> $file_account002
 echo "   \"transactionsID\": [\"000000\"]," >> $file_account002
+echo "   \"cardsID\": []," >> $file_account002
 echo "   \"currency\": \"PLN\"" >> $file_account002
 echo "}" >> $file_account002
 
@@ -116,6 +124,7 @@ echo "{" > $file_account003
 echo "   \"balance\": \"0\"," >> $file_account003
 echo "   \"type\": \"saving\"," >> $file_account003
 echo "   \"transactionsID\": []," >> $file_account003
+echo "   \"cardsID\": []," >> $file_account003
 echo "   \"currency\": \"PLN\"" >> $file_account003
 echo "}" >> $file_account003
 
@@ -123,6 +132,7 @@ echo "{" > $file_account004
 echo "   \"balance\": \"100000\"," >> $file_account004
 echo "   \"type\": \"checking\"," >> $file_account004
 echo "   \"transactionsID\": [\"000001\"]," >> $file_account004
+echo "   \"cardsID\": []," >> $file_account004
 echo "   \"currency\": \"PLN\"" >> $file_account004
 echo "}" >> $file_account004
 
@@ -130,6 +140,7 @@ echo "{" > $file_account005
 echo "   \"balance\": \"0\"," >> $file_account005
 echo "   \"type\": \"saving\"," >> $file_account005
 echo "   \"transactionsID\": []," >> $file_account005
+echo "   \"cardsID\": []," >> $file_account005
 echo "   \"currency\": \"PLN\"" >> $file_account005
 echo "}" >> $file_account005
 

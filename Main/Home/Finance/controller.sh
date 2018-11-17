@@ -60,7 +60,7 @@ __fin_showSavingAccounts() {
 
 
 __fin_showCreditCards() {
-    ui_header $fin_title "KARTY KREDYTOWE"
+    ui_header $fin_title "KARTY PŁATNICZE"
     return 0
 }
 

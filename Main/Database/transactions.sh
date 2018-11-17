@@ -111,6 +111,12 @@ db_makeTransfer() {
     local sourceAccountBalance=$(db_getAccountRawBalance $sourceAccountID)
     local newSourceAccountBalance=$(($sourceAccountBalance-$sum))
 
+    
+    # validate
+    if [ "$sum" -gt "$sourceAccountBalance" ]; then
+        return 1
+    fi
+
     # exchangeSum
     local sourceAccountCurrency=$(db_getAccountCurrency $sourceAccountID)
     local sourceExchangeRate=$(db_getExchangeRate $sourceAccountCurrency) 
