@@ -27,10 +27,13 @@ __servRec_showMenu() {
         local receiversFiles=()
         local j=1
         for i in ${receiversFilesRaw[@]}; do
-            local name=$(utl_getFromJson "name" "$(dbReceivers_getPath)/$i")
-            local accountID=$(utl_getFromJson "accountID" "$(dbReceivers_getPath)/$i")
-            ui_alignRight "$name" "$accountID" "s" "s" && echo ""
-            receiversFiles+=("$i")
+            local bHidden=$(utl_getFromJson "hidden" "$(dbReceivers_getPath)/$i")
+            if ! $bHidden; then
+                local name=$(utl_getFromJson "name" "$(dbReceivers_getPath)/$i")
+                local accountID=$(utl_getFromJson "accountID" "$(dbReceivers_getPath)/$i")
+                ui_alignRight "$name" "$accountID" "s" "s" && echo ""
+                receiversFiles+=("$i")
+            fi
         done
         echo ""
     fi

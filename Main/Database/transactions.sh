@@ -33,6 +33,7 @@ db_createTransaction() {
     local receivedSumCurrency="${12}"
     local transactionSum="${13}"
     local transactionCurrency="${14}"
+    local bVirtual=${15}
 
 
     # read -p "---------DB----------" x
@@ -68,6 +69,7 @@ db_createTransaction() {
 
     # print stuff to files
     echo "{"  > $transactionFile
+    echo "  \"virtual\": \"$bVirtual\"," >> $transactionFile
     echo "  \"date\": \"$date\"," >> $transactionFile
     echo "  \"time\": \"$time\"," >> $transactionFile
     echo "  \"type\": \"$type\"," >> $transactionFile
@@ -101,6 +103,10 @@ db_makeTransfer() {
     local sum="$7"
     local transactionSum="$8"
     local transactionCurrency="$9"
+    local bVirtual=${10}
+    local bSrcVirtual=${11}
+
+    
 
     # validate
     if [ "$sum" -lt "0" ]; then
@@ -108,7 +114,11 @@ db_makeTransfer() {
     fi
 
     # calculate source account balance
-    local sourceAccountBalance=$(db_getAccountRawBalance $sourceAccountID)
+    if ! $bSrcVirtual; then
+        local sourceAccountBalance=$(db_getAccountRawBalance $sourceAccountID)
+    else
+        local sourceAccountBalance=$(db_get "balance" "$sourceAccountID.$DB_EXT" "VirtualAccounts")
+    fi
     local newSourceAccountBalance=$(($sourceAccountBalance-$sum))
 
     
@@ -117,29 +127,54 @@ db_makeTransfer() {
     #     return 1
     # fi
 
+    if ! $bVirtual; then
+        local targetAccountCurrency=$(db_getAccountCurrency $targetAccountID)
+    else
+        local targetAccountCurrency="PLN"
+    fi
+
     # exchangeSum
-    local sourceAccountCurrency=$(db_getAccountCurrency $sourceAccountID)
-    local sourceExchangeRate=$(db_getExchangeRate $sourceAccountCurrency) 
-    local targetAccountCurrency=$(db_getAccountCurrency $targetAccountID)
-    local targetExchangeRate=$(db_getExchangeRate $targetAccountCurrency)
-    local receivedSum=$(echo "scale=4;$sum/($targetExchangeRate/$sourceExchangeRate)" | bc)
-    receivedSum=$(echo "scale=0;($receivedSum+0.4999)/1" | bc)
+    if ! $bSrcVirtual; then
+        local sourceAccountCurrency=$(db_getAccountCurrency $sourceAccountID)
+        local sourceExchangeRate=$(db_getExchangeRate $sourceAccountCurrency) 
+        local targetExchangeRate=$(db_getExchangeRate $targetAccountCurrency)
+        local receivedSum=$(echo "scale=4;$sum/($targetExchangeRate/$sourceExchangeRate)" | bc)
+        receivedSum=$(echo "scale=0;($receivedSum+0.4999)/1" | bc)
+    else
+        local sourceAccountCurrency="PLN"
+        local receivedSum=$(echo "scale=0;($sum+0.4999)/1" | bc)
+    fi
 
     # calculate target account balance
-    local targetAccountBalance=$(db_getAccountRawBalance $targetAccountID)
+    if ! $bVirtual; then
+        local targetAccountBalance=$(db_getAccountRawBalance $targetAccountID)
+    else
+        local targetAccountBalance=$(db_get "balance" "$targetAccountID.$DB_EXT" "VirtualAccounts")
+    fi
     local newTargetAccountBalance=$(($targetAccountBalance+$receivedSum))
 
     # update db
-    dbAccounts_set "balance" $newSourceAccountBalance $sourceAccountID
-    dbAccounts_set "balance" $newTargetAccountBalance $targetAccountID
+    if ! $bSrcVirtual; then
+        dbAccounts_set "balance" $newSourceAccountBalance $sourceAccountID
+    else
+        db_set "balance" "$newSourceAccountBalance" "$sourceAccountID.$DB_EXT" "VirtualAccounts"
+    fi
+
+    if ! $bVirtual; then
+        dbAccounts_set "balance" $newTargetAccountBalance $targetAccountID
+    else
+        db_set "balance" "$newTargetAccountBalance" "$targetAccountID.$DB_EXT" "VirtualAccounts"
+    fi
 
     # create transaction
     userInfo=$(echo "$(dbUsers_get "firstname") $(dbUsers_get "lastname")")
-    local transactionID=$(db_createTransaction "$(echo $(utl_getDate))" "$(echo $(utl_getTime))" "$type" $sourceAccountID "$userInfo" $targetAccountID "$name" "$title" $sum $sourceAccountCurrency $receivedSum $targetAccountCurrency "$transactionSum" "$transactionCurrency")
+    local transactionID=$(db_createTransaction "$(echo $(utl_getDate))" "$(echo $(utl_getTime))" "$type" $sourceAccountID "$userInfo" $targetAccountID "$name" "$title" $sum $sourceAccountCurrency $receivedSum $targetAccountCurrency "$transactionSum" "$transactionCurrency" $bVirtual)
 
     # push transactionID to both accounts
-    db_addTransactionToAccount $transactionID $sourceAccountID
-    db_addTransactionToAccount $transactionID $targetAccountID
+    if ! $bSrcVirtual; then
+        db_addTransactionToAccount $transactionID $sourceAccountID false
+    fi
+    db_addTransactionToAccount $transactionID $targetAccountID $bVirtual
 
 
     echo "$transactionID"
@@ -281,7 +316,7 @@ db_loanMoney() {
     esac
     
     if $bMakeTransfer; then
-        local transactionID=$(db_makeTransfer "PRZELEW ZWYKŁY" "000" "$(db_getUsersAccount)" "$(echo "$(dbUsers_get "firstname") $(dbUsers_get "lastname")")" "" "$typeLabel: $fileID" "$sum" "$sum" "PLN")
+        local transactionID=$(db_makeTransfer "PRZELEW ZWYKŁY" "000" "$(db_getUsersAccount)" "$(echo "$(dbUsers_get "firstname") $(dbUsers_get "lastname")")" "" "$typeLabel: $fileID" "$sum" "$sum" "PLN" false false)
     fi
 
     # feedback

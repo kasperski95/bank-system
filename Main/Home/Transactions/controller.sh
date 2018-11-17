@@ -39,6 +39,7 @@ __tnst_handleTransfer() {
     local currency=""
     local sum=""
     local transferSum=""
+    local bVirtual=false
     local error=" "
 
     # extract information from the user
@@ -119,14 +120,24 @@ __tnst_handleTransfer() {
         fi
 
 
-        # user's receivers
+        # user's receivers & goals
         if [ "$targetAccountID" == "init" ]; then
             local receiversFilesRaw=$(db_getReceivers)
             local receiversFiles=()
             local j=1
             for i in ${receiversFilesRaw[@]}; do
-                echo "$j - $(utl_getFromJson "name" "$(dbReceivers_getPath)/$i")"
+                local bHidden=$(utl_getFromJson "hidden" "$(dbReceivers_getPath)/$i")
+                if [ "$transactionCost" -gt 0 ] && $bHidden; then
+                    continue
+                fi
+
+                if $bHidden; then
+                    echo "$j - Cel oszcz.: $(utl_getFromJson "name" "$(dbReceivers_getPath)/$i")"
+                else
+                    echo "$j - $(utl_getFromJson "name" "$(dbReceivers_getPath)/$i")"
+                fi
                 receiversFiles+=("$i")
+                ((j++))
             done
             echo "0 - Pomiń"
             echo ""
@@ -137,13 +148,17 @@ __tnst_handleTransfer() {
 
             if [ "$receiverIndex" != "0" ]; then
                 ((receiverIndex--))
+                bVirtual=$(utl_getFromJson "hidden" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
+
                 name=$(utl_getFromJson "name" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
                 address=$(utl_getFromJson "address" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
                 targetAccountID=$(utl_getFromJson "accountID" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
+                
             else
                 targetAccountID=""
             fi
         fi
+
 
 
         ui_header "$tnst_title" "$1"
@@ -176,7 +191,9 @@ __tnst_handleTransfer() {
             fi
             continue
         else
-            echo "Rachunek odbiorcy: $targetAccountID"
+            if ! $bVirtual; then
+                echo "Rachunek odbiorcy: $targetAccountID"
+            fi
         fi
 
         # name
@@ -189,7 +206,11 @@ __tnst_handleTransfer() {
             fi
             continue
         else
-            echo "Nazwa odbiorcy: $name"
+            if ! $bVirtual; then
+                echo "Nazwa odbiorcy: $name"
+            else
+                echo "Cel oszczędnościowy: $name"
+            fi
         fi
 
         # address
@@ -202,7 +223,9 @@ __tnst_handleTransfer() {
             fi
             continue
         else
-            echo "Adres odbiorcy: $address"
+            if ! $bVirtual; then
+                echo "Adres odbiorcy: $address"
+            fi
         fi
 
 
@@ -285,20 +308,23 @@ __tnst_handleTransfer() {
 
     # make transfers
     if [ "$action" == "1" ]; then
-        local transactionID=$(db_makeTransfer "$1" $sourceAccountID $targetAccountID "$name" "$address" "$title" $sum $transferSum $currency)
+        local transactionID=$(db_makeTransfer "$1" $sourceAccountID $targetAccountID "$name" "$address" "$title" $sum $transferSum $currency $bVirtual false)
         
         if [ "$transactionCost" -gt "0" ]; then
-            local bankTransactionID=$( db_makeTransfer "PRZELEW ZWYKŁY" $sourceAccountID "000" "$name" "$address" "Koszt przelewu: $transactionID" $transactionCost $transactionCost "PLN")
+            local bankTransactionID=$( db_makeTransfer "PRZELEW ZWYKŁY" $sourceAccountID "000" "$name" "$address" "Koszt przelewu: $transactionID" $transactionCost $transactionCost "PLN" false false)
         fi
 
         if [ "$sumToSave" -gt "0" ]; then
             local usersSavingAccount=$(db_getUsersSavingAccount)
-            local internalTransactionID=$(db_makeTransfer "PRZELEW ZWYKŁY" $sourceAccountID $usersSavingAccount "$name" "$address" "Przelew wewnętrzny" $sumToSave $sumToSave "PLN")
+            local internalTransactionID=$(db_makeTransfer "PRZELEW ZWYKŁY" $sourceAccountID $usersSavingAccount "$name" "$address" "Przelew wewnętrzny" $sumToSave $sumToSave "PLN" false false)
         fi
 
         ui_header "$tnst_title" "$1"
         echo "Przelew został zrealizowany."
         echo ""
+
+        
+
         return 0
     fi
 

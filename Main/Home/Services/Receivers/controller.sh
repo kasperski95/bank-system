@@ -36,9 +36,12 @@ __servRec_delete() {
     local receiversFiles=()
     local j=1
     for i in ${receiversFilesRaw[@]}; do
-        echo "$j - $(utl_getFromJson "name" "$(dbReceivers_getPath)/$i")"
-        ((j++))
-        receiversFiles+=("$i")
+        local bHidden=$(utl_getFromJson "hidden" "$(dbReceivers_getPath)/$i")
+        if ! $bHidden; then
+            echo "$j - $(utl_getFromJson "name" "$(dbReceivers_getPath)/$i")"
+            ((j++))
+            receiversFiles+=("$i")
+        fi
     done
     echo ""
     ui_line

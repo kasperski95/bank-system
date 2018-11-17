@@ -39,7 +39,8 @@ db_getReceivers() {
 
 
 db_createReceiver() {
-    local file="$(dbReceivers_getPath)/$(utl_getNextIndex "$(dbReceivers_getPath)" "3").$DB_EXT"
+    local id=$(utl_getNextIndex "$(dbReceivers_getPath)" "3")
+    local file="$(dbReceivers_getPath)/$id.$DB_EXT"
     touch $file
     echo -e "{" > $file
     echo -e "\t\"name\": \"$1\"," >> $file
@@ -47,7 +48,7 @@ db_createReceiver() {
     echo -e "\t\"accountID\": \"$3\"," >> $file
     echo -e "\t\"hidden\": \"$4\"" >> $file
     echo -e "}" >> $file
-
+    echo "$id"
     return 0
 }
 

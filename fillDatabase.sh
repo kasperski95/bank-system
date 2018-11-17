@@ -1,6 +1,16 @@
 #!/bin/bash
 . Main/globals.sh
+
+rm -r "$DB"
+
+if [ ! -d "$DB" ]; then
+    mkdir "$DB"
+fi
+
 . Main/Utils/index.sh
+
+
+
 
 usersDir="$DB/Users"
 if [ ! -d "$usersDir" ]; then
@@ -15,6 +25,11 @@ fi
 transactionsDir="$DB/Transactions"
 if [ ! -d "$transactionsDir" ]; then
     mkdir $transactionsDir
+fi
+
+receiversDir="$DB/Receivers"
+if [ ! -d "$receiversDir" ]; then
+    mkdir $receiversDir
 fi
 
 fooReceiversDir="$DB/Receivers/foo"
@@ -47,6 +62,16 @@ if [ ! -d "$standingOrdersDir" ]; then
     mkdir $standingOrdersDir
 fi
 
+virtualAccountsDir="$DB/VirtualAccounts"
+if [ ! -d "$virtualAccountsDir" ]; then
+    mkdir $virtualAccountsDir
+fi
+
+miscDir="$DB/Misc"
+if [ ! -d "$miscDir" ]; then
+    mkdir $miscDir
+fi
+
 
 generationDate=$(utl_getDate)
 generationTime=$(utl_getTime)
@@ -63,6 +88,7 @@ file_transaction0="$transactionsDir/000000.$DB_EXT"
 file_transaction1="$transactionsDir/000001.$DB_EXT"
 file_zusFoo="$fooReceiversDir/000.$DB_EXT"
 file_zusBar="$barReceiversDir/000.$DB_EXT"
+file_exchangeRates="$miscDir/exchangeRates.$DB_EXT"
 
 touch $file_userBank
 touch $file_userFoo
@@ -73,11 +99,12 @@ touch $file_account002
 touch $file_account003
 touch $file_transaction0
 touch $file_transaction1
-
+touch $file_exchangeRates
 
 echo "{" > $file_userBank
 echo "    \"password\": \"1234\"," >> $file_userBank
 echo "    \"accountsID\": [\"000\",\"001\"]," >> $file_userBank
+echo "    \"virtualAccountsID\": []," >> $file_userBank
 echo "    \"insurancesID\": []," >> $file_userBank
 echo "    \"phonesID\": []," >> $file_userBank
 echo "    \"loansID\": []," >> $file_userBank
@@ -94,6 +121,7 @@ echo "}" >> $file_userBank
 echo "{" > $file_userFoo
 echo "    \"password\": \"1234\"," >> $file_userFoo
 echo "    \"accountsID\": [\"002\",\"003\"]," >> $file_userFoo
+echo "    \"virtualAccountsID\": []," >> $file_userFoo
 echo "    \"insurancesID\": []," >> $file_userFoo
 echo "    \"phonesID\": []," >> $file_userFoo
 echo "    \"loansID\": []," >> $file_userFoo
@@ -110,6 +138,7 @@ echo "}" >> $file_userFoo
 echo "{" > $file_userBar
 echo "    \"password\": \"1234\"," >> $file_userBar
 echo "    \"accountsID\": [\"004\",\"005\"]," >> $file_userBar
+echo "    \"virtualAccountsID\": []," >> $file_userBar
 echo "    \"insurancesID\": []," >> $file_userBar
 echo "    \"phonesID\": []," >> $file_userBar
 echo "    \"loansID\": []," >> $file_userBar
@@ -174,6 +203,7 @@ echo "}" >> $file_account005
 
 
 echo "{" > $file_transaction0
+echo "  \"virtual\": \"false\"," >> $file_transaction0
 echo "  \"date\": \"$generationDate\"," >> $file_transaction0
 echo "  \"time\": \"$generationTime\"," >> $file_transaction0
 echo "  \"title\": \"Przelew testowy\"," >> $file_transaction0
@@ -191,6 +221,7 @@ echo "  \"targetName\": \"Jan Kowalski\"" >> $file_transaction0
 echo "}" >> $file_transaction0
 
 echo "{" > $file_transaction1
+echo "  \"virtual\": \"false\"," >> $file_transaction1
 echo "  \"date\": \"$generationDate\"," >> $file_transaction1
 echo "  \"time\": \"$generationTime\"," >> $file_transaction1
 echo "  \"title\": \"Przelew testowy\"," >> $file_transaction1
@@ -221,3 +252,17 @@ echo "  \"address\": \"ul. Senatorska 6, Warszawa\"," >> $file_zusBar
 echo "  \"accountID\": \"000\"," >> $file_zusBar
 echo "  \"hidden\": \"false\"" >> $file_zusBar
 echo "}" >> $file_zusBar
+
+
+echo -e "{" > $file_exchangeRates
+echo -e "\t\"PLN\": \"1\"," >> $file_exchangeRates
+echo -e "\t\"USD\": \"3.7838\"," >> $file_exchangeRates
+echo -e "\t\"EUR\": \"4.2901\"," >> $file_exchangeRates
+echo -e "\t\"CHF\": \"3.7535\"," >> $file_exchangeRates
+echo -e "\t\"GBP\": \"4.9221\"," >> $file_exchangeRates
+echo -e "\t\"AUD\": \"2.7401\"," >> $file_exchangeRates
+echo -e "\t\"UAH\": \"0.1358\"," >> $file_exchangeRates
+echo -e "\t\"CZK\": \"0.1653\"," >> $file_exchangeRates
+echo -e "\t\"HRK\": \"0.5774\"," >> $file_exchangeRates
+echo -e "\t\"RUB\": \"0.0565\"" >> $file_exchangeRates
+echo -e "}" >> $file_exchangeRates

@@ -14,6 +14,7 @@ servGls_show() {
     local action
 
     ui_header "$serv_title" "$servGls_title"
+    servGls_showList
     __servGls_showMenu && echo ""
     ui_line
     read -p "Wybierz akcję: " action
@@ -24,12 +25,9 @@ servGls_show() {
 
 
 __servGls_showMenu() {
-    printf $RED
-    echo "1 - Lista"
-    echo "2 - Dodaj"
-    echo "3 - Usuń"
+    echo "1 - Dodaj"
+    echo "2 - Usuń"
     echo "0 - Powrót"
-    printf $DEFAULT_COLOR
 
     return 0
 }
@@ -37,9 +35,8 @@ __servGls_showMenu() {
 
 __servGls_handleAction() {
     case $1 in
-        "1") __servGls_showList;;
-        "2") __servGls_add;;
-        "3") __servGls_delete;;
+        "1") __servGls_add;;
+        "2") __servGls_delete;;
         *) home_skipPause=true
     esac
 

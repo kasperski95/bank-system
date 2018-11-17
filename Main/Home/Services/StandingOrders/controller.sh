@@ -42,6 +42,7 @@ __servSo_add() {
     local sum=""
     local transactionDate=""
     local interval=""
+    local bVirtual=false
     local error=" "
 
     # extract information from the user
@@ -100,6 +101,7 @@ __servSo_add() {
                 targetName=$(utl_getFromJson "name" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
                 address=$(utl_getFromJson "address" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
                 targetAccountID=$(utl_getFromJson "accountID" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
+                bVirtual==$(utl_getFromJson "hidden" "$(dbReceivers_getPath)/${receiversFiles[$receiverIndex]}")
             else
                 targetAccountID=""
             fi
@@ -245,6 +247,7 @@ __servSo_add() {
     echo -e "\t\"sum\": \"$sum\"," >> $file
     echo -e "\t\"initialDate\": \"$transactionDate\"," >> $file
     echo -e "\t\"interval\": \"$interval\"" >> $file
+    echo -e "\t\"virtual\": \"$bVirtual\"" >> $file
     echo -e "}" >> $file
 
     # add to user

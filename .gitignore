@@ -1,9 +1,2 @@
 # ignore
-Database/Accounts/*
-Database/Transactions/*
-Database/Users/*
-Database/Insurances/Transactions/*
-Database/Receivers/*
-Database/Cards/*
-Database/Loans/*
-Database/StandingOrders/*
+Database/*

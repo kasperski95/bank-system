@@ -18,18 +18,23 @@ hist_printList() {
         local receivedSum=$(dbTransactions_get "receivedSum" $i)
         local sumCurrency=$(dbTransactions_get "sumCurrency" $i)
         local receivedSumCurrency=$(dbTransactions_get "receivedSumCurrency" $i)
+        local bVirtual=$(dbTransactions_get "virtual" $i)
         sum=$(echo "scale=2;$sum/100" | bc | sed "s/^\./0\./")
         receivedSum=$(echo "scale=2;$receivedSum/100" | bc | sed "s/^\./0\./")
 
 
+        if $bVirtual; then
+            targetAccountID="v$targetAccountID"
+        fi
+
         if [ "$(db_isUsersAccount $targetAccountID)" == "true" ]; then
             printf $GREEN;
-            __hist_printHistoryEntry $transactionDate $transactionTime $sourceAccountID $targetAccountID $receivedSum $receivedSumCurrency
+            __hist_printHistoryEntry $transactionDate $transactionTime $sourceAccountID "$targetAccountID" $receivedSum $receivedSumCurrency $bVirtual
         fi
 
         if [ "$(db_isUsersAccount $sourceAccountID)" == "true" ]; then
             printf $RED;
-            __hist_printHistoryEntry $transactionDate $transactionTime $sourceAccountID $targetAccountID "-$sum" $sumCurrency
+            __hist_printHistoryEntry $transactionDate $transactionTime $sourceAccountID "$targetAccountID" "-$sum" $sumCurrency $bVirtual
         fi
 
 
@@ -67,6 +72,7 @@ hist_export() {
             local transactionSum=$(dbTransactions_get "transactionSum" $i)
             local transactionCurrency=$(dbTransactions_get "transactionCurrency" $i)
             local title=$(dbTransactions_get "title" $i)
+            local bVirtual=$(dbTransactions_get "virtual" $i)
 
             sum=$(echo "scale=2;$sum/100" | bc | sed "s/^\./0\./")
             receivedSum=$(echo "scale=2;$receivedSum/100" | bc | sed "s/^\./0\./")
@@ -74,15 +80,23 @@ hist_export() {
 
             local outputFile="$outputPath/${transactionDate}_${i}.txt"
             touch $outputFile
+            if $bVirtual; then
+                echo "Typ: PRZELEW WEWNĘTRZNY NA KONTO WIRTUALNE" >> $outputFile
+            else
+                echo "Typ: $type" >> $outputFile
+            fi
             echo "Tytuł przelewu: $title" > $outputFile
-            echo "Typ: $type" >> $outputFile
             echo "Data: $transactionDate" >> $outputFile
             echo "Czas: $transactionTime" >> $outputFile
             echo "Rachunek nadawcy: $sourceAccountID" >> $outputFile
-            echo "Rachunek odbiorcy: $targetAccountID" >> $outputFile
-            echo "Wysłana kwota: $sum $sumCurrency" >> $outputFile
             echo "Kwota transakcji: $transactionSum $transactionCurrency" >> $outputFile
-            echo "Otrzymana kwota: $receivedSum $receivedSumCurrency" >> $outputFile
+            if ! $bVirtual; then
+                echo "Rachunek odbiorcy: $targetAccountID" >> $outputFile
+                echo "Wysłana kwota: $sum $sumCurrency" >> $outputFile
+                echo "Otrzymana kwota: $receivedSum $receivedSumCurrency" >> $outputFile
+            fi
+            
+            
         done;
 
         echo "Wyeksportowano do: ~/Pulpit/Konto"

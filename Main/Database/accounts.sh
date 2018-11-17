@@ -64,13 +64,18 @@ echo -e "{
 db_addTransactionToAccount() {
     local transactionID=$1
     local accountID=$2
+    local bVirtual=$3
+
+    if $bVirtual; then
+        db_add "transactionsID" "$transactionID" "$accountID.$DB_EXT" "VirtualAccounts"
+        return 0
+    fi
+
     local transactions=$(utl_parseToArray $(utl_getRawArrayFromJson "transactionsID" $DB/Accounts/$accountID.$DB_EXT))
-    
     transactions+=($transactionID)
     local transactionsJson=$(utl_parseArrayToJson ${transactions[@]})
-    
     dbAccounts_set "transactionsID" "$transactionsJson" "$accountID" true
-
+    
     return 0
 }
 
