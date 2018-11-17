@@ -16,20 +16,6 @@
 	// 	"description": "Log output to console"
 	// }
 
-
-
-	"form": {
-		"scope": "shellscript",
-		"prefix": "init_form",
-		"body": [
-			"ui_form \"\\$_title\" \"\\$title\"\\",
-			"\t${#menu[@]} ${menu[@]}\\",
-			"\t${#handlers[@]} ${handlers[@]}$1\\ #OR: 1 _handler ${#handlerArgs[@]} ${handlerArgs[@]}\\",
-			"\t#logic ${#logicArgs[@]} ${logicArgs[@]}"
-		],
-		"description": ""
-	},
-
 	"function": {
 		"scope": "shellscript",
 		"prefix": "fun",
@@ -42,9 +28,40 @@
 		"description": ""
 	},
 
-	"createFile": {
+	"for": {
 		"scope": "shellscript",
-		"prefix": "createFile",
+		"prefix": "for",
+		"body": [
+			"for i in \\${$1[@]}; do",
+			"\t$2",
+			"done"
+		],
+		"description": ""
+	},
+
+	"log": {
+		"scope": "shellscript",
+		"prefix": "log",
+		"body": [
+			"read -p \"$1: \\$$1\" x"
+		],
+	},
+
+	"form": {
+		"scope": "shellscript",
+		"prefix": "ui_form",
+		"body": [
+			"ui_form \"\\$_title\" \"\\$title\"\\",
+			"\t${#menu[@]} ${menu[@]}\\",
+			"\t${#handlers[@]} ${handlers[@]}$1\\ #OR: 1 _handler ${#handlerArgs[@]} ${handlerArgs[@]}\\",
+			"\t#logic ${#logicArgs[@]} ${logicArgs[@]}"
+		],
+		"description": ""
+	},
+
+	"db_create": {
+		"scope": "shellscript",
+		"prefix": "db_create",
 		"body": [
 			"local fileDir=\"\\$DB/$1\"",
 			"local fileID=\\$(utl_getNextIndex \"\\$fileDir\" \"3\")",
@@ -60,7 +77,15 @@
 		"scope": "shellscript",
 		"prefix": "db_add",
 		"body": [
-			"db_add \"KEY\" \"VALUE\" \"FILE\" \"RELATIVE_TO_DB_DIR\"",
+			"db_add \"KEY\" \"VALUE\" \"FILE\" \"DIR_RELATIVE_TO_DB\"",
+		]
+	},
+
+	"db_get": {
+		"scope": "shellscript",
+		"prefix": "db_get",
+		"body": [
+			"db_get \"KEY\" \"FILE\" \"DIR_RELATIVE_TO_DB\" \"ARRAY?\"",
 		]
 	}
 

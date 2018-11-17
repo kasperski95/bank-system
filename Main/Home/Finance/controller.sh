@@ -44,7 +44,7 @@ __fin_showSubaccount() {
 
 
 __fin_showSavingAccounts() {
-    ui_header $fin_title "RACHUNKI OSZCZĘDNOŚCIOWE"
+    ui_header "$fin_title" "RACHUNKI OSZCZĘDNOŚCIOWE"
     local accounts=$(db_getUserAccounts)
 
     for i in $accounts; do
@@ -60,12 +60,36 @@ __fin_showSavingAccounts() {
 
 
 __fin_showCreditCards() {
-    ui_header $fin_title "KARTY PŁATNICZE"
+    ui_header "$fin_title" "KARTY PŁATNICZE"
+
+    # get all accounts
+    local _accounts=$(db_getUserAccounts)
+    local cardsIDs
+
+    # loop through accounts and aggregate cardsIDs
+    for i in ${_accounts[@]}; do
+        local _cardsIDs=$(utl_parseToArray $(db_get "cardsID" "$i.$DB_EXT" "Accounts" true))
+        _cardsIDs=$(echo "$_cardsIDs" | tr "\n" " ")
+        for j in ${_cardsIDs[@]}; do
+            cardsIDs+=("$j")
+        done
+    done
+
+    # loop through cardsIDs and print: <cardType>: <cardID> ~ <accountID>   <balance> <currency>
+    for i in ${cardsIDs[@]}; do
+        local accountID=$(db_get "accountID" "$i.$DB_EXT" "Cards")
+        local accountBalance=$(db_get "balance" "$accountID.$DB_EXT" "Accounts")
+        local accountCurrency=$(db_get "currency" "$accountID.$DB_EXT" "Accounts")
+        local cardType=$(db_get "cardType" "$i.$DB_EXT" "Cards")
+        accountBalance=$(echo "scale=2;$accountBalance/100" | bc)
+        ui_alignRight "$cardType: $i ~> $accountID" "$accountBalance $accountCurrency" "s" "s" && echo ""
+    done
+    echo ""
     return 0
 }
 
 
 __fin_showLoans() {
-    ui_header $fin_title "POŻYCZKI"
+    ui_header "$fin_title" "POŻYCZKI"
     return 0
 }
