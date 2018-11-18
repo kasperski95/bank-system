@@ -16,6 +16,7 @@ if [[ ! -d "$ofr_dir" ]]; then ofr_dir="$PWD"; fi
 . $ofr_dir/Credits/controller.sh
 . $ofr_dir/Leasing/controller.sh
 . $ofr_dir/Zus/controller.sh
+. $ofr_dir/Retirement/controller.sh
 
 
 
@@ -58,6 +59,7 @@ __ofr_handleAction() {
         "1") ofrAct_show;;
         "3") ofrCre_show;;
         "4") ofrPho_show;;
+        "5") ofrRet_show;;
         "6") ofrIns_show;;
         "7") ofrZus_show;;
         "8") ofrLsg_show;;
