@@ -72,6 +72,11 @@ if [ ! -d "$miscDir" ]; then
     mkdir $miscDir
 fi
 
+documentsDir="$DB/Documents"
+if [ ! -d "$documentsDir" ]; then
+    mkdir $documentsDir
+fi
+
 
 generationDate=$(utl_getDate)
 generationTime=$(utl_getTime)
