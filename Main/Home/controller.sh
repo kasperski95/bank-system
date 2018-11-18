@@ -24,15 +24,22 @@ home_showBalance() {
         elif [ "$(dbAccounts_get "type" $i)" == "saving" ]; then
             totalSavings=$(echo "$totalSavings + $balance * $exchangeRate" | bc)
         fi
-
-        total=$(echo "$total + $balance * $exchangeRate" | bc)
     done;
 
 
+    # saving goals
+    local goalsID=$(utl_parseToArray $(db_get "virtualAccountsID" "$USERNAME.$DB_EXT" "Users" true))
+
+    for i in ${goalsID[@]}; do
+        totalSavings=$(echo $totalSavings + $(db_get "balance" "$i.$DB_EXT" "VirtualAccounts") | bc)
+    done
+
+
     # balance is stored as integers
+    total=$(echo "scale=2;($totalChecking+$totalSavings) / 100" | bc)
     totalChecking=$(echo "scale=2;$totalChecking / 100" | bc)
     totalSavings=$(echo "scale=2;$totalSavings / 100" | bc)
-    total=$(echo "scale=2;$total / 100" | bc)
+    
     
 
     local format=".2f"

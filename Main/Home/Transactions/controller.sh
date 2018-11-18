@@ -122,6 +122,7 @@ __tnst_handleTransfer() {
 
         # user's receivers & goals
         if [ "$targetAccountID" == "init" ]; then
+            ui_header "$tnst_title" "$1"
             local receiversFilesRaw=$(db_getReceivers)
             local receiversFiles=()
             local j=1
@@ -132,7 +133,7 @@ __tnst_handleTransfer() {
                 fi
 
                 if $bHidden; then
-                    echo "$j - Cel oszcz.: $(utl_getFromJson "name" "$(dbReceivers_getPath)/$i")"
+                    echo "$j - Cel: $(utl_getFromJson "name" "$(dbReceivers_getPath)/$i")"
                 else
                     echo "$j - $(utl_getFromJson "name" "$(dbReceivers_getPath)/$i")"
                 fi
@@ -311,20 +312,19 @@ __tnst_handleTransfer() {
         local transactionID=$(db_makeTransfer "$1" $sourceAccountID $targetAccountID "$name" "$address" "$title" $sum $transferSum $currency $bVirtual false)
         
         if [ "$transactionCost" -gt "0" ]; then
-            local bankTransactionID=$( db_makeTransfer "PRZELEW ZWYKŁY" $sourceAccountID "000" "$name" "$address" "Koszt przelewu: $transactionID" $transactionCost $transactionCost "PLN" false false)
+            local bankTransactionID=$( db_makeTransfer "PRZELEW ZWYKŁY" $sourceAccountID "000" "Bank" "ul. Słoneczna 4, Warszawa" "Koszt przelewu: $transactionID" $transactionCost $transactionCost "PLN" false false)
         fi
 
         if [ "$sumToSave" -gt "0" ]; then
             local usersSavingAccount=$(db_getUsersSavingAccount)
-            local internalTransactionID=$(db_makeTransfer "PRZELEW ZWYKŁY" $sourceAccountID $usersSavingAccount "$name" "$address" "Przelew wewnętrzny" $sumToSave $sumToSave "PLN" false false)
+            local userInfo="$(db_get "firstname" "$USERNAME.$DB_EXT" "Users") $(db_get "lastname" "$USERNAME.$DB_EXT" "Users")"
+            local userAddress="$(db_get "street" "$USERNAME.$DB_EXT" "Users") $(db_get "streetNumber" "$USERNAME.$DB_EXT" "Users"), $(db_get "city" "$USERNAME.$DB_EXT" "Users")"
+            local internalTransactionID=$(db_makeTransfer "PRZELEW ZWYKŁY" $sourceAccountID $usersSavingAccount "$userInfo" "$userAddress" "Przelew wewnętrzny" $sumToSave $sumToSave "PLN" false false)
         fi
 
         ui_header "$tnst_title" "$1"
         echo "Przelew został zrealizowany."
         echo ""
-
-        
-
         return 0
     fi
 

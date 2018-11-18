@@ -22,7 +22,7 @@ __servRec_add() {
         read -p "Numer konta: " accountID
     done;
 
-    db_createReceiver $name $address $accountID
+    local receiverID=$(db_createReceiver "$name" "$address" "$accountID" "false")
 
     echo ""
     return 0

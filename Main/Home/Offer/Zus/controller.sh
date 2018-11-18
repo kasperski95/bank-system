@@ -35,6 +35,12 @@ ofrZus_show() {
     local assessmentBasis
     read -p "Podstawa wymiaru składek [PLN]: " assessmentBasis
     assessmentBasis=$(echo "$assessmentBasis" | tr "," ".")
+    while [[ ! $assessmentBasis =~ [0-9]* ]] && [[ ! $assessmentBasis =~ [0-9]*\.[0-9][0-9] ]]; do
+        ui_header "$ofr_title" "ZUS"
+        echo "Niepoprawne dane wejściowe."
+        echo ""
+        read -p "Podstawa wymiaru składek [PLN]: " assessmentBasis
+    done
 
     # calculate transfer
     local sum="$(echo "scale=0;($assessmentBasis*100)/2.32" | bc)"
@@ -60,6 +66,7 @@ ofrZus_show() {
     echo ""
     echo "1 - Potwierdź"
     echo "0 - Anuluj"
+    echo ""
     ui_line
     read -p "Wybierz akcję: " action
     if [ "$action" != "1" ]; then

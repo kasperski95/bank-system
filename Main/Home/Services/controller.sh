@@ -100,13 +100,13 @@ _serv_findClosestDateInFuture() {
 _serv_handleTopUpPhone() {
     #TODO: validation
     read -p "Numer telefonu: " phoneNumber
-    read -p "Kwota doładowania: " sum
+    read -p "Kwota doładowania [PLN]: " sum
     echo ""
 }
 
 
 _serv_topUpPhone() {
-    local transactionID=$(db_makeTransfer "PRZELEW ZWYKŁY" "$(db_getUsersAccount)" "000" "Play" "Warszawa" "Doładowanie telefonu: $1" $2 $2 "PLN")   
+    local transactionID=$(db_makeTransfer "PRZELEW ZWYKŁY" "$(db_getUsersAccount)" "000" "Play" "Warszawa" "Doładowanie telefonu: $1" $2 $2 "PLN" false false)   
 
     ui_header "$serv_title" "DOŁADOWANIE TELEFONU"
     if [ "$?" == "0" ]; then
