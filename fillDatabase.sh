@@ -77,6 +77,11 @@ if [ ! -d "$documentsDir" ]; then
     mkdir $documentsDir
 fi
 
+installmentsDir="$DB/Installments"
+if [ ! -d "$installmentsDir" ]; then
+    mkdir $installmentsDir
+fi
+
 
 generationDate=$(utl_getDate)
 generationTime=$(utl_getTime)
@@ -97,6 +102,8 @@ file_transaction1="$transactionsDir/000001.$DB_EXT"
 file_zusFoo="$fooReceiversDir/000.$DB_EXT"
 file_zusBar="$barReceiversDir/000.$DB_EXT"
 file_exchangeRates="$miscDir/exchangeRates.$DB_EXT"
+file_installment000="$installmentsDir/000.$DB_EXT"
+file_installment001="$installmentsDir/001.$DB_EXT"
 
 touch $file_userBank
 touch $file_userFoo
@@ -112,6 +119,8 @@ touch $file_account007
 touch $file_transaction0
 touch $file_transaction1
 touch $file_exchangeRates
+touch $file_installment000
+touch $file_installment001
 
 echo "{" > $file_userBank
 echo "    \"password\": \"1234\"," >> $file_userBank
@@ -121,6 +130,7 @@ echo "    \"insurancesID\": []," >> $file_userBank
 echo "    \"phonesID\": []," >> $file_userBank
 echo "    \"loansID\": []," >> $file_userBank
 echo "    \"standingOrdersID\": []," >> $file_userBank
+echo "    \"installmentsID\": []," >> $file_userBank
 echo "    \"firstname\": \"Kasperski\"," >> $file_userBank
 echo "    \"lastname\": \"Bank\"," >> $file_userBank
 echo "    \"pesel\": \"000\"," >> $file_userBank
@@ -138,6 +148,7 @@ echo "    \"insurancesID\": []," >> $file_userZus
 echo "    \"phonesID\": []," >> $file_userZus
 echo "    \"loansID\": []," >> $file_userZus
 echo "    \"standingOrdersID\": []," >> $file_userZus
+echo "    \"installmentsID\": []," >> $file_userZus
 echo "    \"firstname\": \"Konto\"," >> $file_userZus
 echo "    \"lastname\": \"ZUS\"," >> $file_userZus
 echo "    \"pesel\": \"000\"," >> $file_userZus
@@ -155,6 +166,7 @@ echo "    \"insurancesID\": []," >> $file_userFoo
 echo "    \"phonesID\": []," >> $file_userFoo
 echo "    \"loansID\": []," >> $file_userFoo
 echo "    \"standingOrdersID\": []," >> $file_userFoo
+echo "    \"installmentsID\": [\"000\",\"001\"]," >> $file_userFoo
 echo "    \"firstname\": \"John\"," >> $file_userFoo
 echo "    \"lastname\": \"Foo\"," >> $file_userFoo
 echo "    \"pesel\": \"001\"," >> $file_userFoo
@@ -172,6 +184,7 @@ echo "    \"insurancesID\": []," >> $file_userBar
 echo "    \"phonesID\": []," >> $file_userBar
 echo "    \"loansID\": []," >> $file_userBar
 echo "    \"standingOrdersID\": []," >> $file_userBar
+echo "    \"installmentsID\": []," >> $file_userBar
 echo "    \"firstname\": \"Jan\"," >> $file_userBar
 echo "    \"lastname\": \"Bar\"," >> $file_userBar
 echo "    \"pesel\": \"002\"," >> $file_userBar
@@ -311,3 +324,26 @@ echo -e "\t\"CZK\": \"0.1653\"," >> $file_exchangeRates
 echo -e "\t\"HRK\": \"0.5774\"," >> $file_exchangeRates
 echo -e "\t\"RUB\": \"0.0565\"" >> $file_exchangeRates
 echo -e "}" >> $file_exchangeRates
+
+
+echo -e "{" > $file_installment000
+echo -e "\t\"name\": \"Telewizor\"," >> $file_installment000
+echo -e "\t\"location\": \"MediaSklep\"," >> $file_installment000
+echo -e "\t\"date\": \"2018-10-12\"," >> $file_installment000
+echo -e "\t\"nInstallments\": \"12\"," >> $file_installment000
+echo -e "\t\"installment\": \"35000\"," >> $file_installment000
+echo -e "\t\"period\": \"1\"," >> $file_installment000
+echo -e "\t\"totalSum\": \"400000\"," >> $file_installment000
+echo -e "\t\"currency\": \"PLN\"" >> $file_installment000
+echo -e "}" >> $file_installment000
+
+echo -e "{" > $file_installment001
+echo -e "\t\"name\": \"Nvidia RTX 2080\"," >> $file_installment001
+echo -e "\t\"location\": \"GamerShop\"," >> $file_installment001
+echo -e "\t\"date\": \"2018-11-18\"," >> $file_installment001
+echo -e "\t\"nInstallments\": \"12\"," >> $file_installment001
+echo -e "\t\"installment\": \"45000\"," >> $file_installment001
+echo -e "\t\"period\": \"1\"," >> $file_installment001
+echo -e "\t\"totalSum\": \"500000\"," >> $file_installment001
+echo -e "\t\"currency\": \"PLN\"" >> $file_installment001
+echo -e "}" >> $file_installment001

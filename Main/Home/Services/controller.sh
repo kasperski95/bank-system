@@ -5,6 +5,31 @@
 serv_showInstallements() {
     ui_header "$serv_title" "RATY"
 
+    # get installmentsID from user
+    local installmentsID=$(utl_parseToArray $(db_get "installmentsID" "$USERNAME.$DB_EXT" "Users" true))
+
+    if [ "${installmentsID[@]}" == "" ]; then
+        echo "Brak rat."
+        echo ""
+        return 0
+    fi
+
+    # print
+    for i in ${installmentsID[@]}; do
+        local name=$(db_get "name" "$i.$DB_EXT" "Installments")
+        local location=$(db_get "location" "$i.$DB_EXT" "Installments")
+        local date=$(db_get "date" "$i.$DB_EXT" "Installments")
+        local installment=$(db_get "installment" "$i.$DB_EXT" "Installments")
+        local period=$(db_get "period" "$i.$DB_EXT" "Installments")
+        local totalSum=$(db_get "totalSum" "$i.$DB_EXT" "Installments")
+        local currency=$(db_get "currency" "$i.$DB_EXT" "Installments")
+
+        ui_alignRight "$name" "$location, $date" "s" "s" && echo ""
+        ui_alignRight "$(utl_printMoney $totalSum) $currency" "$(utl_printMoney $installment) $currency co $period miesiąc" "s" "s" -1
+        echo ""
+    done
+
+    echo ""
     return 0
 }
 

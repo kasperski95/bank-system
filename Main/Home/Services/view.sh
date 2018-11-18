@@ -32,9 +32,7 @@ __serv_showMenu() {
     echo "2 - Zaplanowane płatności"
     echo "3 - Stałe zlecenia"
     echo "4 - Cele oszczędnościowe"
-    printf $RED
     echo "5 - Raty"
-    printf $DEFAULT_COLOR
     echo "6 - Dokumenty"
     echo "7 - Doładowanie telefonu"
     echo "8 - Kantor"

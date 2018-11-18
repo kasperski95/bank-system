@@ -1,5 +1,8 @@
 #!/bin/bash
 
+utl_printMoney() {
+    echo "scale=2;$1/100" | bc | sed "s/^\./0./"
+}
 
 
 # JSON value extractor
