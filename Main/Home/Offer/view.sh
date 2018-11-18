@@ -17,6 +17,7 @@ if [[ ! -d "$ofr_dir" ]]; then ofr_dir="$PWD"; fi
 . $ofr_dir/Leasing/controller.sh
 . $ofr_dir/Zus/controller.sh
 . $ofr_dir/Retirement/controller.sh
+. $ofr_dir/Savings/controller.sh
 
 
 
@@ -35,9 +36,7 @@ ofr_show() {
 
 __ofr_showMenu() {
     echo "1 - Konto i rachunki bankowe"
-    printf $RED
     echo "2 - Oszczędności"
-    printf $DEFAULT_COLOR
     echo "3 - Kredyty i pożyczki"
     echo "4 - Karty i płatności telefonem"
     echo "5 - Emerytura"
@@ -57,6 +56,7 @@ __ofr_showMenu() {
 __ofr_handleAction() {
     case $1 in
         "1") ofrAct_show;;
+        "2") ofrSvg_show;;
         "3") ofrCre_show;;
         "4") ofrPho_show;;
         "5") ofrRet_show;;
