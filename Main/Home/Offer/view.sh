@@ -18,7 +18,7 @@ if [[ ! -d "$ofr_dir" ]]; then ofr_dir="$PWD"; fi
 . $ofr_dir/Zus/controller.sh
 . $ofr_dir/Retirement/controller.sh
 . $ofr_dir/Savings/controller.sh
-
+. $ofr_dir/Terminals/controller.sh
 
 
 ofr_show() {
@@ -43,11 +43,8 @@ __ofr_showMenu() {
     echo "6 - Ubezpieczenia"
     echo "7 - Rozliczenie z ZUS"
     echo "8 - Leasing"
-    printf $RED
     echo "9 - Terminale płatnicze"
-    printf $DEFAULT_COLOR
     echo "0 - Powrót"
-
 
     return 0
 }
@@ -63,6 +60,7 @@ __ofr_handleAction() {
         "6") ofrIns_show;;
         "7") ofrZus_show;;
         "8") ofrLsg_show;;
+        "9") ofrTrm_show;;
         *) home_skipPause=true
     esac
 

@@ -82,6 +82,15 @@ if [ ! -d "$installmentsDir" ]; then
     mkdir $installmentsDir
 fi
 
+terminalsDir="$DB/Terminals"
+if [ ! -d "$terminalsDir" ]; then
+    mkdir $terminalsDir
+fi
+
+terminalsInfoDir="$DB/TerminalsInfo"
+if [ ! -d "$terminalsInfoDir" ]; then
+    mkdir $terminalsInfoDir
+fi
 
 generationDate=$(utl_getDate)
 generationTime=$(utl_getTime)
@@ -104,6 +113,9 @@ file_zusBar="$barReceiversDir/000.$DB_EXT"
 file_exchangeRates="$miscDir/exchangeRates.$DB_EXT"
 file_installment000="$installmentsDir/000.$DB_EXT"
 file_installment001="$installmentsDir/001.$DB_EXT"
+file_termianalsWarsaw="$terminalsDir/Warszawa.$DB_EXT"
+file_termianal000="$terminalsInfoDir/000.$DB_EXT"
+file_termianal001="$terminalsInfoDir/001.$DB_EXT"
 
 touch $file_userBank
 touch $file_userFoo
@@ -121,6 +133,9 @@ touch $file_transaction1
 touch $file_exchangeRates
 touch $file_installment000
 touch $file_installment001
+touch $file_termianalsWarsaw
+touch $file_termianal000
+touch $file_termianal001
 
 echo "{" > $file_userBank
 echo "    \"password\": \"1234\"," >> $file_userBank
@@ -347,3 +362,22 @@ echo -e "\t\"period\": \"1\"," >> $file_installment001
 echo -e "\t\"totalSum\": \"500000\"," >> $file_installment001
 echo -e "\t\"currency\": \"PLN\"" >> $file_installment001
 echo -e "}" >> $file_installment001
+
+
+echo -e "{" > $file_termianalsWarsaw
+echo -e "\t\"terminalsID\": [\"000\", \"001\"]" >> $file_termianalsWarsaw
+echo -e "}" >> $file_termianalsWarsaw
+
+echo -e "{" > $file_termianal000
+echo -e "\t\"name\": \"Terminal X\"," >> $file_termianal000
+echo -e "\t\"city\": \"Warszawa\"," >> $file_termianal000
+echo -e "\t\"street\": \"ul. Słoneczna\"," >> $file_termianal000
+echo -e "\t\"streetNumber\": \"4\"" >> $file_termianal000
+echo -e "}" >> $file_termianal000
+
+echo -e "{" > $file_termianal001
+echo -e "\t\"name\": \"Terminal Y\"," >> $file_termianal001
+echo -e "\t\"city\": \"Warszawa\"," >> $file_termianal001
+echo -e "\t\"street\": \"ul. Spacerowa\"," >> $file_termianal001
+echo -e "\t\"streetNumber\": \"2\"" >> $file_termianal001
+echo -e "}" >> $file_termianal001
