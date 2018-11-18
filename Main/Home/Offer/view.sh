@@ -15,6 +15,7 @@ if [[ ! -d "$ofr_dir" ]]; then ofr_dir="$PWD"; fi
 . $ofr_dir/Phone/controller.sh
 . $ofr_dir/Credits/controller.sh
 . $ofr_dir/Leasing/controller.sh
+. $ofr_dir/Zus/controller.sh
 
 
 
@@ -40,9 +41,7 @@ __ofr_showMenu() {
     echo "4 - Karty i płatności telefonem"
     echo "5 - Emerytura"
     echo "6 - Ubezpieczenia"
-    printf $RED
     echo "7 - Rozliczenie z ZUS"
-    printf $DEFAULT_COLOR
     echo "8 - Leasing"
     printf $RED
     echo "9 - Terminale płatnicze"
@@ -60,6 +59,7 @@ __ofr_handleAction() {
         "3") ofrCre_show;;
         "4") ofrPho_show;;
         "6") ofrIns_show;;
+        "7") ofrZus_show;;
         "8") ofrLsg_show;;
         *) home_skipPause=true
     esac

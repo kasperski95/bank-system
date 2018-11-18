@@ -76,6 +76,7 @@ fi
 generationDate=$(utl_getDate)
 generationTime=$(utl_getTime)
 file_userBank="$usersDir/bank.$DB_EXT"
+file_userZus="$usersDir/zus.$DB_EXT"
 file_userFoo="$usersDir/foo.$DB_EXT"
 file_userBar="$usersDir/bar.$DB_EXT"
 file_account000="$accountsDir/000.$DB_EXT"
@@ -84,6 +85,8 @@ file_account002="$accountsDir/002.$DB_EXT"
 file_account003="$accountsDir/003.$DB_EXT"
 file_account004="$accountsDir/004.$DB_EXT"
 file_account005="$accountsDir/005.$DB_EXT"
+file_account006="$accountsDir/006.$DB_EXT"
+file_account007="$accountsDir/007.$DB_EXT"
 file_transaction0="$transactionsDir/000000.$DB_EXT"
 file_transaction1="$transactionsDir/000001.$DB_EXT"
 file_zusFoo="$fooReceiversDir/000.$DB_EXT"
@@ -97,6 +100,10 @@ touch $file_account000
 touch $file_account001
 touch $file_account002
 touch $file_account003
+touch $file_account004
+touch $file_account005
+touch $file_account006
+touch $file_account007
 touch $file_transaction0
 touch $file_transaction1
 touch $file_exchangeRates
@@ -113,14 +120,31 @@ echo "    \"firstname\": \"Kasperski\"," >> $file_userBank
 echo "    \"lastname\": \"Bank\"," >> $file_userBank
 echo "    \"pesel\": \"000\"," >> $file_userBank
 echo "    \"city\": \"Warszawa\"," >> $file_userBank
-echo "    \"street\": \"Żydowska\"," >> $file_userBank
-echo "    \"streetNumber\": \"39\"," >> $file_userBank
+echo "    \"street\": \"Słoneczna\"," >> $file_userBank
+echo "    \"streetNumber\": \"1\"," >> $file_userBank
 echo "    \"phoneNumber\": \"+4879012344" >> $file_userBank
 echo "}" >> $file_userBank
 
+echo "{" > $file_userZus
+echo "    \"password\": \"1234\"," >> $file_userZus
+echo "    \"accountsID\": [\"002\",\"003\"]," >> $file_userZus
+echo "    \"virtualAccountsID\": []," >> $file_userZus
+echo "    \"insurancesID\": []," >> $file_userZus
+echo "    \"phonesID\": []," >> $file_userZus
+echo "    \"loansID\": []," >> $file_userZus
+echo "    \"standingOrdersID\": []," >> $file_userZus
+echo "    \"firstname\": \"Konto\"," >> $file_userZus
+echo "    \"lastname\": \"ZUS\"," >> $file_userZus
+echo "    \"pesel\": \"000\"," >> $file_userZus
+echo "    \"city\": \"Warszawa\"," >> $file_userZus
+echo "    \"street\": \"Senatorska\"," >> $file_userZus
+echo "    \"streetNumber\": \"6\"," >> $file_userZus
+echo "    \"phoneNumber\": \"+4879012300" >> $file_userZus
+echo "}" >> $file_userZus
+
 echo "{" > $file_userFoo
 echo "    \"password\": \"1234\"," >> $file_userFoo
-echo "    \"accountsID\": [\"002\",\"003\"]," >> $file_userFoo
+echo "    \"accountsID\": [\"004\",\"005\"]," >> $file_userFoo
 echo "    \"virtualAccountsID\": []," >> $file_userFoo
 echo "    \"insurancesID\": []," >> $file_userFoo
 echo "    \"phonesID\": []," >> $file_userFoo
@@ -137,7 +161,7 @@ echo "}" >> $file_userFoo
 
 echo "{" > $file_userBar
 echo "    \"password\": \"1234\"," >> $file_userBar
-echo "    \"accountsID\": [\"004\",\"005\"]," >> $file_userBar
+echo "    \"accountsID\": [\"006\",\"007\"]," >> $file_userBar
 echo "    \"virtualAccountsID\": []," >> $file_userBar
 echo "    \"insurancesID\": []," >> $file_userBar
 echo "    \"phonesID\": []," >> $file_userBar
@@ -170,9 +194,9 @@ echo "   \"currency\": \"PLN\"" >> $file_account001
 echo "}" >> $file_account001
 
 echo "{" > $file_account002
-echo "   \"balance\": \"100000\"," >> $file_account002
+echo "   \"balance\": \"1000000\"," >> $file_account002
 echo "   \"type\": \"checking\"," >> $file_account002
-echo "   \"transactionsID\": [\"000000\"]," >> $file_account002
+echo "   \"transactionsID\": []," >> $file_account002
 echo "   \"cardsID\": []," >> $file_account002
 echo "   \"currency\": \"PLN\"" >> $file_account002
 echo "}" >> $file_account002
@@ -188,7 +212,7 @@ echo "}" >> $file_account003
 echo "{" > $file_account004
 echo "   \"balance\": \"100000\"," >> $file_account004
 echo "   \"type\": \"checking\"," >> $file_account004
-echo "   \"transactionsID\": [\"000001\"]," >> $file_account004
+echo "   \"transactionsID\": [\"000000\"]," >> $file_account004
 echo "   \"cardsID\": []," >> $file_account004
 echo "   \"currency\": \"PLN\"" >> $file_account004
 echo "}" >> $file_account004
@@ -200,6 +224,22 @@ echo "   \"transactionsID\": []," >> $file_account005
 echo "   \"cardsID\": []," >> $file_account005
 echo "   \"currency\": \"PLN\"" >> $file_account005
 echo "}" >> $file_account005
+
+echo "{" > $file_account006
+echo "   \"balance\": \"100000\"," >> $file_account006
+echo "   \"type\": \"checking\"," >> $file_account006
+echo "   \"transactionsID\": [\"000001\"]," >> $file_account006
+echo "   \"cardsID\": []," >> $file_account006
+echo "   \"currency\": \"PLN\"" >> $file_account006
+echo "}" >> $file_account006
+
+echo "{" > $file_account007
+echo "   \"balance\": \"0\"," >> $file_account007
+echo "   \"type\": \"saving\"," >> $file_account007
+echo "   \"transactionsID\": []," >> $file_account007
+echo "   \"cardsID\": []," >> $file_account007
+echo "   \"currency\": \"PLN\"" >> $file_account007
+echo "}" >> $file_account007
 
 
 echo "{" > $file_transaction0
@@ -216,8 +256,8 @@ echo "  \"receivedSum\": \"100000\"," >> $file_transaction0
 echo "  \"receivedSumCurrency\": \"PLN\"," >> $file_transaction0
 echo "  \"sourceAccountID\": \"000\"," >> $file_transaction0
 echo "  \"sourceName\": \"Bank\"," >> $file_transaction0
-echo "  \"targetAccountID\": \"002\"," >> $file_transaction0
-echo "  \"targetName\": \"Jan Kowalski\"" >> $file_transaction0
+echo "  \"targetAccountID\": \"004\"," >> $file_transaction0
+echo "  \"targetName\": \"John Foo\"" >> $file_transaction0
 echo "}" >> $file_transaction0
 
 echo "{" > $file_transaction1
@@ -234,22 +274,22 @@ echo "  \"receivedSum\": \"100000\"," >> $file_transaction1
 echo "  \"receivedSumCurrency\": \"PLN\"," >> $file_transaction1
 echo "  \"sourceAccountID\": \"000\"," >> $file_transaction1
 echo "  \"sourceName\": \"Bank\"," >> $file_transaction1
-echo "  \"targetAccountID\": \"004\"," >> $file_transaction1
-echo "  \"targetName\": \"Jan Nowak\"" >> $file_transaction1
+echo "  \"targetAccountID\": \"006\"," >> $file_transaction1
+echo "  \"targetName\": \"Jan Bar\"" >> $file_transaction1
 echo "}" >> $file_transaction1
 
 
 echo "{" > $file_zusFoo
 echo "  \"name\": \"ZUS\"," >> $file_zusFoo
 echo "  \"address\": \"ul. Senatorska 6, Warszawa\"," >> $file_zusFoo
-echo "  \"accountID\": \"000\"," >> $file_zusFoo
+echo "  \"accountID\": \"002\"," >> $file_zusFoo
 echo "  \"hidden\": \"false\"" >> $file_zusFoo
 echo "}" >> $file_zusFoo
 
 echo "{" > $file_zusBar
 echo "  \"name\": \"ZUS\"," >> $file_zusBar
 echo "  \"address\": \"ul. Senatorska 6, Warszawa\"," >> $file_zusBar
-echo "  \"accountID\": \"000\"," >> $file_zusBar
+echo "  \"accountID\": \"002\"," >> $file_zusBar
 echo "  \"hidden\": \"false\"" >> $file_zusBar
 echo "}" >> $file_zusBar
 
