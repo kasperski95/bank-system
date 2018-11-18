@@ -10,6 +10,7 @@ servSo_showList() {
 
     if [ "${standingOrdersID[@]}" == "" ]; then
         echo "Brak stałych zleceń."
+        echo ""
         return 0
     fi
 
@@ -21,9 +22,16 @@ servSo_showList() {
         local initialDate=$(db_get "initialDate" "$i.$DB_EXT" "StandingOrders")
         local interval=$(db_get "interval" "$i.$DB_EXT" "StandingOrders")
         local title=$(db_get "title" "$i.$DB_EXT" "StandingOrders")
+        local virtual=$(db_get "virtual" "$i.$DB_EXT" "StandingOrders")
+
+        local prefix=""
+        if $virtual; then
+            prefix="v"
+        fi
+
         sum=$(echo "scale=2;$sum/100" | bc)
         ui_alignRight "$name" "od $initialDate co $interval miesiąc(e)" "s" "s" && echo ""
-        ui_alignRight "" "$sourceAccountID -> $targetAccountID | $title | $sum PLN" "s" "s" && echo ""
+        ui_alignRight "" "$sourceAccountID -> $prefix$targetAccountID | $title | $sum PLN" "s" "s" && echo ""
         echo ""
     done
 
@@ -87,8 +95,13 @@ __servSo_add() {
             local receiversFiles=()
             local j=1
             for i in ${receiversFilesRaw[@]}; do
-                echo "$j - $(utl_getFromJson "name" "$(dbReceivers_getPath)/$i")"
+                local prefix=""
+                if [ $(utl_getFromJson "hidden" "$(dbReceivers_getPath)/$i") == "true" ]; then
+                    prefix="Cel: "
+                fi
+                echo "$j - $prefix$(utl_getFromJson "name" "$(dbReceivers_getPath)/$i")"
                 receiversFiles+=("$i")
+                ((j++))
             done
             echo "0 - Pomiń"
             echo ""
@@ -123,22 +136,24 @@ __servSo_add() {
 
 
         # - targetAccountID
-        if [ "$targetAccountID" == "" ]; then
-            read -p "Rachunek odbiorcy: " targetAccountID
+        if ! $bVirtual; then
             if [ "$targetAccountID" == "" ]; then
-                error="Rachunek odbiorcy nie może być pusty."
-            elif (! db_doesAccountExists $targetAccountID); then
-                targetAccountID=""
-                error="Nie znaleziono podanego rachunku bankowego."
-            elif [ "$sourceAccountID" == "$targetAccountID" ]; then
-                targetAccountID=""
-                error="Nie można dokonywać przelewu na te konto."
+                read -p "Rachunek odbiorcy: " targetAccountID
+                if [ "$targetAccountID" == "" ]; then
+                    error="Rachunek odbiorcy nie może być pusty."
+                elif (! db_doesAccountExists $targetAccountID); then
+                    targetAccountID=""
+                    error="Nie znaleziono podanego rachunku bankowego."
+                elif [ "$sourceAccountID" == "$targetAccountID" ]; then
+                    targetAccountID=""
+                    error="Nie można dokonywać przelewu na te konto."
+                else
+                    error=" "
+                fi
+                continue
             else
-                error=" "
+                echo "Rachunek odbiorcy: $targetAccountID"
             fi
-            continue
-        else
-            echo "Rachunek odbiorcy: $targetAccountID"
         fi
 
 
@@ -152,7 +167,11 @@ __servSo_add() {
             fi
             continue
         else
-            echo "Nazwa odbiorcy: $targetName"
+            if ! $bVirtual; then
+                echo "Nazwa odbiorcy: $targetName"
+            else
+                echo "Cel oszczędnościowy: $targetName"
+            fi
         fi
 
 
@@ -296,6 +315,10 @@ __servSo_delete() {
 
     # delete from user
     db_subtract "standingOrdersID" "${standingOrdersID[$standingOrdersIndex]}" "$USERNAME.$DB_EXT" "Users" 
+
+    ui_header "$servSo_title" "USUŃ"
+    echo "Operacja zakończyła się powodzeniem."
+    echo ""
 
     return 0
 }

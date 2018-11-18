@@ -4,6 +4,12 @@ utl_printMoney() {
     echo "scale=2;$1/100" | bc | sed "s/^\./0./"
 }
 
+utl_convertMoney() {
+    local money=$1
+    money=$(echo $money | tr "," ".")
+    echo "scale=0;($money*100)/1" | bc | sed "s/^\./0./"
+}
+
 
 # JSON value extractor
 utl_getFromJson() {

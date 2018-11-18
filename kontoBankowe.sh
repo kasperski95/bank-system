@@ -12,7 +12,7 @@ while true; do
         home_show
     else
         echo "Inicjalizuje bazę danych..."
-        . ./fillDatabase.sh
+        . ./createDatabase.sh
         sleep 1s
     fi
 done

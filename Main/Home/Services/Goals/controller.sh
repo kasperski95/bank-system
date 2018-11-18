@@ -6,15 +6,40 @@ servGls_showList() {
     # get goalsID from user
     local goalsID=$(utl_parseToArray $(db_get "virtualAccountsID" "$USERNAME.$DB_EXT" "Users" true))
 
+    if [ "${goalsID[@]}" == "" ]; then
+        echo "Brak celów oszędnościowych."
+        echo ""
+        return 0
+    fi
+
+    local standingOrdersID=$(utl_parseToArray $(db_get "standingOrdersID" "$USERNAME.$DB_EXT" "Users" true))
+
     # print: name ... sum / target PLN
     for i in ${goalsID[@]}; do
         local name="$(db_get "name" "$i.$DB_EXT" "VirtualAccounts")"
         local balance="$(db_get "balance" "$i.$DB_EXT" "VirtualAccounts")"
         local targetSum="$(db_get "targetSum" "$i.$DB_EXT" "VirtualAccounts")"
         local currency="$(db_get "currency" "$i.$DB_EXT" "VirtualAccounts")"
+        local estTime=""
+        
+        # estimate time
+        for j in ${standingOrdersID[@]}; do
+            local virtual=$(db_get "virtual" "$j.$DB_EXT" "StandingOrders")
+            if $virtual; then
+                local targetAccountID=$(db_get "targetAccountID" "$j.$DB_EXT" "StandingOrders")
+                if [ "$targetAccountID" == "$i" ]; then
+                    local interval=$(db_get "interval" "$j.$DB_EXT" "StandingOrders")
+                    local intervalSum=$(db_get "sum" "$j.$DB_EXT" "StandingOrders")
+                    estTime=$(echo "scale=0;($targetSum-$balance)/$intervalSum" | bc)
+                    estTime=$(echo "scale=0; $estTime*$interval " | bc)
+                    estTime=" (za ~$estTime mc)"
+                fi
+            fi
+        done
+
         balance=$(echo "scale=2;$balance/100" | bc)
         targetSum=$(echo "scale=2;$targetSum/100" | bc)
-        ui_alignRight "$name" "$balance / $targetSum $currency" "s" "s" && echo ""
+        ui_alignRight "$name$estTime" "$balance / $targetSum $currency" "s" "s" && echo ""
     done
     echo ""
 
@@ -32,7 +57,8 @@ __servGls_add() {
     read -p "Cel: " name
     
     # - target
-    read -p "Docelowa kwota: " targetSum
+    read -p "Docelowa kwota [PLN]: " targetSum
+    targetSum=$(utl_convertMoney $targetSum)
 
     # create receivers as hidden
     local usersAddress="$(db_get "street" "$USERNAME.$DB_EXT" "Users") $(db_get "streetNumber" "$USERNAME.$DB_EXT" "Users"), $(db_get "city" "$USERNAME.$DB_EXT" "Users")"
@@ -75,6 +101,13 @@ __servGls_delete() {
 
     # get virtual accounts from user & print
     local _virtualAccountsID=$(utl_parseToArray $(db_get "virtualAccountsID" "$USERNAME.$DB_EXT" "Users" true))
+    
+    if [ "${_virtualAccountsID[@]}" == "" ]; then
+        echo "Brak celów oszędnościowych."
+        echo ""
+        return 0
+    fi
+    
     local virtualAccountsID=()
     local virtualAccountIndex=1
     for i in ${_virtualAccountsID[@]}; do
@@ -105,6 +138,11 @@ __servGls_delete() {
 
     # subtract from user's file
     db_subtract "virtualAccountsID" "${virtualAccountsID[$virtualAccountIndex]}" "$USERNAME.$DB_EXT" "Users"
+
+    ui_header "$servGls_title" "USUŃ"
+    echo "Operacja zakończyła się powodzeniem."
+    echo "Środki zostały zwrócone na główny rachunek bankowy."
+    echo ""
 
     return 0
 }

@@ -27,6 +27,7 @@ serv_showInstallements() {
         ui_alignRight "$name" "$location, $date" "s" "s" && echo ""
         ui_alignRight "$(utl_printMoney $totalSum) $currency" "$(utl_printMoney $installment) $currency co $period miesiąc" "s" "s" -1
         echo ""
+        echo ""
     done
 
     echo ""
