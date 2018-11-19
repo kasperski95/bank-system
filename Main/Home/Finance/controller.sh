@@ -88,7 +88,8 @@ __fin_showCreditCards() {
         local accountCurrency=$(db_get "currency" "$accountID.$DB_EXT" "Accounts")
         local cardType=$(db_get "cardType" "$i.$DB_EXT" "Cards")
         accountBalance=$(echo "scale=2;$accountBalance/100" | bc)
-        ui_alignRight "$cardType: $i ~> $accountID" "$accountBalance $accountCurrency" "s" "s" && echo ""
+        local protectedCardID=$(echo $i | sed "s/.\{7\}$/*******/")
+        ui_alignRight "$cardType: $protectedCardID ~> $accountID" "$accountBalance $accountCurrency" "s" "s" && echo ""
     done
     echo ""
     return 0

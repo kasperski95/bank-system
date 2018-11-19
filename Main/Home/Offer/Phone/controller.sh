@@ -5,9 +5,14 @@ ofrPho_title="KARTY I PŁATNOŚCI TELEFONEM"
 ofrPho_show() {
     local handlers=(_handleNewCard _handleNewBinding _handleBindingList)
 
-    ui_form "$ofr_title" "$ofrPho_title"\
-        3 "Nowa karta" "Powiązanie telefonu z kartą" "Lista powiązań"\
+    if ! ui_form "$ofr_title" "$ofrPho_title"\
+        3 "Nowa karta" "Powiązanie telefonu z usługą BLIK" "Lista powiązanych telefonów"\
         ${#handlers[@]} ${handlers[@]}
+    then
+        home_skipPause=true
+        return 1
+    fi
+
 }
 
 
@@ -24,6 +29,7 @@ _handleNewCard () {
     echo ""
     ui_line
     read -p "Wybierz akcję: " cardTypeIndex
+    
     ((cardTypeIndex--))
 
     # choose account to which card should be binded
@@ -44,9 +50,10 @@ _handleNewCard () {
     read -p "Wybierz akcję: " accountIndex
     ((accountIndex--))
 
+
     # create card
     local fileDir="$DB/Cards"
-    local fileID=$(utl_getNextIndex "$fileDir" "3")
+    local fileID=$(utl_getNextIndex "$fileDir" "13")
     local file="$(echo $fileDir/$fileID.$DB_EXT)"
     touch $file
     echo -e "{" > $file
@@ -57,6 +64,9 @@ _handleNewCard () {
     # add cardID to account
     db_add "cardsID" "$fileID" "${accounts[$accountIndex]}.$DB_EXT" "Accounts"
 
+    ui_header "$ofrPho_title" "$title"
+    echo "Operacja zakończyła się powodzeniem."
+    echo ""
     return 0
 }
 
@@ -71,6 +81,14 @@ _handleNewBinding () {
     # enter phone number
     ui_header "$ofrPho_title" "$ofrPhoNbtitle"
     read -p "Numer telefonu: " phoneNumber
+
+    while [[ ! "$phoneNumber" =~ [0-9]{9} ]]; do
+        ui_header "$ofrPho_title" "$ofrPhoNbtitle"
+        echo "Niepoprawny numer telefonu."
+        echo ""
+        read -p "Numer telefonu: " phoneNumber
+    done
+
     echo "<wysyłanie kodu potwierdzającego (123456)>"
     read -p "Podaj kod potwierdzający: " code
 
@@ -122,10 +140,17 @@ _handleBindingList () {
     # get array of bindings
     phonesID=$(utl_parseToArray $(db_get "phonesID" "$USERNAME.$DB_EXT" "Users" true))
 
+    if [ "${phonesID[@]}" == "" ]; then
+        echo "Brak powiązanych telefonów."
+        echo ""
+        return 0
+    fi
+
     # print: <phone number> ~> <accountID>
     for i in ${phonesID[@]}; do
         local accountID=$(db_get "accountID" "$i.$DB_EXT" "Phones")
-        echo "$phonesID ~ $accountID"
+        local protectedPhone=$(echo $i | sed "s/.\{6\}$/******/")
+        echo "$protectedPhone <~> $accountID"
     done
     echo ""
 

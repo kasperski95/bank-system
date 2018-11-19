@@ -107,7 +107,7 @@ ui_form() {
     read -p "Wybierz akcję: " index
     ((index--))
 
-    if [ "$index" -eq "-1" ]; then
+    if [ "$index" == "-1" ] || [ "$index" == "" ]; then
         return 1
     fi
 
