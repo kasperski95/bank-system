@@ -77,6 +77,11 @@ if [ ! -d "$documentsDir" ]; then
     mkdir $documentsDir
 fi
 
+certificatesDir="$DB/Certificates"
+if [ ! -d "$certificatesDir" ]; then
+    mkdir $certificatesDir
+fi
+
 installmentsDir="$DB/Installments"
 if [ ! -d "$installmentsDir" ]; then
     mkdir $installmentsDir

@@ -5,6 +5,7 @@ if [[ ! -d "$serv_dir" ]]; then serv_dir="$PWD"; fi
 
 . $serv_dir/Cantor/view.sh
 . $serv_dir/Documents/view.sh
+. $serv_dir/Certificates/view.sh
 . $serv_dir/Goals/view.sh
 . $serv_dir/Receivers/view.sh
 . $serv_dir/StandingOrders/view.sh
@@ -34,8 +35,9 @@ __serv_showMenu() {
     echo "4 - Cele oszczędnościowe"
     echo "5 - Raty"
     echo "6 - Dokumenty"
-    echo "7 - Doładowanie telefonu"
-    echo "8 - Kantor"
+    echo "7 - Zaświadczenia"
+    echo "8 - Doładowanie telefonu"
+    echo "9 - Kantor"
     echo "0 - Powrót"
 
     return 0
@@ -50,8 +52,9 @@ __serv_handleAction() {
         "4") servGls_show;;
         "5") serv_showInstallements;;
         "6") servDoc_show;;
-        "7") serv_showTopUpPhone;;
-        "8") servCan_handleExchange;;
+        "7") servCer_show;;
+        "8") serv_showTopUpPhone;;
+        "9") servCan_handleExchange;;
         *) home_skipPause=true;;
     esac
 
