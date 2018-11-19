@@ -36,13 +36,36 @@ serv_showInstallements() {
 
 
 serv_showTopUpPhone() {
-    ui_form "$serv_title" "DOŁADOWANIE TELEFONU"\
-        1 "Potwierdź"\
-        0\
-        _serv_handleTopUpPhone
-        
+    ui_header "$serv_title" "DOŁADOWANIE TELEFONU"
 
-    if [ "$?" == "0" ]; then
+    local phoneNumber
+    read -p "Numer telefonu: " phoneNumber
+    while [[ ! "$phoneNumber" =~ ^[0-9]{9}$ ]]; do
+        ui_header "$serv_title" "DOŁADOWANIE TELEFONU"
+        echo "Niepoprawny numer telefonu."
+        echo ""
+        read -p "Numer telefonu: " phoneNumber
+    done
+
+    local sum
+    read -p "Kwota doładowania [PLN]: " sum
+    sum=$(echo "$sum" | tr "," ".")
+    while [[ ! "$sum" =~ [0-9]* ]] && [[ ! "$sum" =~ ^[0-9]*\.[0-9]{2}$ ]]; do
+        echo "Niepoprawna kwota."
+        echo ""
+        read -p "Kwota doładowania [PLN]: " sum
+        sum=$(echo "$sum" | tr "," ".")
+    done
+    echo ""
+    echo "1 - Potwierdź"
+    echo "0 - Anuluj"
+    echo ""
+    ui_line
+
+    local action
+    read -p "Wybierz akcję: " action
+    
+    if [ "$action" == "1" ]; then
         sum=$(echo "$sum*100" | bc)
         sum=$(echo "scale=0;$sum/1" | bc )
         _serv_topUpPhone $phoneNumber $sum
@@ -96,13 +119,6 @@ _serv_findClosestDateInFuture() {
     return 0
 }
 
-
-_serv_handleTopUpPhone() {
-    #TODO: validation
-    read -p "Numer telefonu: " phoneNumber
-    read -p "Kwota doładowania [PLN]: " sum
-    echo ""
-}
 
 
 _serv_topUpPhone() {

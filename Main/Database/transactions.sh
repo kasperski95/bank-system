@@ -122,8 +122,8 @@ db_makeTransfer() {
     local newSourceAccountBalance=$(($sourceAccountBalance-$sum))
 
     
-    # validate
-    # if [ "$sum" -gt "$sourceAccountBalance" ]; then
+    #validate
+    # if [ "$(($sourceAccountBalance-$sum-10000))" -lt "0" ]; then
     #     return 1
     # fi
 
@@ -202,6 +202,13 @@ db_loanMoney() {
     # extract data from user: loanSum, loanInstallments
     ui_header "$subtitle" "$title"
     read -p "Kwota [PLN]: " sum
+
+    if [ "$sum" == "" ]; then
+        echo "Niepoprawne dane wejściowe."
+        echo ""
+        return 1
+    fi
+
     sum=$(echo $sum | tr "," ".")
     sum=$(echo "scale=0;($sum*100)/1" | bc)
     if [ "$sum" -le 0 ]; then
@@ -209,10 +216,18 @@ db_loanMoney() {
         echo ""
         return 1
     fi
+
+   
     
     expectedSum="$sum"
 
     read -p "Czas spłaty [w miesiącach]: " nInstallments
+    if [ "$nInstallments" == "" ]; then
+        echo "Niepoprawne dane wejściowe."
+        echo ""
+        return 1
+    fi
+
     if [ "$nInstallments" -le 0 ]; then
         echo "Ilość miesięcy musi być większa 0."
         echo ""

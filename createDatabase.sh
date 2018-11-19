@@ -9,7 +9,8 @@ fi
 
 . Main/Utils/index.sh
 
-
+#TODO: DRY
+#TODO: Separate creating and mocking database
 
 
 usersDir="$DB/Users"
@@ -97,6 +98,22 @@ if [ ! -d "$terminalsInfoDir" ]; then
     mkdir $terminalsInfoDir
 fi
 
+
+insurancesDir="$DB/Insurances"
+if [ ! -d "$insurancesDir" ]; then
+    mkdir $insurancesDir
+fi
+
+insurancesInfoDir="$DB/Insurances/Info"
+if [ ! -d "$insurancesInfoDir" ]; then
+    mkdir $insurancesInfoDir
+fi
+
+insurancesTransactionsDir="$DB/Insurances/Transactions"
+if [ ! -d "$insurancesTransactionsDir" ]; then
+    mkdir $insurancesTransactionsDir
+fi
+
 generationDate=$(utl_getDate)
 generationTime=$(utl_getTime)
 file_userBank="$usersDir/bank.$DB_EXT"
@@ -121,6 +138,16 @@ file_installment001="$installmentsDir/001.$DB_EXT"
 file_termianalsWarsaw="$terminalsDir/Warszawa.$DB_EXT"
 file_termianal000="$terminalsInfoDir/000.$DB_EXT"
 file_termianal001="$terminalsInfoDir/001.$DB_EXT"
+file_insurance000="$insurancesInfoDir/000.$DB_EXT"
+file_insurance001="$insurancesInfoDir/001.$DB_EXT"
+file_insurance002="$insurancesInfoDir/002.$DB_EXT"
+file_insurance003="$insurancesInfoDir/003.$DB_EXT"
+file_insurance004="$insurancesInfoDir/004.$DB_EXT"
+file_insurance005="$insurancesInfoDir/005.$DB_EXT"
+file_insurance006="$insurancesInfoDir/006.$DB_EXT"
+file_insurance007="$insurancesInfoDir/007.$DB_EXT"
+file_insurance008="$insurancesInfoDir/008.$DB_EXT"
+file_insurance009="$insurancesInfoDir/009.$DB_EXT"
 
 touch $file_userBank
 touch $file_userFoo
@@ -141,6 +168,16 @@ touch $file_installment001
 touch $file_termianalsWarsaw
 touch $file_termianal000
 touch $file_termianal001
+touch $file_insurance000
+touch $file_insurance001
+touch $file_insurance002
+touch $file_insurance003
+touch $file_insurance004
+touch $file_insurance005
+touch $file_insurance006
+touch $file_insurance007
+touch $file_insurance008
+touch $file_insurance009
 
 echo "{" > $file_userBank
 echo "    \"password\": \"1234\"," >> $file_userBank
@@ -386,3 +423,53 @@ echo -e "\t\"city\": \"Warszawa\"," >> $file_termianal001
 echo -e "\t\"street\": \"ul. Spacerowa\"," >> $file_termianal001
 echo -e "\t\"streetNumber\": \"2\"" >> $file_termianal001
 echo -e "}" >> $file_termianal001
+
+echo -e "{" > $file_insurance000
+echo -e "\t\"name\": \"Ubezpieczenie od utraty pracy\"," >> $file_insurance000
+echo -e "\t\"cost\": \"10000\"" >> $file_insurance000
+echo -e "}" >> $file_insurance000
+
+echo -e "{" > $file_insurance001
+echo -e "\t\"name\": \"Ubezpieczenie od śmierci\"," >> $file_insurance001
+echo -e "\t\"cost\": \"10000\"" >> $file_insurance001
+echo -e "}" >> $file_insurance001
+
+echo -e "{" > $file_insurance002
+echo -e "\t\"name\": \"Ubezpieczenie od wypadku\"," >> $file_insurance002
+echo -e "\t\"cost\": \"10000\"" >> $file_insurance002
+echo -e "}" >> $file_insurance002
+
+echo -e "{" > $file_insurance003
+echo -e "\t\"name\": \"Ubezpieczenie od utraty dochodu\"," >> $file_insurance003
+echo -e "\t\"cost\": \"10000\"" >> $file_insurance003
+echo -e "}" >> $file_insurance003
+
+echo -e "{" > $file_insurance004
+echo -e "\t\"name\": \"Ubezpieczenie od ognia i innych ryzyk\"," >> $file_insurance004
+echo -e "\t\"cost\": \"10000\"" >> $file_insurance004
+echo -e "}" >> $file_insurance004
+
+echo -e "{" > $file_insurance005
+echo -e "\t\"name\": \"Ubezpieczenie auta od kradzieży\"," >> $file_insurance005
+echo -e "\t\"cost\": \"10000\"" >> $file_insurance005
+echo -e "}" >> $file_insurance005
+
+echo -e "{" > $file_insurance006
+echo -e "\t\"name\": \"Ubezpieczenie od żywiołów\"," >> $file_insurance006
+echo -e "\t\"cost\": \"10000\"" >> $file_insurance006
+echo -e "}" >> $file_insurance006
+
+echo -e "{" > $file_insurance007
+echo -e "\t\"name\": \"Ubezpieczenie od odwołanego lotu\"," >> $file_insurance007
+echo -e "\t\"cost\": \"10000\"" >> $file_insurance007
+echo -e "}" >> $file_insurance007
+
+echo -e "{" > $file_insurance008
+echo -e "\t\"name\": \"Ubezpieczenie od wszystkich ryzyk\"," >> $file_insurance008
+echo -e "\t\"cost\": \"10000\"" >> $file_insurance008
+echo -e "}" >> $file_insurance008
+
+echo -e "{" > $file_insurance009
+echo -e "\t\"name\": \"Ubezpieczenie od powodzi\"," >> $file_insurance009
+echo -e "\t\"cost\": \"10000\"" >> $file_insurance009
+echo -e "}" >> $file_insurance009

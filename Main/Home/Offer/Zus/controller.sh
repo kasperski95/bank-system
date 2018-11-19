@@ -34,12 +34,13 @@ ofrZus_show() {
     # extract "Podstawa wymiaru składek" from the user
     local assessmentBasis
     read -p "Podstawa wymiaru składek [PLN]: " assessmentBasis
-    assessmentBasis=$(echo "$assessmentBasis" | tr "," ".")
-    while [[ ! $assessmentBasis =~ [0-9]* ]] && [[ ! $assessmentBasis =~ [0-9]*\.[0-9][0-9] ]]; do
+
+    while [[ ! $assessmentBasis =~ ^[0-9]+$ ]] && [[ ! $assessmentBasis =~ ^[0-9]+(\.|,)[0-9][0-9]$ ]]; do
         ui_header "$ofr_title" "ZUS"
         echo "Niepoprawne dane wejściowe."
         echo ""
         read -p "Podstawa wymiaru składek [PLN]: " assessmentBasis
+        assessmentBasis=$(echo "$assessmentBasis" | tr "," ".")
     done
 
     # calculate transfer

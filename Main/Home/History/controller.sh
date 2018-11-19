@@ -8,7 +8,7 @@ if [[ ! -d "$hist_dir" ]]; then hist_dir="$PWD"; fi
 
 hist_printList() {    
     local transactions=$(__hist_getUsersTransactions)
-
+    local prevDate=""
     for i in ${transactions[@]}; do
         local transactionDate=$(dbTransactions_get "date" $i)
         local transactionTime=$(dbTransactions_get "time" $i)
@@ -23,22 +23,36 @@ hist_printList() {
         receivedSum=$(echo "scale=2;$receivedSum/100" | bc | sed "s/^\./0\./")
 
 
+        if [ "$prevDate" != "$transactionDate $transactionTime" ] && [ "$prevDate" != "" ]; then
+            echo ""
+        fi
+        prevDate="$transactionDate $transactionTime"
+
+
         if $bVirtual; then
             targetAccountID="v$targetAccountID"
         fi
 
         if [ "$(db_isUsersAccount $targetAccountID)" == "true" ]; then
-            printf $GREEN;
+            if $bVirtual; then
+                printf $BLUE;
+            else
+                printf $GREEN;
+            fi
             __hist_printHistoryEntry $transactionDate $transactionTime $sourceAccountID "$targetAccountID" $receivedSum $receivedSumCurrency $bVirtual
         fi
 
         if [ "$(db_isUsersAccount $sourceAccountID)" == "true" ]; then
-            printf $RED;
+            if $bVirtual; then
+                printf $BLUE;
+            else
+                printf $RED;
+            fi
             __hist_printHistoryEntry $transactionDate $transactionTime $sourceAccountID "$targetAccountID" "-$sum" $sumCurrency $bVirtual
         fi
-
-
         printf $DEFAULT_COLOR;
+
+        
     done
 
     return 0
@@ -89,9 +103,11 @@ hist_export() {
             echo "Data: $transactionDate" >> $outputFile
             echo "Czas: $transactionTime" >> $outputFile
             echo "Rachunek nadawcy: $sourceAccountID" >> $outputFile
-            echo "Kwota transakcji: $transactionSum $transactionCurrency" >> $outputFile
             if ! $bVirtual; then
                 echo "Rachunek odbiorcy: $targetAccountID" >> $outputFile
+            fi
+            echo "Kwota transakcji: $transactionSum $transactionCurrency" >> $outputFile
+            if ! $bVirtual; then
                 echo "Wysłana kwota: $sum $sumCurrency" >> $outputFile
                 echo "Otrzymana kwota: $receivedSum $receivedSumCurrency" >> $outputFile
             fi

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # DevConfig
-PRODUCTION_MODE=true
+PRODUCTION_MODE=false
 DB_EXT="json"
 
 LC_NUMERIC=C # use '.' instead of ',' for floating point numbers         
@@ -23,5 +23,6 @@ fi
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 SILVER='\033[0;37m' 
+BLUE='\033[0;36m' 
 DEFAULT_COLOR=$SILVER
 

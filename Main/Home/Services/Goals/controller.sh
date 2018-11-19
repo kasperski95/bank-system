@@ -55,9 +55,23 @@ __servGls_add() {
     # extract data from user:
     # - name
     read -p "Cel: " name
-    
+    while [ "$name" == "" ]; do
+        ui_header "$servGls_title" "DODAJ"
+        echo "Cel nie może być pusty."
+        echo ""
+        read -p "Cel: " name
+    done
+
     # - target
     read -p "Docelowa kwota [PLN]: " targetSum
+    while [[ ! "$targetSum" =~ ^[0-9]*$ ]] && [[ ! "$targetSum" =~ ^[0-9]*(\.|,)[0-9]{2}$ ]]; do
+        ui_header "$servGls_title" "DODAJ"
+        echo "Niepoprawna kwota."
+        echo ""
+        echo "Cel: $name"
+        read -p "Docelowa kwota [PLN]: " targetSum
+    done
+
     targetSum=$(utl_convertMoney $targetSum)
 
     # create receivers as hidden

@@ -22,7 +22,7 @@ ofrIns_handleList() {
     for i in ${insuranceTransactionID[@]}; do
         local insuranceID=$(db_get "insuranceID" "$i.$DB_EXT" "$ofrIns_dbName/Transactions")
         local insuranceName=$(db_get "name" "$insuranceID.$DB_EXT" "$ofrIns_dbName/Info") 
-        ui_alignRight "$insuranceName" "$(db_get "endDate" "$i.$DB_EXT" "$ofrIns_dbName/Transactions")" "s" "s"
+        ui_alignRight "$insuranceName" "do $(db_get "endDate" "$i.$DB_EXT" "$ofrIns_dbName/Transactions")" "s" "s"
         echo ""
     done
     echo ""
@@ -75,7 +75,7 @@ ofrIns_handleInssuranceChoice() {
     read -p "Wybierz akcję: " action
 
     if [ "$action" == "1" ]; then
-        local transactionID=$(db_makeTransfer "PRZELEW ZWYKŁY" "$(db_getUsersAccount)" "000" "PZU" "Warszawa" "$insuranceName" $insuranceCost $insuranceCost "PLN")   
+        local transactionID=$(db_makeTransfer "PRZELEW ZWYKŁY" "$(db_getUsersAccount)" "000" "PZU" "Warszawa" "$insuranceName" $insuranceCost $insuranceCost "PLN" false false)   
 
         # echo properties: username, inssuranceID, transactionDate, transactionCost
         local file="$(echo $DB/$ofrIns_dbName/Transactions/$(utl_getNextIndex $DB/$ofrIns_dbName/Transactions "3").$DB_EXT)"
