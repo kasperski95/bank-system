@@ -1,3 +1,6 @@
+# Założenia
+http://visperfect.com/download/systemy_operacyjne-konto-bankowe.pdf
+
 # Uruchomienie
 Należy uruchomić skrypt **kontoBankowe.sh**.
 Aby zakończyć działanie skryptu należy wcisnąć **CTRL+C**.
@@ -45,3 +48,4 @@ Aby zakończyć działanie skryptu należy wcisnąć **CTRL+C**.
 - Do komunikacji z bazą danych lepiej było na samym początku zaimplementować coś w rodzaju ORM.
 - Przy braku Intellisense, lepiej ograniczyć się z ilością funkcji.
 - Refaktoryzuj przy 3-cim powtórzeniu schematu / kodu.
+- Do testów używaj jeden wielkiej mocked database.
